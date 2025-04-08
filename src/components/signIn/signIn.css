@@ -1,0 +1,26 @@
+.signIn {
+    padding: 60px 0;
+}
+
+.signIn h2 {
+    font-family: 'poppinsBold';
+    font-size: 1.5rem;
+}
+
+.signIn .box {
+    border-radius: 8px;
+}
+
+.signIn .form-control {
+    border-left: 0;
+    border-top: 0;
+    border-right: 0;
+    border-radius: 0;
+    padding-left: 0;
+    font-size: .912rem;
+}
+
+.signIn a {
+    color: #2857cd;
+    font-family: 'poppinsMedium';
+}
