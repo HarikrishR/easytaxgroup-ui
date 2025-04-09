@@ -3,6 +3,7 @@ import Header from "../header/header";
 import Nav from 'react-bootstrap/Nav';
 import Tab from 'react-bootstrap/Tab';
 import Profile from "./profile";
+import Users from "./users";
 import "./dashboard.css"
 
 const Dashboard = () => {
@@ -33,8 +34,8 @@ const Dashboard = () => {
                             <Tab.Content className="p-4">
                                 <Tab.Pane eventKey="profile"><Profile /></Tab.Pane>
                                 {
-                                    localStorage.getItem('authRole') === 'ADMIN' ?
-                                    <Tab.Pane eventKey="users">Users</Tab.Pane>
+                                    (localStorage.getItem('authRole') ? atob(localStorage.getItem('authRole')!) : '') === 'ADMIN' ?
+                                    <Tab.Pane eventKey="users"><Users/></Tab.Pane>
                                     : ''
                                 }
                                 <Tab.Pane eventKey="second">Forms</Tab.Pane>
