@@ -44,8 +44,9 @@ const SignIn = () => {
             const serviceUrl = import.meta.env.VITE_SERVICE_URL;
             await axios.post(serviceUrl + '/signin', formData)
             .then((response: { data: any; }) => {
-                var data = response.data;
-                auth?.login(data.data.name, data.data.token);
+                var data = response.data.data;
+                const encryptedType = btoa(data.type); // Encrypt the type
+                auth?.login(data.userId, encryptedType, data.token);
                 navigate('/dashboard');
                 toast.success("Login successful");
             })
