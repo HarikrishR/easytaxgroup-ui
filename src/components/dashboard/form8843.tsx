@@ -68,9 +68,9 @@ const FormEEFT = () => {
                 if (Number(year) === Number(currentYear)) {
                     const currentDate = new Date();
                     if (year !== firstEntryDate.getFullYear())
-                        updatedFormData[`days${year}`] = Math.ceil((currentDate.getTime() - startOfYear.getTime()) / (1000 * 60 * 60 * 24));
+                        updatedFormData[`days${year}`] = Math.ceil((currentDate.getTime() - startOfYear.getTime()) / (1000 * 60 * 60 * 24)) || 0;
                     else
-                        updatedFormData[`days${year}`] = Math.ceil((currentDate.getTime() - firstEntryDate.getTime()) / (1000 * 60 * 60 * 24));
+                        updatedFormData[`days${year}`] = Math.ceil((currentDate.getTime() - firstEntryDate.getTime()) / (1000 * 60 * 60 * 24)) || 0;
                 } else if (year === firstEntryDate.getFullYear()) {
                     updatedFormData[`days${year}`] = Math.ceil((endOfYear.getTime() - firstEntryDate.getTime()) / (1000 * 60 * 60 * 24)) + 1;
                 } else {
@@ -80,7 +80,10 @@ const FormEEFT = () => {
 
             setFormData(updatedFormData);
         } else {
-            setFormData({ ...formData, [name]: value });
+            setFormData({ 
+                ...formData, 
+                [name]: name.includes('days') ? Number(value) : value 
+            });
         }
 
         // Validate the input field
@@ -110,10 +113,25 @@ const FormEEFT = () => {
     };
     const prevStep = () => setStep((prev) => Math.max(prev - 1, 0));
 
-    const handleSubmit = () => {
+    const handleSubmit =  async() => {
         if (validateWantToFile() && (formData.wantToFile2021 === 'yes' || formData.wantToFile2022 === 'yes' || formData.wantToFile2023 === 'yes' || formData.wantToFile2024 === 'yes')) {
-            console.log('Stripe payment')
-            console.log(formData);
+            const serviceUrl = import.meta.env.VITE_SERVICE_URL;
+            formData.userId = localStorage.getItem('authUser');
+            formData.noOfDaysUSA = Object.keys(formData)
+                .filter(key => key.startsWith('days'))
+                .map(key => ({
+                    year: key.replace('days', ''),
+                    days: formData[key]
+                }));
+            await axios.post(serviceUrl + '/updateForm8843', formData)
+            .then((response: { data: any; }) => {
+                console.log('Stripe payment')
+                console.log(response);
+            })
+            .catch((error: any) => {
+                toast.error(error.response.data.message);
+            }); // Dispatch the action with form data
+            
         }
     };
 
