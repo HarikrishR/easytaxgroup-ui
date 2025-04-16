@@ -4,6 +4,9 @@
 .dashboard .tab-content {
     height: 80vh;
 }
+.dashboard .tab-content {
+    overflow-y: auto;
+}
 .dashboard .nav-pills {
     background-color: #f8f9fa;
 }
@@ -39,16 +42,20 @@
 .form h4 {
     font-family: 'poppinsSemiBold';
 }
+.form  .form-list span {
+    font-family: 'poppinsMedium';
+    font-size: .875rem;
+    background: #0b2d83;
+    padding: 4px 13px;
+    border-radius: 6px;
+    color: #fff;
+    cursor: pointer;
+}
 .form ul li {
     cursor: pointer;
 }
 .form .form-control,
 .form .form-select {
-    /* border-left: 0;
-    border-top: 0;
-    border-right: 0;
-    border-radius: 0;
-    padding-left: 0; */
     font-size: .912rem;
 }
 .form .form8843 form p {

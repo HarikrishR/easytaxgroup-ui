@@ -1,6 +1,4 @@
-import axios from 'axios';
-import { toast } from 'react-toastify';
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import FormEEFT from './form8843';
 import "./dashboard.css"
 
@@ -18,8 +16,8 @@ const Form = () => {
                 <h2 className="mb-3">Form</h2>
                 {
                     !formData ? 
-                    <ul>
-                        <li onClick={() => fetchFormData('8843')}>8843</li>
+                    <ul className="form-list">
+                        <li onClick={() => fetchFormData('8843')}><span>8843</span></li>
                     </ul> : 
                     <></>
                 }

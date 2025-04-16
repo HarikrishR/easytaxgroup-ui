@@ -70,24 +70,17 @@ const FormEEFT = () => {
 
     const nextStep = async () => {
         if (step === 0) {
-            if (validateUserInfo()) {
-                if (!errors.street && !errors.city && !errors.state && !errors.zipcode && !errors.address)
-                    setStep((prev) => Math.min(prev + 1, sections.length - 1));
-            }
+            if (validateUserInfo())
+                setStep((prev) => Math.min(prev + 1, sections.length - 1));
         }
         else if (step === 1) {
-            if (validateGeneralInfo()) {
-                if (!errors.visaType && !errors.citizen && !errors.passportNumber && !errors.firstEntry && !errors.days2021 && !errors.days2022 && !errors.days2023 && !errors.days2024)
-                    setStep((prev) => Math.min(prev + 1, sections.length - 1));
-            }
+            if (validateGeneralInfo())
+                setStep((prev) => Math.min(prev + 1, sections.length - 1));
         }
         else if (step === 2) {
-            if (validateUniverCityInfo()) {
-                if (!errors.universityName && !errors.universityAdvisorName && !errors.universityStreet && !errors.universityCity && !errors.universityState && !errors.universityZipcode && !errors.universityAddress)
-                    setStep((prev) => Math.min(prev + 1, sections.length - 1));
-            }
+            if (validateUniverCityInfo())
+                setStep((prev) => Math.min(prev + 1, sections.length - 1));
         }
-        // setStep((prev) => Math.min(prev + 1, sections.length - 1))
     };
     const prevStep = () => setStep((prev) => Math.max(prev - 1, 0));
 
@@ -210,11 +203,8 @@ const FormEEFT = () => {
 
     const handleQuesSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (validateQues()) {
-            if (formQuesData.q1 === 'yes' && formQuesData.q2 === 'yes' && formQuesData.q3 === 'yes' && formQuesData.q4 === 'yes') {
-                setAllow(true);
-            } else setAllow
-        }
+        if (validateQues()) setAllow(true);
+        else setAllow(false);
     };
 
     const validateQues = () => {
@@ -511,6 +501,21 @@ const FormEEFT = () => {
                                 <p>State: {formData.state}</p>
                                 <p>zipcode: {formData.zipcode}</p>
                                 <p>address: {formData.address}</p>
+                                <p>Visa Type: {formData.visaType}</p>
+                                <p>Country of Citizen: {formData.citizen}</p>
+                                <p>Passport Number: {formData.passportNumber}</p>
+                                <p>Date of First Entry to USA: {formData.firstEntry}</p>
+                                <p>Days of 2021: {formData.days2021}</p>
+                                <p>Days of 2022: {formData.days2022}</p>
+                                <p>Days of 2023: {formData.days2023}</p>
+                                <p>Days of 2024: {formData.days2024}</p>
+                                <p>University Name: {formData.universityName}</p>
+                                <p>University Advisor Name: {formData.universityAdvisorName}</p>
+                                <p>University Street: {formData.universityStreet}</p>
+                                <p>University City: {formData.universityCity}</p>
+                                <p>University State: {formData.universityState}</p>
+                                <p>University Zipcode: {formData.universityZipcode}</p>
+                                <p>University Address: {formData.universityAddress}</p>
                             </div>
                         )}
                         {
