@@ -4,6 +4,7 @@ import Nav from 'react-bootstrap/Nav';
 import Tab from 'react-bootstrap/Tab';
 import Profile from "./profile";
 import Users from "./users";
+import Form from "./form";
 import "./dashboard.css"
 
 const Dashboard = () => {
@@ -38,7 +39,7 @@ const Dashboard = () => {
                                     <Tab.Pane eventKey="users"><Users/></Tab.Pane>
                                     : ''
                                 }
-                                <Tab.Pane eventKey="second">Forms</Tab.Pane>
+                                <Tab.Pane eventKey="second"><Form/></Tab.Pane>
                             </Tab.Content>
                         </div>
                     </div>

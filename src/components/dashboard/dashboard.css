@@ -32,3 +32,28 @@
     display: inline-block;
     width: 140px;
 }
+
+.form h2 {
+    font-family: 'poppinsBold';
+}
+.form h4 {
+    font-family: 'poppinsSemiBold';
+}
+.form ul li {
+    cursor: pointer;
+}
+.form .form-control,
+.form .form-select {
+    /* border-left: 0;
+    border-top: 0;
+    border-right: 0;
+    border-radius: 0;
+    padding-left: 0; */
+    font-size: .912rem;
+}
+.form .form8843 form p {
+    margin-bottom: 0px;
+}
+.form .form8843 .form8843Des {
+    font-family: 'poppinsMedium';
+}

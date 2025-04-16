@@ -3,7 +3,7 @@ import Footer from '../footer/footer';
 import './signIn.css'
 import { Link } from 'react-router-dom';
 import { useState, useContext } from 'react';
-import { signIn } from '../../redux/actions/action'; // Adjust the path based on your project structure
+import { userData } from '../../redux/actions/action'; // Adjust the path based on your project structure
 import { useDispatch } from 'react-redux';
 import { AuthContext } from '../../authContext';
 import { useNavigate } from 'react-router-dom';
@@ -45,6 +45,8 @@ const SignIn = () => {
             await axios.post(serviceUrl + '/signin', formData)
             .then((response: { data: any; }) => {
                 var data = response.data.data;
+                localStorage.setItem('userData', JSON.stringify(data));
+                dispatch(userData(data));
                 const encryptedType = btoa(data.type); // Encrypt the type
                 auth?.login(data.userId, encryptedType, data.token);
                 navigate('/dashboard');
@@ -52,8 +54,7 @@ const SignIn = () => {
             })
             .catch((error: any) => {
                 toast.error(error.response.data.message);
-            });
-            dispatch(signIn(formData)); // Dispatch the action with form data
+            }); // Dispatch the action with form data
         }
     };
 

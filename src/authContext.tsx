@@ -32,6 +32,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     localStorage.removeItem('authToken'); // Clear token from local storage
     localStorage.removeItem('authUser'); // Clear user info
     localStorage.removeItem('authRole'); // Clear role info
+    localStorage.removeItem('userData'); // Clear userData info
+    localStorage.removeItem('formData'); // Clear formData info
     toast.success("Logged out successfully");
   };
 

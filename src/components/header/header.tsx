@@ -2,12 +2,20 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import logo from '../../assets/images/logo.png';
+import { userData } from '../../redux/actions/action';
 import { Link } from 'react-router-dom';
 import { useContext } from 'react';
 import { AuthContext } from '../../authContext';
+import { useDispatch } from 'react-redux';
 
 const Header = () => {
     const auth = useContext(AuthContext);
+    const dispatch = useDispatch();
+
+    const handleLogout = () => {
+        auth?.logout();
+        dispatch(userData(null));
+    };
     return (
         <>
             <Navbar expand="lg" className="bg-body-tertiary">
@@ -29,7 +37,7 @@ const Header = () => {
                             { auth?.token ? <Link to="/dashboard" className='nav-link'>Dashboard</Link> : ''}
                         </Nav>
                         {
-                             auth?.token ? <button onClick={() => { auth.logout(); }} className='btnPrimary mt-2 mt-lg-0 d-inline-block'>Logout</button> 
+                             auth?.token ? <button onClick={() => { handleLogout() }} className='btnPrimary mt-2 mt-lg-0 d-inline-block'>Logout</button> 
                              : <Link to="/signIn" className='btnPrimary mt-2 mt-lg-0 d-inline-block'>Login</Link>
                         }
                     </Navbar.Collapse>

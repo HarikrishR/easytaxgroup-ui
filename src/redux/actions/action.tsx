@@ -1,5 +1,12 @@
 
-import { SIGN_IN, SIGN_UP } from './actionTypes';
+import { SIGN_IN, SIGN_UP, USER_DATA } from './actionTypes';
+
+export const userData = (value: any) => {
+    return {
+        type: USER_DATA,
+        payload: value,
+    };
+};
 
 export const signUp = (value: Object) => {
         return {

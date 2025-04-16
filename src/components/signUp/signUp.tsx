@@ -3,17 +3,14 @@ import Footer from '../footer/footer';
 import './signUp.css'
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
-import { signUp } from '../../redux/actions/action'; // Adjust the path based on your project structure
-import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 const SignUp = () => {
     const navigate = useNavigate();
-    const dispatch = useDispatch();
-    const [formData, setFormData] = useState({ name: '', phoneNumber: '', email: '', password: '', gender: '', type: 'CLIENT' });
-    const [errors, setErrors] = useState<{ name?: string; phoneNumber?: string; email?: string; password?: string; gender?: string }>({});
+    const [formData, setFormData] = useState({ firstName: '', lastName : '', phoneNumber: '', email: '', password: '', type: 'CLIENT' });
+    const [errors, setErrors] = useState<{ firstName?: string; lastName?: string; phoneNumber?: string; email?: string; password?: string; }>({});
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { id, value } = e.target;
@@ -21,9 +18,13 @@ const SignUp = () => {
     };
 
     const validate = () => {
-        const newErrors: { name?: string; phoneNumber?: string; email?: string; password?: string; gender?: string } = {};
-        if (!formData.name) {
-            newErrors.name = 'User Name is required';
+        const newErrors: { firstName?: string; lastName?: string; phoneNumber?: string; email?: string; password?: string; } = {};
+        if (!formData.firstName) {
+            newErrors.firstName = 'First Name is required';
+        }
+
+        if (!formData.lastName) {
+            newErrors.lastName = 'Last Name is required';
         }
 
         if (!formData.phoneNumber) {
@@ -41,9 +42,6 @@ const SignUp = () => {
             newErrors.password = 'Password must be at least 6 characters';
         }
 
-        if (!formData.gender) {
-            newErrors.gender = 'Gender is required';
-        }
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -59,7 +57,7 @@ const SignUp = () => {
             .then((response: { data: any; }) => {
                 navigate('/signIn');
                 toast.success(response.data.message);
-                dispatch(signUp(formData));
+                
                 console.log('Form submitted successfully', response.data);
             })
             .catch((error: any) => {
@@ -84,14 +82,29 @@ const SignUp = () => {
                                         <input
                                             type="text"
                                             className="form-control"
-                                            id="name"
-                                            placeholder="User Name"
-                                            value={formData.name}
+                                            id="firstName"
+                                            placeholder="First Name"
+                                            value={formData.firstName}
                                             onChange={handleChange}
                                         />
-                                        {errors.name && (
+                                        {errors.firstName && (
                                             <p className="formError">
-                                                {errors.name}
+                                                {errors.firstName}
+                                            </p>
+                                        )}
+                                    </div>
+                                    <div className="mb-4">
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            id="lastName"
+                                            placeholder="Last Name"
+                                            value={formData.lastName}
+                                            onChange={handleChange}
+                                        />
+                                        {errors.lastName && (
+                                            <p className="formError">
+                                                {errors.lastName}
                                             </p>
                                         )}
                                     </div>
@@ -137,24 +150,6 @@ const SignUp = () => {
                                         {errors.password && (
                                             <p className="formError">
                                                 {errors.password}
-                                            </p>
-                                        )}
-                                    </div>
-                                    <div className="mb-4">
-                                        <select
-                                            className="form-select"
-                                            id="gender"
-                                            value={formData.gender}
-                                            onChange={handleChange}
-                                        >
-                                            <option value=''>Gender</option>
-                                            <option value='Male'>Male</option>
-                                            <option value='Female'>Female</option>
-                                            <option value='Others'>Others</option>
-                                        </select>
-                                        {errors.gender && (
-                                            <p className="formError">
-                                                {errors.gender}
                                             </p>
                                         )}
                                     </div>

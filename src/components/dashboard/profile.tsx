@@ -40,22 +40,21 @@ const Profile = () => {
                     !userData ? <p>Loading...</p> :
                         <>
                             <div className="profile-header">
-                                <h2 className="mb-0">Hello {userData.name}!</h2>
+                                <h2 className="mb-0">Hello {userData.firstName}!</h2>
                                 <p>Here you can view personal informations.</p>
                             </div>
                             <div className="profile-content">
                                 <ul className="p-0 mt-4">
                                     <li><span>User ID</span> {userData.userId}</li>
-                                    <li><span>Name</span> {userData.name}</li>
+                                    <li><span>First Name</span> {userData.firstName}</li>
+                                    <li><span>Last Name</span> {userData.lastName}</li>
                                     <li><span>Email</span> {userData.email}</li>
                                     <li><span>Phone Number</span> {userData.phoneNumber}</li>
-                                    <li><span>Gender</span> {userData.gender}</li>
                                     <li><span>Role</span> {userData.type}</li>
                                 </ul>
                             </div>
                         </>
                 }
-
             </section>
         </>
     );
