@@ -10,7 +10,7 @@ const FormEEFT = () => {
     const [allow, setAllow] = useState(false);
     const [formData, setFormData] = useState(
         JSON.parse(localStorage.getItem("formData") || JSON.stringify({
-            visaType: "F1",
+            visaType: "F",
             citizen: "India",
             wantToFile2021: "no",
             wantToFile2022: "no",
@@ -420,8 +420,10 @@ const FormEEFT = () => {
                                             value={formData.visaType}
                                             onChange={handleChange}
                                         >
-                                            <option value='F1'>F1</option>
-                                            <option value='F2'>F2</option>
+                                            <option value='F1'>F</option>
+                                            <option value='J'>J</option>
+                                            <option value='M'>M</option>
+                                            <option value='Q'>Q</option>
                                         </select>
                                         {errors.visaType && (<p className="formError">{errors.visaType}</p>)}
                                     </div>
