@@ -43,7 +43,11 @@ const Dashboard = () => {
                                     <Tab.Pane eventKey="users"><Users/></Tab.Pane>
                                     : ''
                                 }
-                                <Tab.Pane eventKey="forms"><Form/></Tab.Pane>
+                                {
+                                    (localStorage.getItem('authRole') ? atob(localStorage.getItem('authRole')!) : '') === 'CLIENT' ?
+                                    <Tab.Pane eventKey="forms"><Form/></Tab.Pane>
+                                    : ''
+                                }
                             </Tab.Content>
                         </div>
                     </div>

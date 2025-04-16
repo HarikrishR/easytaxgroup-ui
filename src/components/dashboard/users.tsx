@@ -17,12 +17,10 @@ const Users = () => {
                     setUserData(data);
                 })
                 .catch((error: any) => {
-                    console.error("Error fetching user data:", error);
                     toast.error("Error fetching user data!");
                 });
 
         } catch (error) {
-            console.error("Error fetching user data:", error);
             toast.error("Error fetching user data!");
         }
     };
