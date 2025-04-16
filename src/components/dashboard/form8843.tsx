@@ -47,10 +47,12 @@ const FormEEFT = () => {
     }, [formData]);
 
     const handleChange = (e: any) => {
-        if (e.target.name === "firstEntry") {
-            const firstEntryDate = new Date(e.target.value);
+        const { name, value, placeholder } = e.target;
+
+        if (name === "firstEntry") {
+            const firstEntryDate = new Date(value);
             const currentYear = new Date().getFullYear();
-            const updatedFormData = { ...formData, [e.target.name]: e.target.value };
+            const updatedFormData = { ...formData, [name]: value };
 
             // Remove all existing days records
             Object.keys(updatedFormData).forEach((key) => {
@@ -65,12 +67,11 @@ const FormEEFT = () => {
                 const endOfYear = new Date(year, 11, 31);
                 if (Number(year) === Number(currentYear)) {
                     const currentDate = new Date();
-                    if(year !== firstEntryDate.getFullYear())
+                    if (year !== firstEntryDate.getFullYear())
                         updatedFormData[`days${year}`] = Math.ceil((currentDate.getTime() - startOfYear.getTime()) / (1000 * 60 * 60 * 24));
                     else
                         updatedFormData[`days${year}`] = Math.ceil((currentDate.getTime() - firstEntryDate.getTime()) / (1000 * 60 * 60 * 24));
-                } 
-                else if (year === firstEntryDate.getFullYear()) {
+                } else if (year === firstEntryDate.getFullYear()) {
                     updatedFormData[`days${year}`] = Math.ceil((endOfYear.getTime() - firstEntryDate.getTime()) / (1000 * 60 * 60 * 24)) + 1;
                 } else {
                     updatedFormData[`days${year}`] = 365;
@@ -78,8 +79,19 @@ const FormEEFT = () => {
             }
 
             setFormData(updatedFormData);
-        } else
-            setFormData({ ...formData, [e.target.name]: e.target.value });
+        } else {
+            setFormData({ ...formData, [name]: value });
+        }
+
+        // Validate the input field
+        const newErrors = { ...errors };
+        if (!value) {
+            newErrors[name as keyof typeof newErrors] = `${placeholder} is required`;
+        } else {
+            delete newErrors[name as keyof typeof newErrors];
+        }
+
+        setErrors(newErrors);
     };
 
     const nextStep = async () => {
@@ -162,7 +174,7 @@ const FormEEFT = () => {
             for (let year = firstEntryYear; year <= currentYear; year++) {
             const fieldName = `days${year}`;
             if (!formData[fieldName]) {
-                newErrors[fieldName] = `Number of days in ${year} is required`;
+                newErrors[fieldName] = `${year} is required`;
             }
             }
         }
@@ -206,25 +218,25 @@ const FormEEFT = () => {
         } = {};
 
         if (!formData.universityName) {
-            newErrors.universityName = 'University Name is required';
+            newErrors.universityName = 'Name is required';
         }
         if (!formData.universityAdvisorName) {
-            newErrors.universityAdvisorName = 'University Advisor Name is required';
+            newErrors.universityAdvisorName = 'Advisor Name is required';
         }
         if (!formData.universityAdvisorNumber) {
-            newErrors.universityAdvisorNumber = 'University Advisor Number is required';
+            newErrors.universityAdvisorNumber = 'Advisor Number is required';
         }
         if (!formData.universityStreet) {
-            newErrors.universityStreet = 'University Street is required';
+            newErrors.universityStreet = 'Street is required';
         }
         if (!formData.universityCity) {
-            newErrors.universityCity = 'University City is required';
+            newErrors.universityCity = 'City is required';
         }
         if (!formData.universityState) {
-            newErrors.universityState = 'University State is required';
+            newErrors.universityState = 'State is required';
         }
         if (!formData.universityZipcode) {
-            newErrors.universityZipcode = 'University Zipcode is required';
+            newErrors.universityZipcode = 'Zipcode is required';
         }
         
         setErrors(newErrors);
