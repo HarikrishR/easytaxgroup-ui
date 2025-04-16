@@ -26,9 +26,13 @@ const Dashboard = () => {
                                         </Nav.Item>
                                         : ''
                                 }
-                                <Nav.Item className="mb-2">
-                                    <Nav.Link eventKey="second">Forms</Nav.Link>
-                                </Nav.Item>
+                                {
+                                    (localStorage.getItem('authRole') ? atob(localStorage.getItem('authRole')!) : '') === 'CLIENT' ?
+                                        <Nav.Item className="mb-2">
+                                            <Nav.Link eventKey="forms">Forms</Nav.Link>
+                                        </Nav.Item>
+                                        : ''
+                                }
                             </Nav>
                         </div>
                         <div className="col-sm-9 ps-sm-0 col-lg-10">
@@ -39,7 +43,7 @@ const Dashboard = () => {
                                     <Tab.Pane eventKey="users"><Users/></Tab.Pane>
                                     : ''
                                 }
-                                <Tab.Pane eventKey="second"><Form/></Tab.Pane>
+                                <Tab.Pane eventKey="forms"><Form/></Tab.Pane>
                             </Tab.Content>
                         </div>
                     </div>

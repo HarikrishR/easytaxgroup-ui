@@ -36,6 +36,13 @@
     width: 140px;
 }
 
+.users .usersDetails table th {
+    font-family: 'poppinsSemiBold';
+}
+.users p {
+    font-family: 'poppinsMedium';
+}
+
 .form h2 {
     font-family: 'poppinsBold';
 }
