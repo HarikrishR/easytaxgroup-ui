@@ -17,31 +17,7 @@ const FormEEFT = () => {
             wantToFile2023: "no",
             wantToFile2024: "no",
         })) ||
-        {
-            street: "",
-            city: "",
-            state: "",
-            zipcode: "",
-            visaType: "F2",
-            citizen: "India",
-            passportNumber: "",
-            firstEntry: "",
-            days2021: "",
-            days2022: "",
-            days2023: "",
-            days2024: "",
-            universityName: "",
-            universityAdvisorName: "",
-            universityAdvisorNumber: "",
-            universityStreet: "",
-            universityCity: "",
-            universityState: "",
-            universityZipcode: "",
-            wantToFile2021: "",
-            wantToFile2022: "",
-            wantToFile2023: "",
-            wantToFile2024: "",
-        }
+        {}
     );
     const [errors, setErrors] = useState<
         {
@@ -53,10 +29,6 @@ const FormEEFT = () => {
             citizen?: string;
             passportNumber?: string;
             firstEntry?: string;
-            days2021?: string;
-            days2022?: string;
-            days2023?: string;
-            days2024?: string;
             universityName?: string;
             universityAdvisorName?: string;
             universityAdvisorNumber?: string;
@@ -75,7 +47,39 @@ const FormEEFT = () => {
     }, [formData]);
 
     const handleChange = (e: any) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+        if (e.target.name === "firstEntry") {
+            const firstEntryDate = new Date(e.target.value);
+            const currentYear = new Date().getFullYear();
+            const updatedFormData = { ...formData, [e.target.name]: e.target.value };
+
+            // Remove all existing days records
+            Object.keys(updatedFormData).forEach((key) => {
+                if (key.startsWith('days')) {
+                    delete updatedFormData[key];
+                }
+            });
+
+            // Recalculate days for each year from firstEntry to currentYear
+            for (let year = firstEntryDate.getFullYear(); year <= currentYear; year++) {
+                const startOfYear = new Date(year, 0, 1);
+                const endOfYear = new Date(year, 11, 31);
+                if (Number(year) === Number(currentYear)) {
+                    const currentDate = new Date();
+                    if(year !== firstEntryDate.getFullYear())
+                        updatedFormData[`days${year}`] = Math.ceil((currentDate.getTime() - startOfYear.getTime()) / (1000 * 60 * 60 * 24));
+                    else
+                        updatedFormData[`days${year}`] = Math.ceil((currentDate.getTime() - firstEntryDate.getTime()) / (1000 * 60 * 60 * 24));
+                } 
+                else if (year === firstEntryDate.getFullYear()) {
+                    updatedFormData[`days${year}`] = Math.ceil((endOfYear.getTime() - firstEntryDate.getTime()) / (1000 * 60 * 60 * 24)) + 1;
+                } else {
+                    updatedFormData[`days${year}`] = 365;
+                }
+            }
+
+            setFormData(updatedFormData);
+        } else
+            setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
     const nextStep = async () => {
@@ -97,6 +101,7 @@ const FormEEFT = () => {
     const handleSubmit = () => {
         if (validateWantToFile() && (formData.wantToFile2021 === 'yes' || formData.wantToFile2022 === 'yes' || formData.wantToFile2023 === 'yes' || formData.wantToFile2024 === 'yes')) {
             console.log('Stripe payment')
+            console.log(formData);
         }
     };
 
@@ -130,10 +135,7 @@ const FormEEFT = () => {
             citizen?: string;
             passportNumber?: string;
             firstEntry?: string;
-            days2021?: string;
-            days2022?: string;
-            days2023?: string;
-            days2024?: string;
+            [key: string]: string | undefined; // To handle dynamic keys for days validation
         } = {};
 
         if (!formData.visaType) {
@@ -146,20 +148,25 @@ const FormEEFT = () => {
             newErrors.passportNumber = 'Passport Number is required';
         }
         if (!formData.firstEntry) {
-            newErrors.firstEntry = 'Date of First Entry to USA is required';
+            newErrors.firstEntry = 'Date of First Entry is required';
         }
-        if (!formData.days2021) {
-            newErrors.days2021 = 'Days of 2021 is required';
+        if (new Date(formData.firstEntry) > new Date()) {
+            newErrors.firstEntry = 'First Entry Date cannot be in the future';
         }
-        if (!formData.days2022) {
-            newErrors.days2022 = 'Days of 2022 is required';
+
+        // Validate days fields dynamically
+        if (formData.firstEntry) {
+            const firstEntryYear = new Date(formData.firstEntry).getFullYear();
+            const currentYear = new Date().getFullYear();
+
+            for (let year = firstEntryYear; year <= currentYear; year++) {
+            const fieldName = `days${year}`;
+            if (!formData[fieldName]) {
+                newErrors[fieldName] = `Number of days in ${year} is required`;
+            }
+            }
         }
-        if (!formData.days2023) {
-            newErrors.days2023 = 'Days of 2023 is required';
-        }
-        if (!formData.days2024) {
-            newErrors.days2024 = 'Days of 2024 is required';
-        }
+
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -441,34 +448,34 @@ const FormEEFT = () => {
                                     </div>
                                     <div className='col-sm-6 col-lg-4'>
                                         <label className='mb-2'>Date of First Entry to USA</label>
-                                        <input type="date" name="firstEntry" value={formData.firstEntry} onChange={handleChange} className='form-control' />
+                                        <input type="date" name="firstEntry" value={formData.firstEntry} onChange={handleChange} className='form-control' max={new Date().toISOString().split("T")[0]} />
                                         {errors.firstEntry && (<p className="formError">{errors.firstEntry}</p>)}
                                     </div>
                                 </div>
                                 <div className='row mb-4'>
-                                    <div className='col-12'>
-                                        <p>Number of days in USA?</p>
-                                    </div>
-                                    <div className='col-sm-6 mb-4'>
-                                        <label className='mb-2'>2021</label>
-                                        <input type="number" name="days2021" placeholder="2021" value={formData.days2021} onChange={handleChange} className='form-control' />
-                                        {errors.days2021 && (<p className="formError">{errors.days2021}</p>)}
-                                    </div>
-                                    <div className='col-sm-6 mb-4'>
-                                        <label className='mb-2'>2022</label>
-                                        <input type="number" name="days2022" placeholder="2022" value={formData.days2022} onChange={handleChange} className='form-control' />
-                                        {errors.days2022 && (<p className="formError">{errors.days2022}</p>)}
-                                    </div>
-                                    <div className='col-sm-6 mb-4'>
-                                        <label className='mb-2'>2023</label>
-                                        <input type="number" name="days2023" placeholder="2023" value={formData.days2023} onChange={handleChange} className='form-control' />
-                                        {errors.days2023 && (<p className="formError">{errors.days2023}</p>)}
-                                    </div>
-                                    <div className='col-sm-6 mb-4'>
-                                        <label className='mb-2'>2024</label>
-                                        <input type="number" name="days2024" placeholder="2024" value={formData.days2024} onChange={handleChange} className='form-control' />
-                                        {errors.days2024 && (<p className="formError">{errors.days2024}</p>)}
-                                    </div>
+                                    {formData.firstEntry && (
+                                        <div className='col-12'>
+                                            <p>Number of days in USA?</p>
+                                        </div>
+                                    )}
+                                    {Array.from({ length: new Date().getFullYear() - new Date(formData.firstEntry).getFullYear() + 1 }, (_, i) => {
+                                        const year = new Date(formData.firstEntry).getFullYear() + i;
+                                        const fieldName = `days${year}`;
+                                        return (
+                                            <div className='col-sm-6 col-lg-4 mb-4 position-relative' key={year}>
+                                                <label className='mb-2'>{year}</label>
+                                                <input
+                                                    type="number"
+                                                    name={fieldName}
+                                                    placeholder={`${year}`}
+                                                    value={formData[fieldName] || ''}
+                                                    onChange={handleChange}
+                                                    className='form-control'
+                                                />
+                                                {errors[fieldName as keyof typeof errors] && (<p className="formError">{errors[fieldName as keyof typeof errors]}</p>)}
+                                            </div>
+                                        );
+                                    })}
                                 </div>
                             </>
                         )}
