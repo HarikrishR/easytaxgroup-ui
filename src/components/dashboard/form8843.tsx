@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 import { useEffect, useState } from "react";
 import "./dashboard.css"
 
-const sections = ["User Info", "General Information", "University Details", "Review & Submit"];
+const sections = ["User Info", "General Information", "University Details", "Do You Want to File Form 8843 for All the Following Years?"];
 
 const FormEEFT = () => {
     const [step, setStep] = useState(0);
@@ -11,10 +11,13 @@ const FormEEFT = () => {
     const [formData, setFormData] = useState(
         JSON.parse(localStorage.getItem("formData") || JSON.stringify({
             visaType: "F1",
-            citizen: "India"
+            citizen: "India",
+            wantToFile2021: "no",
+            wantToFile2022: "no",
+            wantToFile2023: "no",
+            wantToFile2024: "no",
         })) ||
         {
-            address: "",
             street: "",
             city: "",
             state: "",
@@ -29,16 +32,19 @@ const FormEEFT = () => {
             days2024: "",
             universityName: "",
             universityAdvisorName: "",
+            universityAdvisorNumber: "",
             universityStreet: "",
             universityCity: "",
             universityState: "",
             universityZipcode: "",
-            universityAddress: ""
+            wantToFile2021: "",
+            wantToFile2022: "",
+            wantToFile2023: "",
+            wantToFile2024: "",
         }
     );
     const [errors, setErrors] = useState<
         {
-            address?: string;
             street?: string;
             city?: string;
             state?: string;
@@ -53,11 +59,15 @@ const FormEEFT = () => {
             days2024?: string;
             universityName?: string;
             universityAdvisorName?: string;
+            universityAdvisorNumber?: string;
             universityStreet?: string;
             universityCity?: string;
             universityState?: string;
             universityZipcode?: string;
-            universityAddress?: string;
+            wantToFile2021?: string;
+            wantToFile2022?: string;
+            wantToFile2023?: string;
+            wantToFile2024?: string;
         }>({});
 
     useEffect(() => {
@@ -85,13 +95,13 @@ const FormEEFT = () => {
     const prevStep = () => setStep((prev) => Math.max(prev - 1, 0));
 
     const handleSubmit = () => {
-        alert("Form submitted successfully!");
-        localStorage.removeItem("formData");
+        if (validateWantToFile() && (formData.wantToFile2021 === 'yes' || formData.wantToFile2022 === 'yes' || formData.wantToFile2023 === 'yes' || formData.wantToFile2024 === 'yes')) {
+            console.log('Stripe payment')
+        }
     };
 
     const validateUserInfo = () => {
         const newErrors: {
-            address?: string;
             street?: string;
             city?: string;
             state?: string;
@@ -108,9 +118,6 @@ const FormEEFT = () => {
         }
         if (!formData.zipcode) {
             newErrors.zipcode = 'Zipcode is required';
-        }
-        if (!formData.address) {
-            newErrors.address = 'Address is required';
         }
 
         setErrors(newErrors);
@@ -157,15 +164,38 @@ const FormEEFT = () => {
         return Object.keys(newErrors).length === 0;
     };
 
+    const validateWantToFile = () => {
+        const newErrors: {
+            wantToFile2021?: string;
+            wantToFile2022?: string;
+            wantToFile2023?: string;
+            wantToFile2024?: string;
+        } = {};
+        if (!formData.wantToFile2021) {
+            newErrors.wantToFile2021 = '2021 is required';
+        }
+        if (!formData.wantToFile2022) {
+            newErrors.wantToFile2022 = '2022 is required';
+        }
+        if (!formData.wantToFile2023) {
+            newErrors.wantToFile2023 = '2023 is required';
+        }
+        if (!formData.wantToFile2024) {
+            newErrors.wantToFile2024 = '2024 is required';
+        }
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
     const validateUniverCityInfo = () => {
         const newErrors: {
             universityName?: string;
             universityAdvisorName?: string;
+            universityAdvisorNumber?: string;
             universityStreet?: string;
             universityCity?: string;
             universityState?: string;
             universityZipcode?: string;
-            universityAddress?: string;
         } = {};
 
         if (!formData.universityName) {
@@ -173,6 +203,9 @@ const FormEEFT = () => {
         }
         if (!formData.universityAdvisorName) {
             newErrors.universityAdvisorName = 'University Advisor Name is required';
+        }
+        if (!formData.universityAdvisorNumber) {
+            newErrors.universityAdvisorNumber = 'University Advisor Number is required';
         }
         if (!formData.universityStreet) {
             newErrors.universityStreet = 'University Street is required';
@@ -186,9 +219,7 @@ const FormEEFT = () => {
         if (!formData.universityZipcode) {
             newErrors.universityZipcode = 'University Zipcode is required';
         }
-        if (!formData.universityAddress) {
-            newErrors.universityAddress = 'University Address is required';
-        }
+        
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -203,7 +234,8 @@ const FormEEFT = () => {
 
     const handleQuesSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (validateQues()) setAllow(true);
+        if (validateQues() && formQuesData.q1 === 'yes' && formQuesData.q2 === 'yes' && formQuesData.q3 === 'yes' && formQuesData.q4 === 'yes') 
+            setAllow(true);
         else setAllow(false);
     };
 
@@ -363,15 +395,8 @@ const FormEEFT = () => {
                                     </div>
                                     <div className='col-sm-6 col-lg-4'>
                                         <label className='mb-2'>Zipcode</label>
-                                        <input type="text" name="zipcode" placeholder="Zipcode" value={formData.zipcode} onChange={handleChange} className='form-control' />
+                                        <input type="number" name="zipcode" placeholder="Zipcode" value={formData.zipcode} onChange={handleChange} className='form-control' />
                                         {errors.zipcode && (<p className="formError">{errors.zipcode}</p>)}
-                                    </div>
-                                </div>
-                                <div className='row mb-4'>
-                                    <div className='col-sm-6 col-lg-4'>
-                                        <label className='mb-2'>Address</label>
-                                        <textarea rows={4} name="address" placeholder="Address" value={formData.address} onChange={handleChange} className='form-control' />
-                                        {errors.address && (<p className="formError">{errors.address}</p>)}
                                     </div>
                                 </div>
                             </>
@@ -481,42 +506,88 @@ const FormEEFT = () => {
                                     </div>
                                     <div className='col-sm-6 col-lg-4'>
                                         <label className='mb-2'>Zipcode</label>
-                                        <input type="text" name="universityZipcode" placeholder="Zipcode" value={formData.universityZipcode} onChange={handleChange} className='form-control' />
+                                        <input type="number" name="universityZipcode" placeholder="Zipcode" value={formData.universityZipcode} onChange={handleChange} className='form-control' />
                                         {errors.universityZipcode && (<p className="formError">{errors.universityZipcode}</p>)}
                                     </div>
                                 </div>
                                 <div className='row mb-4'>
                                     <div className='col-sm-6 col-lg-4'>
-                                        <label className='mb-2'>Address</label>
-                                        <textarea rows={4} name="universityAddress" placeholder="Address" value={formData.universityAddress} onChange={handleChange} className='form-control' />
-                                        {errors.universityAddress && (<p className="formError">{errors.universityAddress}</p>)}
+                                        <label className='mb-2'>Advisor Number</label>
+                                        <input type="number" name="universityAdvisorNumber" placeholder='Number' value={formData.universityAdvisorNumber} onChange={handleChange} className='form-control' />
+                                        {errors.universityAdvisorNumber && (<p className="formError">{errors.universityAdvisorNumber}</p>)}
                                     </div>
                                 </div>
                             </>
                         )}
                         {step === 3 && (
-                            <div>
-                                <p>Street: {formData.street}</p>
-                                <p>City: {formData.city}</p>
-                                <p>State: {formData.state}</p>
-                                <p>zipcode: {formData.zipcode}</p>
-                                <p>address: {formData.address}</p>
-                                <p>Visa Type: {formData.visaType}</p>
-                                <p>Country of Citizen: {formData.citizen}</p>
-                                <p>Passport Number: {formData.passportNumber}</p>
-                                <p>Date of First Entry to USA: {formData.firstEntry}</p>
-                                <p>Days of 2021: {formData.days2021}</p>
-                                <p>Days of 2022: {formData.days2022}</p>
-                                <p>Days of 2023: {formData.days2023}</p>
-                                <p>Days of 2024: {formData.days2024}</p>
-                                <p>University Name: {formData.universityName}</p>
-                                <p>University Advisor Name: {formData.universityAdvisorName}</p>
-                                <p>University Street: {formData.universityStreet}</p>
-                                <p>University City: {formData.universityCity}</p>
-                                <p>University State: {formData.universityState}</p>
-                                <p>University Zipcode: {formData.universityZipcode}</p>
-                                <p>University Address: {formData.universityAddress}</p>
-                            </div>
+                            <>
+                                <div className='row mb-4'>
+                                    <div className='col-sm-6 mb-4'>
+                                        <label className='mb-2'>2021</label>
+                                        <select
+                                            className="form-select"
+                                            id="wantToFile2021"
+                                            name="wantToFile2021"
+                                            value={formData.wantToFile2021}
+                                            onChange={handleChange}
+                                        >
+                                            <option value='yes'>Yes</option>
+                                            <option value='no'>No</option>
+                                            <option value='alreadyFiled'>Already Filed</option>
+                                            <option value='notPresentInUSA'>No Not Present in USA</option>
+                                        </select>
+                                        {errors.wantToFile2021 && (<p className="formError">{errors.wantToFile2021}</p>)}
+                                    </div>
+                                    <div className='col-sm-6 mb-4'>
+                                        <label className='mb-2'>2022</label>
+                                        <select
+                                            className="form-select"
+                                            id="wantToFile2022"
+                                            name="wantToFile2022"
+                                            value={formData.wantToFile2022}
+                                            onChange={handleChange}
+                                        >
+                                            <option value='yes'>Yes</option>
+                                            <option value='no'>No</option>
+                                            <option value='alreadyFiled'>Already Filed</option>
+                                            <option value='notPresentInUSA'>No Not Present in USA</option>
+                                        </select>
+                                        {errors.wantToFile2022 && (<p className="formError">{errors.wantToFile2022}</p>)}
+                                    </div>
+                                    <div className='col-sm-6 mb-4'>
+                                        <label className='mb-2'>2023</label>
+                                        <select
+                                            className="form-select"
+                                            id="wantToFile2023"
+                                            name="wantToFile2023"
+                                            value={formData.wantToFile2023}
+                                            onChange={handleChange}
+                                        >
+                                            <option value='yes'>Yes</option>
+                                            <option value='no'>No</option>
+                                            <option value='alreadyFiled'>Already Filed</option>
+                                            <option value='notPresentInUSA'>No Not Present in USA</option>
+                                        </select>
+                                        {errors.wantToFile2023 && (<p className="formError">{errors.wantToFile2023}</p>)}
+                                    </div>
+                                    <div className='col-sm-6 mb-4'>
+                                        <label className='mb-2'>2024</label>
+                                        <select
+                                            className="form-select"
+                                            id="wantToFile2024"
+                                            name="wantToFile2024"
+                                            value={formData.wantToFile2024}
+                                            onChange={handleChange}
+                                        >
+                                            <option value='yes'>Yes</option>
+                                            <option value='no'>No</option>
+                                            <option value='alreadyFiled'>Already Filed</option>
+                                            <option value='notPresentInUSA'>No Not Present in USA</option>
+                                        </select>
+                                        {errors.wantToFile2024 && (<p className="formError">{errors.wantToFile2024}</p>)}
+                                    </div>
+                                </div>
+                            </>
                         )}
                         {
                             step !== 0 && (
