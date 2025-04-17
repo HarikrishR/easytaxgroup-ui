@@ -1,3 +1,13 @@
+.stripeSection {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background-color: #7272726e;
+    position: fixed;
+    z-index: 100;
+}
 .stripeContainer {
     z-index: 1000;
     position: absolute;

@@ -46,13 +46,15 @@ const StripePaymentElement = () => {
 
     return (
         <>
-            <div className='stripeContainer'>
-                <form onSubmit={handleSubmit}>
-                    <PaymentElement />
-                    <button disabled={!stripe} className='btnLtePrimary mt-3'>Submit</button>
-                    {/* {errorMessage && <p className='paymentError'>{errorMessage}</p>} */}
-                </form>
-            </div>
+            <section className='stripeSection'>
+                <div className='stripeContainer'>
+                    <form onSubmit={handleSubmit}>
+                        <PaymentElement />
+                        <button disabled={!stripe} className='btnLtePrimary mt-3'>Submit</button>
+                        {/* {errorMessage && <p className='paymentError'>{errorMessage}</p>} */}
+                    </form>
+                </div>
+            </section>
     </>
     )
 };
