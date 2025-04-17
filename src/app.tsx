@@ -10,12 +10,19 @@ import { useContext } from 'react';
 import { AuthContext } from './authContext.tsx';
 import ProtectedRoute from './protectedRoute.tsx';
 import Toast from './components/toast/toast.tsx';
+import Loader from './components/loader/loader.tsx';
+import { useSelector } from 'react-redux';
+import StripeCheckoutForm from './components/payment/stripElement.tsx';
 
 const App = () => {
+    const loader = useSelector((state: any) => state.loader);
+    const { loading } = useSelector((state: any) => state.clientSecretSettings);
     const auth = useContext(AuthContext);
     return (
         <>
             <Toast/>
+            { loader ? <Loader/> : ''}
+            { loading ? '' : <StripeCheckoutForm/> }
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/aboutUs" element={<AboutUs />} />

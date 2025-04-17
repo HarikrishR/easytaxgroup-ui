@@ -2,12 +2,17 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { PDFDocument } from 'pdf-lib';
 import { useEffect, useState } from "react";
+import { loadStripe } from "@stripe/stripe-js";
+import CheckoutForm from '../payment/stripElement';
 import form8843 from './f8843.pdf';
 import "./dashboard.css"
+import { get_loader, getClientSecretSettings, getStripePromise } from '../../redux/actions/action';
+import { useDispatch } from 'react-redux';
 
 const sections = ["User Info", "General Information", "University Details", "Do You Want to File Form 8843 for All the Following Years?"];
 
 const FormEEFT = () => {
+    const dispatch = useDispatch();
     const [step, setStep] = useState(0);
     const [allow, setAllow] = useState(false);
     const [formData, setFormData] = useState(
@@ -47,6 +52,11 @@ const FormEEFT = () => {
     useEffect(() => {
         localStorage.setItem("formData", JSON.stringify(formData));
     }, [formData]);
+
+    useEffect(() => {
+        const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+        dispatch(getStripePromise(stripePromise))
+    }, []);
 
     const fetchFromDataDB = async () => {
         try {
@@ -124,9 +134,9 @@ const FormEEFT = () => {
 
             setFormData(updatedFormData);
         } else {
-            setFormData({ 
-                ...formData, 
-                [name]: name.includes('days') ? Number(value) : value 
+            setFormData({
+                ...formData,
+                [name]: name.includes('days') ? Number(value) : value
             });
         }
 
@@ -157,7 +167,24 @@ const FormEEFT = () => {
     };
     const prevStep = () => setStep((prev) => Math.max(prev - 1, 0));
 
-    const handleSubmit =  async() => {
+    async function createPaymentIntent() {
+        try {
+            dispatch(get_loader(true));
+            const serviceUrl = import.meta.env.VITE_SERVICE_URL;
+            const response = await axios.post(serviceUrl + "/createCheckoutSession", {});
+            dispatch(getClientSecretSettings({
+                clientSecret: response.data.client_secret,
+                loading: false,
+            }));
+            dispatch(get_loader(false));
+        } catch (error) {
+            dispatch(get_loader(false));
+            console.error("Error creating payment intent:", error);
+            toast.error("Error creating payment intent!");
+        }
+    }
+
+    const handleSubmit = async () => {
         if (validateWantToFile() && (formData.wantToFile2021 === 'yes' || formData.wantToFile2022 === 'yes' || formData.wantToFile2023 === 'yes' || formData.wantToFile2024 === 'yes')) {
             const serviceUrl = import.meta.env.VITE_SERVICE_URL;
             formData.userId = localStorage.getItem('authUser');
@@ -168,55 +195,58 @@ const FormEEFT = () => {
                     days: formData[key]
                 }));
             await axios.post(serviceUrl + '/updateForm8843', formData)
-            .then(async (response: { data: any; }) => {
-                console.log('Stripe payment');
-                console.log(response);
+                .then(async (response: { data: any; }) => {
+                    // console.log('Stripe payment');
+                    console.log(response);
+                    createPaymentIntent();
 
-                const formUrl = form8843; // Provide actual URL of the blank Form 8843 PDF
-                const formPdfBytes = await fetch(formUrl).then(res => res.arrayBuffer());
-                
-                const pdfDoc = await PDFDocument.load(formPdfBytes);
-                const form = pdfDoc.getForm();
 
-                const fields = form.getFields().map(f => f.getName()); // Extract field names
-                console.log("Available form fields:", fields);
-                console.log("Available form fields:", formData);
 
-                // Populate fields (Make sure field names match actual PDF form field names)
-                form.getTextField("topmostSubform[0].Page1[0].f1_9[0]").setText(formData.visaType);
-                form.getTextField("topmostSubform[0].Page1[0].f1_11[0]").setText(formData.citizen);
-                form.getTextField("topmostSubform[0].Page1[0].f1_12[0]").setText(formData.citizen);
-                form.getTextField("topmostSubform[0].Page1[0].f1_13[0]").setText(formData.passportNumber);
-                form.getTextField("topmostSubform[0].Page1[0].f1_14[0]").setText(formData.days2024 ? formData.days2024.toString() : "0");
-                form.getTextField("topmostSubform[0].Page1[0].f1_15[0]").setText(formData.days2023 ? formData.days2023.toString() : "0");
-                form.getTextField("topmostSubform[0].Page1[0].f1_16[0]").setText(formData.days2022 ? formData.days2022.toString() : "0");
-                form.getTextField("topmostSubform[0].Page1[0].f1_17[0]").setText(formData.days2024 ? formData.days2024.toString() : "0");
-                form.getTextField("topmostSubform[0].Page1[0].f1_18[0]").setText(formData.universityAdvisorName);
-                form.getTextField("topmostSubform[0].Page1[0].f1_19[0]").setText(formData.universityCity+ "," + formData.universityState+ "," + formData.universityZipcode);
-                form.getTextField("topmostSubform[0].Page1[0].f1_20[0]").setText(formData.universityAdvisorNumber);
-                form.getTextField("topmostSubform[0].Page1[0].f1_21[0]").setText(formData.universityAdvisorName);
-                form.getTextField("topmostSubform[0].Page1[0].f1_22[0]").setText(formData.universityCity+ "," + formData.universityState+ "," + formData.universityZipcode);
-                form.getTextField("topmostSubform[0].Page1[0].f1_23[0]").setText(formData.universityAdvisorNumber);
-                form.getTextField("topmostSubform[0].Page1[0].f1_30[0]").setText(localStorage.getItem("userData") ? JSON.parse(localStorage.getItem("userData") || "{}").firstName || "" : "" + ", " + localStorage.getItem("userData") ? JSON.parse(localStorage.getItem("userData") || "{}").lastName || "" : "");
-                form.getTextField("topmostSubform[0].Page1[0].f1_31[0]").setText(formData.city+ "," + formData.state+ "," + formData.zipcode);
-                form.getTextField("topmostSubform[0].Page1[0].f1_32[0]").setText(localStorage.getItem("userData") ? JSON.parse(localStorage.getItem("userData") || "{}").phoneNumber || "" : "");
+                    // const formUrl = form8843; // Provide actual URL of the blank Form 8843 PDF
+                    // const formPdfBytes = await fetch(formUrl).then(res => res.arrayBuffer());
 
-                // Save and prepare for download
-                const updatedPdfBytes = await pdfDoc.save();
-                const blob = new Blob([updatedPdfBytes], { type: "application/pdf" });
-                const link = document.createElement("a");
-                link.href = URL.createObjectURL(blob);
-                link.download = "Updated_Form8843.pdf";
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                URL.revokeObjectURL(link.href);
-            })
-            .catch((error: any) => {
-                console.log(error);
-                toast.error("Failed to create form 8843");
-            }); // Dispatch the action with form data
-            
+                    // const pdfDoc = await PDFDocument.load(formPdfBytes);
+                    // const form = pdfDoc.getForm();
+
+                    // const fields = form.getFields().map(f => f.getName()); // Extract field names
+                    // console.log("Available form fields:", fields);
+                    // console.log("Available form fields:", formData);
+
+                    // // Populate fields (Make sure field names match actual PDF form field names)
+                    // form.getTextField("topmostSubform[0].Page1[0].f1_9[0]").setText(formData.visaType);
+                    // form.getTextField("topmostSubform[0].Page1[0].f1_11[0]").setText(formData.citizen);
+                    // form.getTextField("topmostSubform[0].Page1[0].f1_12[0]").setText(formData.citizen);
+                    // form.getTextField("topmostSubform[0].Page1[0].f1_13[0]").setText(formData.passportNumber);
+                    // form.getTextField("topmostSubform[0].Page1[0].f1_14[0]").setText(formData.days2024 ? formData.days2024.toString() : "0");
+                    // form.getTextField("topmostSubform[0].Page1[0].f1_15[0]").setText(formData.days2023 ? formData.days2023.toString() : "0");
+                    // form.getTextField("topmostSubform[0].Page1[0].f1_16[0]").setText(formData.days2022 ? formData.days2022.toString() : "0");
+                    // form.getTextField("topmostSubform[0].Page1[0].f1_17[0]").setText(formData.days2024 ? formData.days2024.toString() : "0");
+                    // form.getTextField("topmostSubform[0].Page1[0].f1_18[0]").setText(formData.universityAdvisorName);
+                    // form.getTextField("topmostSubform[0].Page1[0].f1_19[0]").setText(formData.universityCity+ "," + formData.universityState+ "," + formData.universityZipcode);
+                    // form.getTextField("topmostSubform[0].Page1[0].f1_20[0]").setText(formData.universityAdvisorNumber);
+                    // form.getTextField("topmostSubform[0].Page1[0].f1_21[0]").setText(formData.universityAdvisorName);
+                    // form.getTextField("topmostSubform[0].Page1[0].f1_22[0]").setText(formData.universityCity+ "," + formData.universityState+ "," + formData.universityZipcode);
+                    // form.getTextField("topmostSubform[0].Page1[0].f1_23[0]").setText(formData.universityAdvisorNumber);
+                    // form.getTextField("topmostSubform[0].Page1[0].f1_30[0]").setText(localStorage.getItem("userData") ? JSON.parse(localStorage.getItem("userData") || "{}").firstName || "" : "" + ", " + localStorage.getItem("userData") ? JSON.parse(localStorage.getItem("userData") || "{}").lastName || "" : "");
+                    // form.getTextField("topmostSubform[0].Page1[0].f1_31[0]").setText(formData.city+ "," + formData.state+ "," + formData.zipcode);
+                    // form.getTextField("topmostSubform[0].Page1[0].f1_32[0]").setText(localStorage.getItem("userData") ? JSON.parse(localStorage.getItem("userData") || "{}").phoneNumber || "" : "");
+
+                    // // Save and prepare for download
+                    // const updatedPdfBytes = await pdfDoc.save();
+                    // const blob = new Blob([updatedPdfBytes], { type: "application/pdf" });
+                    // const link = document.createElement("a");
+                    // link.href = URL.createObjectURL(blob);
+                    // link.download = "Updated_Form8843.pdf";
+                    // document.body.appendChild(link);
+                    // link.click();
+                    // document.body.removeChild(link);
+                    // URL.revokeObjectURL(link.href);
+                })
+                .catch((error: any) => {
+                    dispatch(get_loader(false));
+                    toast.error("Something went wrong!");
+                }); // Dispatch the action with form data
+
         }
     };
 
@@ -261,6 +291,8 @@ const FormEEFT = () => {
         }
         if (!formData.passportNumber) {
             newErrors.passportNumber = 'Passport Number is required';
+        } else if (!/^[A-Z0-9]{6,9}$/.test(formData.passportNumber)) {
+            newErrors.passportNumber = 'Alphanumeric and 6-9 characters long';
         }
         if (!formData.firstEntry) {
             newErrors.firstEntry = 'Date of First Entry is required';
@@ -275,10 +307,10 @@ const FormEEFT = () => {
             const currentYear = new Date().getFullYear();
 
             for (let year = firstEntryYear; year <= currentYear; year++) {
-            const fieldName = `days${year}`;
-            if (!formData[fieldName]) {
-                newErrors[fieldName] = `${year} is required`;
-            }
+                const fieldName = `days${year}`;
+                if (!formData[fieldName]) {
+                    newErrors[fieldName] = `${year} is required`;
+                }
             }
         }
 
@@ -341,7 +373,7 @@ const FormEEFT = () => {
         if (!formData.universityZipcode) {
             newErrors.universityZipcode = 'Zipcode is required';
         }
-        
+
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -356,7 +388,7 @@ const FormEEFT = () => {
 
     const handleQuesSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (validateQues() && formQuesData.q1 === 'yes' && formQuesData.q2 === 'yes' && formQuesData.q3 === 'yes' && formQuesData.q4 === 'yes') 
+        if (validateQues() && formQuesData.q1 === 'yes' && formQuesData.q2 === 'yes' && formQuesData.q3 === 'yes' && formQuesData.q4 === 'yes')
             setAllow(true);
         else setAllow(false);
     };
@@ -558,12 +590,12 @@ const FormEEFT = () => {
                                     </div>
                                 </div>
                                 <div className='row mb-4'>
-                                    <div className='col-sm-6 col-lg-4'>
+                                    <div className='col-sm-6 col-lg-4 position-relative'>
                                         <label className='mb-2'>Passport Number</label>
                                         <input type="text" name="passportNumber" placeholder="Passport Number" value={formData.passportNumber} onChange={handleChange} className='form-control' />
                                         {errors.passportNumber && (<p className="formError">{errors.passportNumber}</p>)}
                                     </div>
-                                    <div className='col-sm-6 col-lg-4'>
+                                    <div className='col-sm-6 col-lg-4 position-relative'>
                                         <label className='mb-2'>Date of First Entry to USA</label>
                                         <input type="date" name="firstEntry" value={formData.firstEntry} onChange={handleChange} className='form-control' max={new Date().toISOString().split("T")[0]} />
                                         {errors.firstEntry && (<p className="formError">{errors.firstEntry}</p>)}
@@ -646,7 +678,7 @@ const FormEEFT = () => {
                         {step === 3 && (
                             <>
                                 <div className='row mb-4'>
-                                    <div className='col-sm-6 mb-4'>
+                                    <div className='col-sm-4 mb-4'>
                                         <label className='mb-2'>2021</label>
                                         <select
                                             className="form-select"
@@ -662,7 +694,7 @@ const FormEEFT = () => {
                                         </select>
                                         {errors.wantToFile2021 && (<p className="formError">{errors.wantToFile2021}</p>)}
                                     </div>
-                                    <div className='col-sm-6 mb-4'>
+                                    <div className='col-sm-4 mb-4'>
                                         <label className='mb-2'>2022</label>
                                         <select
                                             className="form-select"
@@ -678,7 +710,9 @@ const FormEEFT = () => {
                                         </select>
                                         {errors.wantToFile2022 && (<p className="formError">{errors.wantToFile2022}</p>)}
                                     </div>
-                                    <div className='col-sm-6 mb-4'>
+                                </div>
+                                <div className='row mb-4'>
+                                    <div className='col-sm-4 mb-4'>
                                         <label className='mb-2'>2023</label>
                                         <select
                                             className="form-select"
@@ -694,7 +728,7 @@ const FormEEFT = () => {
                                         </select>
                                         {errors.wantToFile2023 && (<p className="formError">{errors.wantToFile2023}</p>)}
                                     </div>
-                                    <div className='col-sm-6 mb-4'>
+                                    <div className='col-sm-4 mb-4'>
                                         <label className='mb-2'>2024</label>
                                         <select
                                             className="form-select"
@@ -725,7 +759,6 @@ const FormEEFT = () => {
                         )}
                     </div>
             }
-
         </>
 
     );
