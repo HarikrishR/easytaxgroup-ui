@@ -4,8 +4,11 @@ const initialState = {
   loader: false,
   signIn: false,
   userData: null,
+  selectedForm: null,
   clientSecretSettings: { clientSecret: "", loading: true },
   stripePromise: null,
+  generatePDF: false,
+  formData: {},
 };
 
 const reducer = (state = initialState, action : any) => {
@@ -24,6 +27,21 @@ const reducer = (state = initialState, action : any) => {
       return {
         ...state,
         signIn: action.payload,
+      };
+    case actionTypes.FORM_DATA:
+      return {
+        ...state,
+        formData: action.payload,
+      };
+    case actionTypes.SELECTED_FROM:
+      return {
+        ...state,
+        selectedForm: action.payload,
+      };
+    case actionTypes.GENERATE_PDF:
+      return {
+        ...state,
+        generatePDF: action.payload,
       };
     case actionTypes.STRIPE_PROMISE:
       return {

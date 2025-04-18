@@ -1,5 +1,5 @@
 
-import { CLIENT_SECURITY_SETTINGS, GET_LOADER, SIGN_IN, SIGN_UP, STRIPE_PROMISE, USER_DATA } from './actionTypes';
+import { CLIENT_SECURITY_SETTINGS, FORM_DATA, GENERATE_PDF, GET_LOADER, SELECTED_FROM, SIGN_IN, SIGN_UP, STRIPE_PROMISE, USER_DATA } from './actionTypes';
 
 export const get_loader = (value: Object) => {
     return {
@@ -7,7 +7,6 @@ export const get_loader = (value: Object) => {
         payload: value,
     };
 };
-
 
 export const userData = (value: any) => {
     return {
@@ -30,6 +29,20 @@ export const signIn = (value: Object) => {
     };
 };
 
+export const getSelectedForm = (value: any) => {
+    return {
+        type: SELECTED_FROM,
+        payload: value,
+    };
+};
+
+export const getGeneratePDF = (value: any) => {
+    return {
+        type: GENERATE_PDF,
+        payload: value,
+    };
+};
+
 export const getClientSecretSettings = (value: Object) => {
     return {
         type: CLIENT_SECURITY_SETTINGS,
@@ -40,6 +53,13 @@ export const getClientSecretSettings = (value: Object) => {
 export const getStripePromise = (value: any) => {
     return {
         type: STRIPE_PROMISE,
+        payload: value,
+    };
+};
+
+export const getFormData = (value: any) => {
+    return {
+        type: FORM_DATA,
         payload: value,
     };
 };

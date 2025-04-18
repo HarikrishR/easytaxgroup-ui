@@ -37,8 +37,8 @@ const Header = () => {
                             { auth?.token ? <Link to="/dashboard" className='nav-link'>Dashboard</Link> : ''}
                         </Nav>
                         {
-                             auth?.token ? <button onClick={() => { handleLogout() }} className='btnPrimary mt-2 mt-lg-0 d-inline-block'>Logout</button> 
-                             : <Link to="/signIn" className='btnPrimary mt-2 mt-lg-0 d-inline-block'>Login</Link>
+                             auth?.token ? <button onClick={() => { handleLogout() }} className='btnPrimary mt-2 mt-lg-0 d-inline-block small'>Logout</button> 
+                             : <Link to="/signIn" className='btnPrimary mt-2 mt-lg-0 d-inline-block small'>Login</Link>
                         }
                     </Navbar.Collapse>
                 </Container>

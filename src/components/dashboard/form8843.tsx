@@ -3,8 +3,9 @@ import { toast } from 'react-toastify';
 import { useEffect, useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import "./dashboard.css"
-import { get_loader, getClientSecretSettings, getStripePromise } from '../../redux/actions/action';
+import { get_loader, getClientSecretSettings, getFormData, getGeneratePDF, getStripePromise } from '../../redux/actions/action';
 import { useDispatch } from 'react-redux';
+import PDFGenerate from '../pdfGeneration/pdfGenerate';
 
 const sections = ["User Info", "General Information", "University Details", "Do You Want to File Form 8843 for All the Following Years?"];
 
@@ -77,10 +78,10 @@ const FormEEFT = () => {
                         JSON.parse(localStorage.getItem("formData") || JSON.stringify({
                             visaType: "F",
                             citizen: "India",
-                            wantToFile2021: "no",
-                            wantToFile2022: "no",
-                            wantToFile2023: "no",
-                            wantToFile2024: "no",
+                            wantToFile2021: "notPresentInUSA",
+                            wantToFile2022: "notPresentInUSA",
+                            wantToFile2023: "notPresentInUSA",
+                            wantToFile2024: "notPresentInUSA"
                         }))
                     }
                 })
@@ -128,11 +129,11 @@ const FormEEFT = () => {
                 const startOfYear = new Date(year, 0, 1);
                 const endOfYear = new Date(year, 11, 31);
                 if (Number(year) === Number(currentYear)) {
-                    const currentDate = new Date();
-                    if (year !== firstEntryDate.getFullYear())
-                        updatedFormData[`days${year}`] = Math.ceil((currentDate.getTime() - startOfYear.getTime()) / (1000 * 60 * 60 * 24)) || 0;
-                    else
-                        updatedFormData[`days${year}`] = Math.ceil((currentDate.getTime() - firstEntryDate.getTime()) / (1000 * 60 * 60 * 24)) || 0;
+                    // const currentDate = new Date();
+                    // if (year !== firstEntryDate.getFullYear())
+                    //     updatedFormData[`days${year}`] = Math.ceil((currentDate.getTime() - startOfYear.getTime()) / (1000 * 60 * 60 * 24)) || 0;
+                    // else
+                    //     updatedFormData[`days${year}`] = Math.ceil((currentDate.getTime() - firstEntryDate.getTime()) / (1000 * 60 * 60 * 24)) || 0;
                 } else if (year === firstEntryDate.getFullYear()) {
                     updatedFormData[`days${year}`] = Math.ceil((endOfYear.getTime() - firstEntryDate.getTime()) / (1000 * 60 * 60 * 24)) + 1;
                 } else {
@@ -215,12 +216,15 @@ const FormEEFT = () => {
                 }));
             await axios.post(serviceUrl + '/updateForm8843', formData)
                 .then(async (response: { data: any; }) => {
+                    dispatch(getFormData(formData));
                     // console.log('Stripe payment');
                     console.log(response);
-                    createPaymentIntent();
+                    // createPaymentIntent();
+                    // dispatch(getGeneratePDF(true))
                 })
                 .catch((error: any) => {
                     dispatch(get_loader(false));
+                    console.log(error);
                     toast.error("Something went wrong!");
                 }); // Dispatch the action with form data
 
@@ -281,7 +285,7 @@ const FormEEFT = () => {
         // Validate days fields dynamically
         if (formData.firstEntry) {
             const firstEntryYear = new Date(formData.firstEntry).getFullYear();
-            const currentYear = new Date().getFullYear();
+            const currentYear = new Date().getFullYear() - 1;
 
             for (let year = firstEntryYear; year <= currentYear; year++) {
                 const fieldName = `days${year}`;
@@ -576,7 +580,7 @@ const FormEEFT = () => {
                                     </div>
                                     <div className='col-sm-6 col-lg-4 position-relative'>
                                         <label className='mb-2'>Date of First Entry to USA</label>
-                                        <input type="date" name="firstEntry" value={formData.firstEntry} onChange={handleChange} className='form-control' max={new Date().toISOString().split("T")[0]} />
+                                        <input type="date" name="firstEntry" value={formData.firstEntry} onChange={handleChange} className='form-control' max={new Date(new Date().getFullYear() - 1, 11, 31).toISOString().split('T')[0]} />
                                         {errors.firstEntry && (<p className="formError">{errors.firstEntry}</p>)}
                                     </div>
                                 </div>
@@ -586,7 +590,7 @@ const FormEEFT = () => {
                                             <p>Number of days in USA?</p>
                                         </div>
                                     )}
-                                    {Array.from({ length: new Date().getFullYear() - new Date(formData.firstEntry).getFullYear() + 1 }, (_, i) => {
+                                    {Array.from({ length: new Date().getFullYear() - new Date(formData.firstEntry).getFullYear() }, (_, i) => {
                                         const year = new Date(formData.firstEntry).getFullYear() + i;
                                         const fieldName = `days${year}`;
                                         return (

@@ -3,6 +3,7 @@ import { useElements, useStripe , PaymentElement } from '@stripe/react-stripe-js
 import { toast } from 'react-toastify';
 import './strip.css';
 import { useDispatch, useSelector } from 'react-redux';
+import PDFGenerate from '../pdfGeneration/pdfGenerate';
 import { getClientSecretSettings } from '../../redux/actions/action';
 
 const StripePaymentElement = () => {
@@ -31,6 +32,7 @@ const StripePaymentElement = () => {
         if (result.error) {
             toast.error(result.error.message ?? 'An unknown error occurred.');
         } else if ('paymentIntent' in result && (result.paymentIntent as { status: string })?.status === 'succeeded') {
+            PDFGenerate();
             const paymentDetails = result.paymentIntent;
             console.log('Payment result:', result);
             console.log('Payment Details:', paymentDetails);

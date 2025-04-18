@@ -6,6 +6,7 @@ import AboutUs from './components/aboutUs/aboutUs.tsx';
 import Services from './components/services/services.tsx';
 import ContactUs from './components/contactUs/contactUs.tsx';
 import Dashboard from './components/dashboard/dashboard.tsx';
+import PDFGenerate from './components/pdfGeneration/pdfGenerate.tsx';
 import { useContext } from 'react';
 import { AuthContext } from './authContext.tsx';
 import ProtectedRoute from './protectedRoute.tsx';
@@ -39,6 +40,7 @@ const App = () => {
                 <Route path="/signIn" element={auth?.token ? <Dashboard /> : <SignIn />} />
                 <Route path="/signUp" element={auth?.token ? <Dashboard /> : <SignUp />} />
             </Routes>
+            <PDFGenerate/>
         </>
     );
 }
