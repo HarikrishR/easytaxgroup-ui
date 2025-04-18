@@ -7,7 +7,7 @@ import { get_loader, getClientSecretSettings, getFormData, getGeneratePDF, getSt
 import { useDispatch } from 'react-redux';
 import PDFGenerate from '../pdfGeneration/pdfGenerate';
 
-const sections = ["User Info", "General Information", "University Details", "Do You Want to File Form 8843 for All the Following Years?"];
+const sections = ["User Info", "General Information", "University Details", "Do You Want to File Form for All the Following Years?"];
 
 const FormEEFT = () => {
     const dispatch = useDispatch();
@@ -26,6 +26,7 @@ const FormEEFT = () => {
     );
     const [errors, setErrors] = useState<
         {
+            ssn?: string;
             street?: string;
             city?: string;
             state?: string;
@@ -245,6 +246,7 @@ const FormEEFT = () => {
 
     const validateUserInfo = () => {
         const newErrors: {
+            ssn?: string;
             street?: string;
             city?: string;
             state?: string;
@@ -254,6 +256,11 @@ const FormEEFT = () => {
             usaState?: string;
             usaZipcode?: string;
         } = {};
+        if (!formData.ssn) {
+            newErrors.ssn = 'Social Security Number is required';
+        } else if (!/^\d{3}-\d{2}-\d{4}$/.test(formData.ssn)) {
+            newErrors.ssn = 'Social Security Number must be in the format XXX-XX-XXXX';
+        }
         if (!formData.street) {
             newErrors.street = 'Street is required';
         }
@@ -515,7 +522,6 @@ const FormEEFT = () => {
                     :
                     <div>
                         <h4 className='mb-4'>{sections[step]}</h4>
-
                         {step === 0 && (
                             <>
                                 <div className='row mb-4'>
@@ -540,6 +546,22 @@ const FormEEFT = () => {
                                         />
                                     </div>
                                 </div>
+                                <div className='row mb-4'>
+                                    <div className='col-sm-6 col-lg-4'>
+                                        <label className='mb-2'>SSN</label>
+                                        <input type="text" name="ssn" placeholder="Social Security Number" value={formData.ssn} 
+                                            onChange={(e) => {
+                                                const formattedSSN = e.target.value
+                                                    .replace(/\D/g, '') // Remove non-numeric characters
+                                                    .replace(/(\d{3})(\d{2})(\d{1,4})/, '$1-$2-$3') // Add dashes
+                                                    .slice(0, 11); // Limit to 11 characters (XXX-XX-XXXX)
+                                                handleChange({ target: { name: e.target.name, value: formattedSSN, placeholder: e.target.placeholder } });
+                                            }} className='form-control' 
+                                        />
+                                        {errors.ssn && (<p className="formError">{errors.ssn}</p>)}
+                                    </div>
+                                </div>
+                                <hr/>
                                 <h5 className='mb-3'>Residential Address</h5>
                                 <div className='row mb-4'>
                                     <div className='col-sm-6 col-lg-4'>
@@ -553,7 +575,6 @@ const FormEEFT = () => {
                                         {errors.city && (<p className="formError">{errors.city}</p>)}
                                     </div>
                                 </div>
-                                
                                 <div className='row mb-4'>
                                     <div className='col-sm-6 col-lg-4'>
                                         <label className='mb-2'>State</label>
