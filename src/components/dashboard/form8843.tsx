@@ -30,6 +30,10 @@ const FormEEFT = () => {
             city?: string;
             state?: string;
             zipcode?: string;
+            usaStreet?: string;
+            usaCity?: string;
+            usaState?: string;
+            usaZipcode?: string;
             visaType?: string;
             citizen?: string;
             passportNumber?: string;
@@ -73,7 +77,15 @@ const FormEEFT = () => {
                             });
                             delete data.noOfDaysUSA; // Optionally remove the original array if not needed
                         }
-                        setFormData(data);
+                        // Merge the user object
+                        const mergedData = {
+                            ...data,
+                            ...data.user // Spread the `user` object into the main object
+                        };
+
+                        // Remove the nested user object since its properties are now merged
+                        delete mergedData.user;
+                        setFormData(mergedData);
                     } else {
                         JSON.parse(localStorage.getItem("formData") || JSON.stringify({
                             visaType: "F",
@@ -237,6 +249,10 @@ const FormEEFT = () => {
             city?: string;
             state?: string;
             zipcode?: string;
+            usaStreet?: string;
+            usaCity?: string;
+            usaState?: string;
+            usaZipcode?: string;
         } = {};
         if (!formData.street) {
             newErrors.street = 'Street is required';
@@ -249,6 +265,18 @@ const FormEEFT = () => {
         }
         if (!formData.zipcode) {
             newErrors.zipcode = 'Zipcode is required';
+        }
+        if (!formData.usaStreet) {
+            newErrors.usaStreet = 'Street is required';
+        }
+        if (!formData.usaCity) {
+            newErrors.usaCity = 'City is required';
+        }
+        if (!formData.usaState) {
+            newErrors.usaState = 'State is required';
+        }
+        if (!formData.usaZipcode) {
+            newErrors.usaZipcode = 'Zipcode is required';
         }
 
         setErrors(newErrors);
@@ -512,6 +540,7 @@ const FormEEFT = () => {
                                         />
                                     </div>
                                 </div>
+                                <h5 className='mb-3'>Residential Address</h5>
                                 <div className='row mb-4'>
                                     <div className='col-sm-6 col-lg-4'>
                                         <label className='mb-2'>Street</label>
@@ -524,6 +553,7 @@ const FormEEFT = () => {
                                         {errors.city && (<p className="formError">{errors.city}</p>)}
                                     </div>
                                 </div>
+                                
                                 <div className='row mb-4'>
                                     <div className='col-sm-6 col-lg-4'>
                                         <label className='mb-2'>State</label>
@@ -534,6 +564,32 @@ const FormEEFT = () => {
                                         <label className='mb-2'>Zipcode</label>
                                         <input type="number" name="zipcode" placeholder="Zipcode" value={formData.zipcode} onChange={handleChange} className='form-control' />
                                         {errors.zipcode && (<p className="formError">{errors.zipcode}</p>)}
+                                    </div>
+                                </div>
+                                <hr/>
+                                <h5 className='mb-3'>USA Address</h5>
+                                <div className='row mb-4'>
+                                    <div className='col-sm-6 col-lg-4'>
+                                        <label className='mb-2'>Street</label>
+                                        <input type="text" name="usaStreet" placeholder="Street" value={formData.usaStreet} onChange={handleChange} className='form-control' />
+                                        {errors.usaStreet && (<p className="formError">{errors.usaStreet}</p>)}
+                                    </div>
+                                    <div className='col-sm-6 col-lg-4'>
+                                        <label className='mb-2'>City</label>
+                                        <input type="text" name="usaCity" placeholder="City" value={formData.usaCity} onChange={handleChange} className='form-control' />
+                                        {errors.usaCity && (<p className="formError">{errors.usaCity}</p>)}
+                                    </div>
+                                </div>
+                                <div className='row mb-4'>
+                                    <div className='col-sm-6 col-lg-4'>
+                                        <label className='mb-2'>State</label>
+                                        <input type="text" name="usaState" placeholder="State" value={formData.usaState} onChange={handleChange} className='form-control' />
+                                        {errors.usaState && (<p className="formError">{errors.usaState}</p>)}
+                                    </div>
+                                    <div className='col-sm-6 col-lg-4'>
+                                        <label className='mb-2'>Zipcode</label>
+                                        <input type="number" name="usaZipcode" placeholder="Zipcode" value={formData.usaZipcode} onChange={handleChange} className='form-control' />
+                                        {errors.usaZipcode && (<p className="formError">{errors.usaZipcode}</p>)}
                                     </div>
                                 </div>
                             </>

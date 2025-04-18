@@ -24,7 +24,8 @@
 .form h2 {
     font-family: 'poppinsBold';
 }
-.form h4 {
+.form h4,
+.form h5 {
     font-family: 'poppinsSemiBold';
 }
 .form  .form-list span {
