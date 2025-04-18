@@ -21,8 +21,8 @@ const App = () => {
     return (
         <>
             <Toast/>
-            { loader ? <Loader/> : ''}
             { loading ? '' : <StripeCheckoutForm/> }
+            { loader ? <Loader/> : ''}
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/aboutUs" element={<AboutUs />} />
@@ -39,7 +39,6 @@ const App = () => {
                 <Route path="/signIn" element={auth?.token ? <Dashboard /> : <SignIn />} />
                 <Route path="/signUp" element={auth?.token ? <Dashboard /> : <SignUp />} />
             </Routes>
-
         </>
     );
 }

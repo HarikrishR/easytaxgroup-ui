@@ -1,10 +1,7 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { PDFDocument } from 'pdf-lib';
 import { useEffect, useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
-import CheckoutForm from '../payment/stripElement';
-import form8843 from './f8843.pdf';
 import "./dashboard.css"
 import { get_loader, getClientSecretSettings, getStripePromise } from '../../redux/actions/action';
 import { useDispatch } from 'react-redux';
@@ -19,10 +16,10 @@ const FormEEFT = () => {
         JSON.parse(localStorage.getItem("formData") || JSON.stringify({
             visaType: "F",
             citizen: "India",
-            wantToFile2021: "no",
-            wantToFile2022: "no",
-            wantToFile2023: "no",
-            wantToFile2024: "no",
+            wantToFile2021: "notPresentInUSA",
+            wantToFile2022: "notPresentInUSA",
+            wantToFile2023: "notPresentInUSA",
+            wantToFile2024: "notPresentInUSA",
         })) ||
         {}
     );
@@ -115,8 +112,19 @@ const FormEEFT = () => {
                 }
             });
 
+            [2021, 2022, 2023, 2024].forEach((key) => {
+                const wantToFileKey = `wantToFile${key}`;
+                updatedFormData[wantToFileKey] = 'notPresentInUSA';
+            });
+
             // Recalculate days for each year from firstEntry to currentYear
             for (let year = firstEntryDate.getFullYear(); year <= currentYear; year++) {
+                // Set default value for wantToFile
+                if ([2021, 2022, 2023, 2024].includes(year)) {
+                    const wantToFileKey = `wantToFile${year}`;
+                    updatedFormData[wantToFileKey] = 'yes';
+                }
+
                 const startOfYear = new Date(year, 0, 1);
                 const endOfYear = new Date(year, 11, 31);
                 if (Number(year) === Number(currentYear)) {
@@ -167,11 +175,22 @@ const FormEEFT = () => {
     };
     const prevStep = () => setStep((prev) => Math.max(prev - 1, 0));
 
-    async function createPaymentIntent() {
+    async function createPaymentIntent () {
         try {
             dispatch(get_loader(true));
+            const stripePromise = await loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+            dispatch(getStripePromise(stripePromise))
+
             const serviceUrl = import.meta.env.VITE_SERVICE_URL;
-            const response = await axios.post(serviceUrl + "/createCheckoutSession", {});
+            let amount = 0;
+            const storedFormData = formData;
+            const wantToFileKeys = Object.keys(storedFormData).filter(key => key.startsWith('wantToFile') && storedFormData[key] === 'yes');
+            if (wantToFileKeys.length > 0) amount = 50 + (wantToFileKeys.length - 1) * 10;
+            
+            var paymentData = {
+                amount: amount,
+            };
+            const response = await axios.post(serviceUrl + "/createCheckoutSession", paymentData);
             dispatch(getClientSecretSettings({
                 clientSecret: response.data.client_secret,
                 loading: false,
@@ -199,48 +218,6 @@ const FormEEFT = () => {
                     // console.log('Stripe payment');
                     console.log(response);
                     createPaymentIntent();
-
-
-
-                    // const formUrl = form8843; // Provide actual URL of the blank Form 8843 PDF
-                    // const formPdfBytes = await fetch(formUrl).then(res => res.arrayBuffer());
-
-                    // const pdfDoc = await PDFDocument.load(formPdfBytes);
-                    // const form = pdfDoc.getForm();
-
-                    // const fields = form.getFields().map(f => f.getName()); // Extract field names
-                    // console.log("Available form fields:", fields);
-                    // console.log("Available form fields:", formData);
-
-                    // // Populate fields (Make sure field names match actual PDF form field names)
-                    // form.getTextField("topmostSubform[0].Page1[0].f1_9[0]").setText(formData.visaType);
-                    // form.getTextField("topmostSubform[0].Page1[0].f1_11[0]").setText(formData.citizen);
-                    // form.getTextField("topmostSubform[0].Page1[0].f1_12[0]").setText(formData.citizen);
-                    // form.getTextField("topmostSubform[0].Page1[0].f1_13[0]").setText(formData.passportNumber);
-                    // form.getTextField("topmostSubform[0].Page1[0].f1_14[0]").setText(formData.days2024 ? formData.days2024.toString() : "0");
-                    // form.getTextField("topmostSubform[0].Page1[0].f1_15[0]").setText(formData.days2023 ? formData.days2023.toString() : "0");
-                    // form.getTextField("topmostSubform[0].Page1[0].f1_16[0]").setText(formData.days2022 ? formData.days2022.toString() : "0");
-                    // form.getTextField("topmostSubform[0].Page1[0].f1_17[0]").setText(formData.days2024 ? formData.days2024.toString() : "0");
-                    // form.getTextField("topmostSubform[0].Page1[0].f1_18[0]").setText(formData.universityAdvisorName);
-                    // form.getTextField("topmostSubform[0].Page1[0].f1_19[0]").setText(formData.universityCity+ "," + formData.universityState+ "," + formData.universityZipcode);
-                    // form.getTextField("topmostSubform[0].Page1[0].f1_20[0]").setText(formData.universityAdvisorNumber);
-                    // form.getTextField("topmostSubform[0].Page1[0].f1_21[0]").setText(formData.universityAdvisorName);
-                    // form.getTextField("topmostSubform[0].Page1[0].f1_22[0]").setText(formData.universityCity+ "," + formData.universityState+ "," + formData.universityZipcode);
-                    // form.getTextField("topmostSubform[0].Page1[0].f1_23[0]").setText(formData.universityAdvisorNumber);
-                    // form.getTextField("topmostSubform[0].Page1[0].f1_30[0]").setText(localStorage.getItem("userData") ? JSON.parse(localStorage.getItem("userData") || "{}").firstName || "" : "" + ", " + localStorage.getItem("userData") ? JSON.parse(localStorage.getItem("userData") || "{}").lastName || "" : "");
-                    // form.getTextField("topmostSubform[0].Page1[0].f1_31[0]").setText(formData.city+ "," + formData.state+ "," + formData.zipcode);
-                    // form.getTextField("topmostSubform[0].Page1[0].f1_32[0]").setText(localStorage.getItem("userData") ? JSON.parse(localStorage.getItem("userData") || "{}").phoneNumber || "" : "");
-
-                    // // Save and prepare for download
-                    // const updatedPdfBytes = await pdfDoc.save();
-                    // const blob = new Blob([updatedPdfBytes], { type: "application/pdf" });
-                    // const link = document.createElement("a");
-                    // link.href = URL.createObjectURL(blob);
-                    // link.download = "Updated_Form8843.pdf";
-                    // document.body.appendChild(link);
-                    // link.click();
-                    // document.body.removeChild(link);
-                    // URL.revokeObjectURL(link.href);
                 })
                 .catch((error: any) => {
                     dispatch(get_loader(false));
@@ -390,7 +367,9 @@ const FormEEFT = () => {
         e.preventDefault();
         if (validateQues() && formQuesData.q1 === 'yes' && formQuesData.q2 === 'yes' && formQuesData.q3 === 'yes' && formQuesData.q4 === 'yes')
             setAllow(true);
-        else setAllow(false);
+        else {
+            setAllow(false);
+            toast.info("Please answer all questions with 'Yes'");};
     };
 
     const validateQues = () => {
@@ -690,7 +669,7 @@ const FormEEFT = () => {
                                             <option value='yes'>Yes</option>
                                             <option value='no'>No</option>
                                             <option value='alreadyFiled'>Already Filed</option>
-                                            <option value='notPresentInUSA'>No Not Present in USA</option>
+                                            <option value='notPresentInUSA'>Not Present in USA</option>
                                         </select>
                                         {errors.wantToFile2021 && (<p className="formError">{errors.wantToFile2021}</p>)}
                                     </div>
@@ -706,7 +685,7 @@ const FormEEFT = () => {
                                             <option value='yes'>Yes</option>
                                             <option value='no'>No</option>
                                             <option value='alreadyFiled'>Already Filed</option>
-                                            <option value='notPresentInUSA'>No Not Present in USA</option>
+                                            <option value='notPresentInUSA'>Not Present in USA</option>
                                         </select>
                                         {errors.wantToFile2022 && (<p className="formError">{errors.wantToFile2022}</p>)}
                                     </div>
@@ -724,7 +703,7 @@ const FormEEFT = () => {
                                             <option value='yes'>Yes</option>
                                             <option value='no'>No</option>
                                             <option value='alreadyFiled'>Already Filed</option>
-                                            <option value='notPresentInUSA'>No Not Present in USA</option>
+                                            <option value='notPresentInUSA'>Not Present in USA</option>
                                         </select>
                                         {errors.wantToFile2023 && (<p className="formError">{errors.wantToFile2023}</p>)}
                                     </div>
@@ -740,7 +719,7 @@ const FormEEFT = () => {
                                             <option value='yes'>Yes</option>
                                             <option value='no'>No</option>
                                             <option value='alreadyFiled'>Already Filed</option>
-                                            <option value='notPresentInUSA'>No Not Present in USA</option>
+                                            <option value='notPresentInUSA'>Not Present in USA</option>
                                         </select>
                                         {errors.wantToFile2024 && (<p className="formError">{errors.wantToFile2024}</p>)}
                                     </div>

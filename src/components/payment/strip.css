@@ -14,7 +14,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    background: linear-gradient(297deg, #6a11cb, #2575fc);
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
@@ -35,8 +35,16 @@
             #465298 20px);
 }
 
-.paymentError {
-    color: #ffffff;
-    margin: 5px 0 18px;
-    text-align: center;
+.stripeSection .btnPrimary {
+    background: #008000;
+    border: #008000;
+}
+.stripeSection .btnLtePrimary {
+    background: #ff0000;
+    border: #ff0000;
+    color: #fff;
+}
+.stripeSection .price {
+    color: #fff;
+    font-family: 'poppinsBold';
 }

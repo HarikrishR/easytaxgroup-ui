@@ -1,5 +1,4 @@
 import { Elements } from '@stripe/react-stripe-js';
-import { toast } from 'react-toastify';
 import './strip.css';
 import StripePaymentElement from './stripePaymentElement';
 import { useSelector } from 'react-redux';
@@ -12,6 +11,7 @@ const StripeCheckoutForm = () => {
         <>
             {!clientSecretSettings.loading && (
                 <Elements
+                    key={clientSecretSettings.clientSecret} // Add a unique key to force re-render
                     stripe={stripePromise}
                     options={{
                         clientSecret: clientSecretSettings.clientSecret,
