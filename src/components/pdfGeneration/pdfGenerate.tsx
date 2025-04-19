@@ -14,9 +14,7 @@ import './pdfGenerate.css';
 
 const PDFGenerate = () => {
     const dispatch = useDispatch();
-    useEffect(()=>{
-        console.log('sss');
-    },[])
+    const user = useSelector((state:any)=>state.userData);
     const generatePDF = useSelector((state: any) => state.generatePDF);
     const formData = useSelector((state: any) => state.formData);
 
@@ -63,8 +61,8 @@ const PDFGenerate = () => {
                 // console.log(formData);
         
                 // Populate fields (Make sure field names match actual PDF form field names)
-                form.getTextField("topmostSubform[0].Page1[0].f1_4[0]").setText(localStorage.getItem("userData") ? JSON.parse(localStorage.getItem("userData") || "{}").firstName || "" : "");
-                form.getTextField("topmostSubform[0].Page1[0].f1_5[0]").setText(localStorage.getItem("userData") ? JSON.parse(localStorage.getItem("userData") || "{}").lastName || "" : "");
+                form.getTextField("topmostSubform[0].Page1[0].f1_4[0]").setText(user.firstName);
+                form.getTextField("topmostSubform[0].Page1[0].f1_5[0]").setText(user.lastName);
                 form.getTextField("topmostSubform[0].Page1[0].f1_7[0]").setText(formData.street + "," +formData.city + "," + formData.state + "," + formData.zipcode);
                 form.getTextField("topmostSubform[0].Page1[0].f1_9[0]").setText(formData.visaType);
                 form.getTextField("topmostSubform[0].Page1[0].f1_11[0]").setText(formData.citizen);
