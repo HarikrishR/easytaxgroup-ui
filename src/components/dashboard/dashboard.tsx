@@ -30,10 +30,10 @@ const Dashboard = () => {
                     <a className="navbar-brand col-md-3 col-lg-2" href="#">
                         <img src={logo} className='logo ps-4' />
                     </a>
-                    <button className="navbar-toggler d-sm-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+                    <button className="navbar-toggler d-md-none collapsed me-4" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
                         <span className="navbar-toggler-icon"></span>
                     </button>
-                    <div className="d-none d-sm-block">
+                    <div className="d-none d-md-block">
                         <button onClick={() => { handleLogout() }} className="btnPrimary me-4 small">Logout</button>
                     </div>
                 </div>
@@ -72,14 +72,15 @@ const Dashboard = () => {
                                         : ''
                                 }
                             </Nav>
-                            <div className="d-block d-sm-none">
-                                <button onClick={() => { handleLogout() }} className="btnPrimary me-4 small">Logout</button>
-                            </div>
+                            
+                        </div>
+                        <div className="p-4 d-block d-md-none text-end">
+                            <button onClick={() => { handleLogout() }} className="btnPrimary small">Logout</button>
                         </div>
                     </div>
 
                     <div className="col-md-9 ms-sm-auto col-lg-10">
-                        <div className="p-4">
+                        <div className="p-4 pb-5">
                             <Tab.Content>
                                 <Tab.Pane eventKey="profile">
                                     <Profile />

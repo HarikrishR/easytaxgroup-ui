@@ -12,9 +12,18 @@ const SignUp = () => {
     const [formData, setFormData] = useState({ firstName: '', lastName : '', phoneNumber: '', email: '', password: '', type: 'CLIENT' });
     const [errors, setErrors] = useState<{ firstName?: string; lastName?: string; phoneNumber?: string; email?: string; password?: string; }>({});
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const { id, value } = e.target;
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { id, value, name, placeholder } = e.target;
         setFormData((prev) => ({ ...prev, [id]: value }));
+
+        // Validate the input field
+        const newErrors = { ...errors };
+        if (!value) {
+            newErrors[name as keyof typeof newErrors] = `${placeholder} is required`;
+        } else
+            delete newErrors[name as keyof typeof newErrors];
+
+        setErrors(newErrors);
     };
 
     const validate = () => {
@@ -83,6 +92,7 @@ const SignUp = () => {
                                             type="text"
                                             className="form-control"
                                             id="firstName"
+                                            name="firstName"
                                             placeholder="First Name"
                                             value={formData.firstName}
                                             onChange={handleChange}
@@ -98,6 +108,7 @@ const SignUp = () => {
                                             type="text"
                                             className="form-control"
                                             id="lastName"
+                                            name="lastName"
                                             placeholder="Last Name"
                                             value={formData.lastName}
                                             onChange={handleChange}
@@ -110,9 +121,10 @@ const SignUp = () => {
                                     </div>
                                     <div className="mb-4">
                                         <input
-                                            type="text"
+                                            type="number"
                                             className="form-control"
                                             id="phoneNumber"
+                                            name="phoneNumber"
                                             placeholder="Phone Number"
                                             value={formData.phoneNumber}
                                             onChange={handleChange}
@@ -128,6 +140,7 @@ const SignUp = () => {
                                             type="email"
                                             className="form-control"
                                             id="email"
+                                            name="email"
                                             placeholder="Email"
                                             value={formData.email}
                                             onChange={handleChange}
@@ -143,6 +156,7 @@ const SignUp = () => {
                                             type="password"
                                             className="form-control"
                                             id="password"
+                                            name="password"
                                             placeholder="Password"
                                             value={formData.password}
                                             onChange={handleChange}

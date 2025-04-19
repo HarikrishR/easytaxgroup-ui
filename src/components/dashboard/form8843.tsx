@@ -7,7 +7,7 @@ import { get_loader, getClientSecretSettings, getFormData, getGeneratePDF, getSt
 import { useDispatch } from 'react-redux';
 import PDFGenerate from '../pdfGeneration/pdfGenerate';
 
-const sections = ["User Info", "General Information", "University Details", "Do You Want to File Form for All the Following Years?"];
+const sections = ["User Info", "General Information", "University Details", "Do You Want to File Form for the Following Years?"];
 
 const FormEEFT = () => {
     const dispatch = useDispatch();
@@ -232,7 +232,7 @@ const FormEEFT = () => {
                     dispatch(getFormData(formData));
                     // console.log('Stripe payment');
                     console.log(response);
-                    // createPaymentIntent();
+                    createPaymentIntent();
                     // dispatch(getGeneratePDF(true))
                 })
                 .catch((error: any) => {
@@ -444,11 +444,11 @@ const FormEEFT = () => {
                         <h4 className='mb-4'>Welcome to the Form 8843</h4>
                         <p className='form8843Des'>Before you start, please make sure you have the following documents ready:</p>
                         <form>
-                            <div className='row mb-4 align-items-center'>
-                                <div className='col-sm-8'>
+                            <div className='row align-items-center'>
+                                <div className='col-sm-8 mb-2 mb-sm-3'>
                                     <p>Can we create a billing tab within our website?</p>
                                 </div>
-                                <div className='col-sm-4'>
+                                <div className='col-6 col-sm-4 mb-4 mb-sm-3'>
                                     <select
                                         className="form-select"
                                         id="q1"
@@ -461,12 +461,10 @@ const FormEEFT = () => {
                                     </select>
                                     {errorsQues.q1 && (<p className="formError">{errorsQues.q1}</p>)}
                                 </div>
-                            </div>
-                            <div className='row mb-4 align-items-center'>
-                                <div className='col-sm-8'>
+                                <div className='col-sm-8 mb-2 mb-sm-3'>
                                     <p>Once I click on Bill, Can we send automatic Email to the Client? And with the option of followup emailing?</p>
                                 </div>
-                                <div className='col-sm-4'>
+                                <div className='col-6 col-sm-4 mb-4 mb-sm-3'>
                                     <select
                                         className="form-select"
                                         id="q2"
@@ -480,11 +478,11 @@ const FormEEFT = () => {
                                     {errorsQues.q2 && (<p className="formError">{errorsQues.q2}</p>)}
                                 </div>
                             </div>
-                            <div className='row mb-4 align-items-center'>
-                                <div className='col-sm-8'>
+                            <div className='row align-items-center'>
+                                <div className='col-sm-8 mb-2 mb-sm-3'>
                                     <p>Automatic emails</p>
                                 </div>
-                                <div className='col-sm-4'>
+                                <div className='col-6 col-sm-4 mb-4 mb-sm-3'>
                                     <select
                                         className="form-select"
                                         id="q3"
@@ -497,12 +495,10 @@ const FormEEFT = () => {
                                     </select>
                                     {errorsQues.q3 && (<p className="formError">{errorsQues.q3}</p>)}
                                 </div>
-                            </div>
-                            <div className='row mb-4 align-items-center'>
-                                <div className='col-sm-8'>
+                                <div className='col-sm-8 mb-2 mb-sm-3'>
                                     <p>Question 4?</p>
                                 </div>
-                                <div className='col-sm-4'>
+                                <div className='col-6 col-sm-4 mb-4 mb-sm-3'>
                                     <select
                                         className="form-select"
                                         id="q4"
@@ -524,8 +520,8 @@ const FormEEFT = () => {
                         <h4 className='mb-4'>{sections[step]}</h4>
                         {step === 0 && (
                             <>
-                                <div className='row mb-4'>
-                                    <div className='col-sm-6 col-lg-4'>
+                                <div className='row'>
+                                    <div className='col-sm-6 col-lg-4 mb-4 mb-4'>
                                         <label className='mb-2'>First Name</label>
                                         <input
                                             type="text"
@@ -535,7 +531,7 @@ const FormEEFT = () => {
                                             className='form-control'
                                         />
                                     </div>
-                                    <div className='col-sm-6 col-lg-4'>
+                                    <div className='col-sm-6 col-lg-4 mb-4 mb-4'>
                                         <label className='mb-2'>Last Name</label>
                                         <input
                                             type="text"
@@ -545,9 +541,7 @@ const FormEEFT = () => {
                                             className='form-control'
                                         />
                                     </div>
-                                </div>
-                                <div className='row mb-4'>
-                                    <div className='col-sm-6 col-lg-4'>
+                                    <div className='col-sm-6 col-lg-4 mb-4 mb-4'>
                                         <label className='mb-2'>SSN</label>
                                         <input type="text" name="ssn" placeholder="Social Security Number" value={formData.ssn} 
                                             onChange={(e) => {
@@ -561,53 +555,51 @@ const FormEEFT = () => {
                                         {errors.ssn && (<p className="formError">{errors.ssn}</p>)}
                                     </div>
                                 </div>
-                                <hr/>
-                                <h5 className='mb-3'>Residential Address</h5>
-                                <div className='row mb-4'>
-                                    <div className='col-sm-6 col-lg-4'>
+                                <div className='subHead position-relative overflow-hidden mb-3'>
+                                    <h6 className='mb-0 pe-4'>Residential Address</h6>
+                                </div>
+                                <div className='row'>
+                                    <div className='col-sm-6 col-lg-4 mb-4'>
                                         <label className='mb-2'>Street</label>
                                         <input type="text" name="street" placeholder="Street" value={formData.street} onChange={handleChange} className='form-control' />
                                         {errors.street && (<p className="formError">{errors.street}</p>)}
                                     </div>
-                                    <div className='col-sm-6 col-lg-4'>
+                                    <div className='col-sm-6 col-lg-4 mb-4'>
                                         <label className='mb-2'>City</label>
                                         <input type="text" name="city" placeholder="City" value={formData.city} onChange={handleChange} className='form-control' />
                                         {errors.city && (<p className="formError">{errors.city}</p>)}
                                     </div>
-                                </div>
-                                <div className='row mb-4'>
-                                    <div className='col-sm-6 col-lg-4'>
+                                    <div className='col-sm-6 col-lg-4 mb-4'>
                                         <label className='mb-2'>State</label>
                                         <input type="text" name="state" placeholder="State" value={formData.state} onChange={handleChange} className='form-control' />
                                         {errors.state && (<p className="formError">{errors.state}</p>)}
                                     </div>
-                                    <div className='col-sm-6 col-lg-4'>
+                                    <div className='col-sm-6 col-lg-4 mb-4'>
                                         <label className='mb-2'>Zipcode</label>
                                         <input type="number" name="zipcode" placeholder="Zipcode" value={formData.zipcode} onChange={handleChange} className='form-control' />
                                         {errors.zipcode && (<p className="formError">{errors.zipcode}</p>)}
                                     </div>
                                 </div>
-                                <hr/>
-                                <h5 className='mb-3'>USA Address</h5>
-                                <div className='row mb-4'>
-                                    <div className='col-sm-6 col-lg-4'>
+                                <div className='subHead position-relative overflow-hidden mb-3'>
+                                    <h6 className='mb-0 pe-4'>USA Address</h6>
+                                </div>
+                                <div className='row'>
+                                    <div className='col-sm-6 col-lg-4 mb-4'>
                                         <label className='mb-2'>Street</label>
                                         <input type="text" name="usaStreet" placeholder="Street" value={formData.usaStreet} onChange={handleChange} className='form-control' />
                                         {errors.usaStreet && (<p className="formError">{errors.usaStreet}</p>)}
                                     </div>
-                                    <div className='col-sm-6 col-lg-4'>
+                                    <div className='col-sm-6 col-lg-4 mb-4'>
                                         <label className='mb-2'>City</label>
                                         <input type="text" name="usaCity" placeholder="City" value={formData.usaCity} onChange={handleChange} className='form-control' />
                                         {errors.usaCity && (<p className="formError">{errors.usaCity}</p>)}
                                     </div>
-                                </div>
-                                <div className='row mb-4'>
-                                    <div className='col-sm-6 col-lg-4'>
+                                    <div className='col-sm-6 col-lg-4 mb-4'>
                                         <label className='mb-2'>State</label>
                                         <input type="text" name="usaState" placeholder="State" value={formData.usaState} onChange={handleChange} className='form-control' />
                                         {errors.usaState && (<p className="formError">{errors.usaState}</p>)}
                                     </div>
-                                    <div className='col-sm-6 col-lg-4'>
+                                    <div className='col-sm-6 col-lg-4 mb-4'>
                                         <label className='mb-2'>Zipcode</label>
                                         <input type="number" name="usaZipcode" placeholder="Zipcode" value={formData.usaZipcode} onChange={handleChange} className='form-control' />
                                         {errors.usaZipcode && (<p className="formError">{errors.usaZipcode}</p>)}
@@ -617,8 +609,8 @@ const FormEEFT = () => {
                         )}
                         {step === 1 && (
                             <>
-                                <div className='row mb-4'>
-                                    <div className='col-sm-6 col-lg-4'>
+                                <div className='row'>
+                                    <div className='col-sm-6 col-lg-4 mb-4'>
                                         <label className='mb-2'>Visa Type</label>
                                         <select
                                             className="form-select"
@@ -634,7 +626,7 @@ const FormEEFT = () => {
                                         </select>
                                         {errors.visaType && (<p className="formError">{errors.visaType}</p>)}
                                     </div>
-                                    <div className='col-sm-6 col-lg-4'>
+                                    <div className='col-sm-6 col-lg-4 mb-4'>
                                         <label className='mb-2'>Country of Citizen</label>
                                         <select
                                             className="form-select"
@@ -648,25 +640,23 @@ const FormEEFT = () => {
                                         </select>
                                         {errors.citizen && (<p className="formError">{errors.citizen}</p>)}
                                     </div>
-                                </div>
-                                <div className='row mb-4'>
-                                    <div className='col-sm-6 col-lg-4 position-relative'>
+                                    <div className='col-sm-6 col-lg-4 mb-4 position-relative'>
                                         <label className='mb-2'>Passport Number</label>
                                         <input type="text" name="passportNumber" placeholder="Passport Number" value={formData.passportNumber} onChange={handleChange} className='form-control' />
                                         {errors.passportNumber && (<p className="formError">{errors.passportNumber}</p>)}
                                     </div>
-                                    <div className='col-sm-6 col-lg-4 position-relative'>
+                                    <div className='col-sm-6 col-lg-4 mb-4 position-relative'>
                                         <label className='mb-2'>Date of First Entry to USA</label>
                                         <input type="date" name="firstEntry" value={formData.firstEntry} onChange={handleChange} className='form-control' max={new Date(new Date().getFullYear() - 1, 11, 31).toISOString().split('T')[0]} />
                                         {errors.firstEntry && (<p className="formError">{errors.firstEntry}</p>)}
                                     </div>
                                 </div>
-                                <div className='row mb-4'>
-                                    {formData.firstEntry && (
-                                        <div className='col-12'>
-                                            <p>Number of days in USA?</p>
-                                        </div>
-                                    )}
+                                {formData.firstEntry && (
+                                    <div className='subHead position-relative overflow-hidden mb-3'>
+                                        <h6 className='mb-0 pe-4'>Number of days in USA?</h6>
+                                    </div>
+                                )}
+                                <div className='row'>
                                     {Array.from({ length: new Date().getFullYear() - new Date(formData.firstEntry).getFullYear() }, (_, i) => {
                                         const year = new Date(formData.firstEntry).getFullYear() + i;
                                         const fieldName = `days${year}`;
@@ -690,55 +680,49 @@ const FormEEFT = () => {
                         )}
                         {step === 2 && (
                             <>
-                                <div className='row mb-4'>
-                                    <div className='col-sm-6 col-lg-4'>
+                                <div className='row'>
+                                    <div className='col-sm-6 col-lg-4 mb-4'>
                                         <label className='mb-2'>Name</label>
                                         <input type="text" name="universityName" placeholder="Name" value={formData.universityName} onChange={handleChange} className='form-control' />
                                         {errors.universityName && (<p className="formError">{errors.universityName}</p>)}
                                     </div>
-                                    <div className='col-sm-6 col-lg-4'>
+                                    <div className='col-sm-6 col-lg-4 mb-4'>
                                         <label className='mb-2'>Advisor Name</label>
                                         <input type="text" name="universityAdvisorName" placeholder='Name' value={formData.universityAdvisorName} onChange={handleChange} className='form-control' />
                                         {errors.universityAdvisorName && (<p className="formError">{errors.universityAdvisorName}</p>)}
                                     </div>
-                                </div>
-                                <div className='row mb-4'>
-                                    <div className='col-sm-6 col-lg-4'>
+                                    <div className='col-sm-6 col-lg-4 mb-4'>
+                                        <label className='mb-2'>Advisor Number</label>
+                                        <input type="number" name="universityAdvisorNumber" placeholder='Number' value={formData.universityAdvisorNumber} onChange={handleChange} className='form-control' />
+                                        {errors.universityAdvisorNumber && (<p className="formError">{errors.universityAdvisorNumber}</p>)}
+                                    </div>
+                                    <div className='col-sm-6 col-lg-4 mb-4'>
                                         <label className='mb-2'>Street</label>
                                         <input type="text" name="universityStreet" placeholder="Street" value={formData.universityStreet} onChange={handleChange} className='form-control' />
                                         {errors.universityStreet && (<p className="formError">{errors.universityStreet}</p>)}
                                     </div>
-                                    <div className='col-sm-6 col-lg-4'>
+                                    <div className='col-sm-6 col-lg-4 mb-4'>
                                         <label className='mb-2'>City</label>
                                         <input type="text" name="universityCity" placeholder="City" value={formData.universityCity} onChange={handleChange} className='form-control' />
                                         {errors.universityCity && (<p className="formError">{errors.universityCity}</p>)}
                                     </div>
-                                </div>
-                                <div className='row mb-4'>
-                                    <div className='col-sm-6 col-lg-4'>
+                                    <div className='col-sm-6 col-lg-4 mb-4'>
                                         <label className='mb-2'>State</label>
                                         <input type="text" name="universityState" placeholder="State" value={formData.universityState} onChange={handleChange} className='form-control' />
                                         {errors.universityState && (<p className="formError">{errors.universityState}</p>)}
                                     </div>
-                                    <div className='col-sm-6 col-lg-4'>
+                                    <div className='col-sm-6 col-lg-4 mb-4'>
                                         <label className='mb-2'>Zipcode</label>
                                         <input type="number" name="universityZipcode" placeholder="Zipcode" value={formData.universityZipcode} onChange={handleChange} className='form-control' />
                                         {errors.universityZipcode && (<p className="formError">{errors.universityZipcode}</p>)}
-                                    </div>
-                                </div>
-                                <div className='row mb-4'>
-                                    <div className='col-sm-6 col-lg-4'>
-                                        <label className='mb-2'>Advisor Number</label>
-                                        <input type="number" name="universityAdvisorNumber" placeholder='Number' value={formData.universityAdvisorNumber} onChange={handleChange} className='form-control' />
-                                        {errors.universityAdvisorNumber && (<p className="formError">{errors.universityAdvisorNumber}</p>)}
                                     </div>
                                 </div>
                             </>
                         )}
                         {step === 3 && (
                             <>
-                                <div className='row mb-4'>
-                                    <div className='col-sm-4 mb-4'>
+                                <div className='row'>
+                                    <div className='col-sm-6 col-md-4 col-lg-3 mb-4'>
                                         <label className='mb-2'>2021</label>
                                         <select
                                             className="form-select"
@@ -754,7 +738,7 @@ const FormEEFT = () => {
                                         </select>
                                         {errors.wantToFile2021 && (<p className="formError">{errors.wantToFile2021}</p>)}
                                     </div>
-                                    <div className='col-sm-4 mb-4'>
+                                    <div className='col-sm-6 col-md-4 col-lg-3 mb-4'>
                                         <label className='mb-2'>2022</label>
                                         <select
                                             className="form-select"
@@ -770,9 +754,7 @@ const FormEEFT = () => {
                                         </select>
                                         {errors.wantToFile2022 && (<p className="formError">{errors.wantToFile2022}</p>)}
                                     </div>
-                                </div>
-                                <div className='row mb-4'>
-                                    <div className='col-sm-4 mb-4'>
+                                    <div className='col-sm-6 col-md-4 col-lg-3 mb-4'>
                                         <label className='mb-2'>2023</label>
                                         <select
                                             className="form-select"
@@ -788,7 +770,7 @@ const FormEEFT = () => {
                                         </select>
                                         {errors.wantToFile2023 && (<p className="formError">{errors.wantToFile2023}</p>)}
                                     </div>
-                                    <div className='col-sm-4 mb-4'>
+                                    <div className='col-sm-6 col-md-4 col-lg-3 mb-4'>
                                         <label className='mb-2'>2024</label>
                                         <select
                                             className="form-select"

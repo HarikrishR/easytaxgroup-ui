@@ -24,14 +24,13 @@ const Profile = () => {
                 });
 
         } catch (error) {
-            console.error("Error fetching user data:", error);
             toast.error("Error fetching user data!");
         }
     };
 
     useEffect(() => {
         fetchUserData();
-    },[]);
+    }, []);
 
     return (
         <>
@@ -43,9 +42,12 @@ const Profile = () => {
                                 <h2 className="mb-0">Hello {userData.firstName}!</h2>
                                 <p>Here you can view personal informations.</p>
                             </div>
-                            <div className="profile-content">
-                                <ul className="p-0 mt-4">
-                                    <li><span>User ID</span> {userData.userId}</li>
+                            <div className="profile-content mb-4">
+                                <div className='subHead position-relative overflow-hidden mb-3'>
+                                    <h6 className='mb-0 pe-4'>User Info</h6>
+                                </div>
+                                <ul className="p-0">
+                                    <li><span>ID</span> {userData.userId}</li>
                                     <li><span>First Name</span> {userData.firstName}</li>
                                     <li><span>Last Name</span> {userData.lastName}</li>
                                     <li><span>Email</span> {userData.email}</li>
@@ -53,6 +55,20 @@ const Profile = () => {
                                     <li><span>Role</span> {userData.type}</li>
                                 </ul>
                             </div>
+                            {
+                                userData.street ?
+                                    <div className="profile-content">
+                                        <div className='subHead position-relative overflow-hidden mb-3'>
+                                            <h6 className='mb-0 pe-4'>Address</h6>
+                                        </div>
+                                        <ul className="p-0">
+                                            <li><span>Street</span> {userData.usaStreet}</li>
+                                            <li><span>City</span> {userData.usaCity}</li>
+                                            <li><span>State</span> {userData.usaState}</li>
+                                            <li><span>Zipcode</span> {userData.usaZipcode}</li>
+                                        </ul>
+                                    </div> : <></>
+                            }
                         </>
                 }
             </section>

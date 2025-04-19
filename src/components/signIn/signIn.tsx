@@ -18,8 +18,17 @@ const SignIn = () => {
     const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { id, value } = e.target;
+        const { id, value, name, placeholder } = e.target;
         setFormData((prev) => ({ ...prev, [id]: value }));
+
+        // Validate the input field
+        const newErrors = { ...errors };
+        if (!value) {
+            newErrors[name as keyof typeof newErrors] = `${placeholder} is required`;
+        } else
+            delete newErrors[name as keyof typeof newErrors];
+
+        setErrors(newErrors);
     };
 
     const validate = () => {
@@ -73,6 +82,7 @@ const SignIn = () => {
                                             type="email"
                                             className="form-control"
                                             id="email"
+                                            name="email"
                                             placeholder="Email"
                                             value={formData.email}
                                             onChange={handleChange}
@@ -88,6 +98,7 @@ const SignIn = () => {
                                             type="password"
                                             className="form-control"
                                             id="password"
+                                            name="password"
                                             placeholder="Password"
                                             value={formData.password}
                                             onChange={handleChange}
