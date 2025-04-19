@@ -2,9 +2,12 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useEffect, useState } from "react";
 import "./dashboard.css"
+import { useDispatch, useSelector } from 'react-redux';
+import { userData } from '../../redux/actions/action';
 
 const Profile = () => {
-    const [userData, setUserData] = useState<any>(null);
+    const dispatch = useDispatch();
+    const user = useSelector((state:any)=>state.userData)
 
     const fetchUserData = async () => {
         try {
@@ -16,7 +19,7 @@ const Profile = () => {
             await axios.post(serviceUrl + '/fetchUserById', formData)
                 .then((response: { data: any; }) => {
                     var data = response.data.data;
-                    setUserData(data);
+                    dispatch(userData(data));
                 })
                 .catch((error: any) => {
                     console.error("Error fetching user data:", error);
@@ -36,10 +39,10 @@ const Profile = () => {
         <>
             <section className="profile">
                 {
-                    !userData ? <p>Loading...</p> :
+                    !user ? <p>Loading...</p> :
                         <>
                             <div className="profile-header">
-                                <h2 className="mb-0">Hello {userData.firstName}!</h2>
+                                <h2 className="mb-0">Hello {user.firstName}!</h2>
                                 <p>Here you can view personal informations.</p>
                             </div>
                             <div className="profile-content mb-4">
@@ -47,25 +50,25 @@ const Profile = () => {
                                     <h6 className='mb-0 pe-4'>User Info</h6>
                                 </div>
                                 <ul className="p-0">
-                                    <li><span>ID</span> {userData.userId}</li>
-                                    <li><span>First Name</span> {userData.firstName}</li>
-                                    <li><span>Last Name</span> {userData.lastName}</li>
-                                    <li><span>Email</span> {userData.email}</li>
-                                    <li><span>Phone Number</span> {userData.phoneNumber}</li>
-                                    <li><span>Role</span> {userData.type}</li>
+                                    <li><span>ID</span> {user.userId}</li>
+                                    <li><span>First Name</span> {user.firstName}</li>
+                                    <li><span>Last Name</span> {user.lastName}</li>
+                                    <li><span>Email</span> {user.email}</li>
+                                    <li><span>Phone Number</span> {user.phoneNumber}</li>
+                                    <li><span>Role</span> {user.type}</li>
                                 </ul>
                             </div>
                             {
-                                userData.street ?
+                                user.street ?
                                     <div className="profile-content">
                                         <div className='subHead position-relative overflow-hidden mb-3'>
                                             <h6 className='mb-0 pe-4'>Address</h6>
                                         </div>
                                         <ul className="p-0">
-                                            <li><span>Street</span> {userData.usaStreet}</li>
-                                            <li><span>City</span> {userData.usaCity}</li>
-                                            <li><span>State</span> {userData.usaState}</li>
-                                            <li><span>Zipcode</span> {userData.usaZipcode}</li>
+                                            <li><span>Street</span> {user.usaStreet}</li>
+                                            <li><span>City</span> {user.usaCity}</li>
+                                            <li><span>State</span> {user.usaState}</li>
+                                            <li><span>Zipcode</span> {user.usaZipcode}</li>
                                         </ul>
                                     </div> : <></>
                             }

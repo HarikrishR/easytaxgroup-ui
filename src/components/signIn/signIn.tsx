@@ -54,7 +54,6 @@ const SignIn = () => {
             await axios.post(serviceUrl + '/signin', formData)
             .then((response: { data: any; }) => {
                 var data = response.data.data;
-                localStorage.setItem('userData', JSON.stringify(data));
                 dispatch(userData(data));
                 const encryptedType = btoa(data.type); // Encrypt the type
                 auth?.login(data.userId, encryptedType, data.token);

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import "./dashboard.css"
 import { get_loader, getClientSecretSettings, getFormData, getGeneratePDF, getStripePromise } from '../../redux/actions/action';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import PDFGenerate from '../pdfGeneration/pdfGenerate';
 
 const sections = ["User Info", "General Information", "University Details", "Do You Want to File Form for the Following Years?"];
@@ -13,6 +13,7 @@ const FormEEFT = () => {
     const dispatch = useDispatch();
     const [step, setStep] = useState(0);
     const [allow, setAllow] = useState(false);
+    const userData = useSelector((state:any)=>state.userData)
     const [formData, setFormData] = useState(
         JSON.parse(localStorage.getItem("formData") || JSON.stringify({
             visaType: "F",
@@ -527,7 +528,7 @@ const FormEEFT = () => {
                                             type="text"
                                             name="firstName"
                                             disabled
-                                            value={localStorage.getItem("userData") ? JSON.parse(localStorage.getItem("userData") || "{}").firstName || "" : ""}
+                                            value={userData.firstName || ""}
                                             className='form-control'
                                         />
                                     </div>
@@ -537,7 +538,7 @@ const FormEEFT = () => {
                                             type="text"
                                             name="firstName"
                                             disabled
-                                            value={localStorage.getItem("userData") ? JSON.parse(localStorage.getItem("userData") || "{}").lastName || "" : ""}
+                                            value={userData.lastName || ""}
                                             className='form-control'
                                         />
                                     </div>
