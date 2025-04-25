@@ -71,3 +71,19 @@
 .form .form8843 .form8843Des {
     font-family: 'poppinsMedium';
 }
+
+.orders h2,
+.orders .card h5,
+.orders .card .status p {
+    font-family: 'poppinsBold';
+}
+.orders .card .sub span{
+    font-family: 'poppinsSemiBold';
+}
+.orders .card .status p:last-child {
+    background: #f5c21c;
+    border-radius: 4px;
+    display: inline-block;
+    padding: 2px 11px;
+    font-size: .725rem;
+}

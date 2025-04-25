@@ -4,6 +4,7 @@ import { AuthContext } from '../../authContext';
 import { useDispatch } from 'react-redux';
 import { CgProfile } from "react-icons/cg";
 import { FaUsers, FaWpforms } from "react-icons/fa";
+import { RiListUnordered } from "react-icons/ri";
 import Tab from 'react-bootstrap/Tab';
 import Profile from "./profile";
 import Users from "./users";
@@ -13,6 +14,7 @@ import "./dashboard.css"
 import './adminDashboard.css'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import { userData } from '../../redux/actions/action';
+import Orders from './orders';
 
 const Dashboard = () => {
     const auth = useContext(AuthContext);
@@ -71,6 +73,16 @@ const Dashboard = () => {
                                         </Nav.Item>
                                         : ''
                                 }
+                                {
+                                    (localStorage.getItem('authRole') ? atob(localStorage.getItem('authRole')!) : '') === 'CLIENT' ?
+                                        <Nav.Item>
+                                            <Nav.Link eventKey="orders">
+                                                <RiListUnordered className="me-2" />
+                                                Orders
+                                            </Nav.Link>
+                                        </Nav.Item>
+                                        : ''
+                                }
                             </Nav>
                             
                         </div>
@@ -92,7 +104,14 @@ const Dashboard = () => {
                                 }
                                 {
                                     (localStorage.getItem('authRole') ? atob(localStorage.getItem('authRole')!) : '') === 'CLIENT' ?
-                                        <Tab.Pane eventKey="forms"><Form /></Tab.Pane>
+                                            <Tab.Pane eventKey="forms"><Form /></Tab.Pane>
+                                        : ''
+                                }
+                                {
+                                    (localStorage.getItem('authRole') ? atob(localStorage.getItem('authRole')!) : '') === 'CLIENT' ?
+                                            <Tab.Pane eventKey="orders">
+                                                <Orders />
+                                            </Tab.Pane>
                                         : ''
                                 }
                             </Tab.Content>

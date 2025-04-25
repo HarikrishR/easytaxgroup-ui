@@ -6,25 +6,20 @@
     height: 100%;
     background-color: #7272726e;
     position: fixed;
-    z-index: 100;
+    z-index: 100000;
 }
 .stripeContainer {
     z-index: 1000;
     position: absolute;
+    width: 50%;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: linear-gradient(297deg, #6a11cb, #2575fc);
+    background: #fff;
+    /* background: linear-gradient(297deg, #6a11cb, #2575fc); */
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-}
-
-.StripeElement {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
 }
 
 .stripe-background {
@@ -47,4 +42,10 @@
 .stripeSection .price {
     color: #fff;
     font-family: 'poppinsBold';
+}
+
+@media (max-width: 768px) {
+    .stripeContainer {
+        width: 95%;
+    }
 }

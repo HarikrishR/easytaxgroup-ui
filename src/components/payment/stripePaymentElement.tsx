@@ -1,4 +1,5 @@
-import React, { use } from 'react';
+import axios from 'axios';
+import React from 'react';
 import { useElements, useStripe , PaymentElement } from '@stripe/react-stripe-js';
 import { toast } from 'react-toastify';
 import './strip.css';
@@ -7,6 +8,7 @@ import PDFGenerate from '../pdfGeneration/pdfGenerate';
 import { getClientSecretSettings } from '../../redux/actions/action';
 
 const StripePaymentElement = () => {
+    const userData = useSelector((state:any)=>state.userData)
     const dispatch = useDispatch();
     const stripe = useStripe();
     const elements = useElements();
@@ -32,28 +34,59 @@ const StripePaymentElement = () => {
         if (result.error) {
             toast.error(result.error.message ?? 'An unknown error occurred.');
         } else if ('paymentIntent' in result && (result.paymentIntent as { status: string })?.status === 'succeeded') {
-            PDFGenerate();
             const paymentDetails = result.paymentIntent;
             console.log('Payment result:', result);
             console.log('Payment Details:', paymentDetails);
 
-            // Fetch all necessary payment details
-            const { id, amount, currency, created, status, payment_method, livemode, client_secret } = paymentDetails;
+            const serviceUrl = import.meta.env.VITE_SERVICE_URL;
+            var paymentData = {
+                paymentId: paymentDetails.id,
+                status: paymentDetails.status,
+                userId: userData.userId,
+            };
+            const puRes = await axios.post(serviceUrl + "/updateTransaction", paymentData);
+            console.log(puRes.data);
 
-            // Convert 'created' timestamp to readable date and time
-            const createdDate = new Date(created * 1000); // Stripe timestamps are in seconds
-            const formattedDate = createdDate.toISOString();
 
-            // Decode payment_method if it's an object
-            const decodedPaymentMethod = typeof payment_method === 'object' ? JSON.stringify(payment_method) : payment_method;
+            const formData = JSON.parse(localStorage.getItem('formData') || '{}');
+            const submittedYears = Object.keys(formData)
+                .filter(key => key.startsWith('wantToFile') && formData[key] === 'yes')
+                .map(key => key.replace('wantToFile', ''));
 
-            console.log('Formatted Date:', formattedDate);
-            console.log('Decoded Payment Method:', decodedPaymentMethod);
+            console.log(submittedYears);
 
-            // Log or store payment details
-            console.log('Payment Details:', { id, amount, currency, created, status, payment_method });
+            var orderData = {
+                paymentId: paymentDetails.id,
+                status: "Under Review",
+                paymentStatus: paymentDetails.status,
+                userId: userData.userId,
+                form: '8843',
+                submittedYear: submittedYears,
+            };
+            const coRes = await axios.post(serviceUrl + "/createOrder", orderData);
+            console.log(coRes.data);
 
-            toast.success('Payment successful!');
+            // PDFGenerate();
+            
+            
+
+            // // Fetch all necessary payment details
+            // const { id, amount, currency, created, status, payment_method, livemode, client_secret } = paymentDetails;
+
+            // // Convert 'created' timestamp to readable date and time
+            // const createdDate = new Date(created * 1000); // Stripe timestamps are in seconds
+            // const formattedDate = createdDate.toISOString();
+
+            // // Decode payment_method if it's an object
+            // const decodedPaymentMethod = typeof payment_method === 'object' ? JSON.stringify(payment_method) : payment_method;
+
+            // console.log('Formatted Date:', formattedDate);
+            // console.log('Decoded Payment Method:', decodedPaymentMethod);
+
+            // // Log or store payment details
+            // console.log('Payment Details:', { id, amount, currency, created, status, payment_method });
+
+            // toast.success('Payment successful!');
         } else {
             toast.info('Payment requires additional action or redirection.');
         }
@@ -81,6 +114,39 @@ const StripePaymentElement = () => {
                 // document.querySelector('.stripeSection')?.remove();
             }
 
+            const paymentDetails = result.paymentIntent;
+            if(!paymentDetails) {
+                toast.error('No payment details found.');
+                return;
+            }
+            const serviceUrl = import.meta.env.VITE_SERVICE_URL;
+            var paymentData = {
+                paymentId: paymentDetails.id,
+                status: "Cancelled",
+                userId: userData.userId,
+            };
+            const puRes = await axios.post(serviceUrl + "/updateTransaction", paymentData);
+            console.log(puRes.data);
+
+
+            const formData = JSON.parse(localStorage.getItem('formData') || '{}');
+            const submittedYears = Object.keys(formData)
+                .filter(key => key.startsWith('wantToFile') && formData[key] === 'yes')
+                .map(key => key.replace('wantToFile', ''));
+
+            console.log(submittedYears);
+
+            var orderData = {
+                paymentId: paymentDetails.id,
+                status: "Cancelled",
+                paymentStatus: "Cancelled",
+                userId: userData.userId,
+                form: '8843',
+                submittedYear: submittedYears,
+            };
+            const coRes = await axios.post(serviceUrl + "/createOrder", orderData);
+            console.log(coRes.data);
+
             if (result.paymentIntent?.status === 'requires_payment_method') {
                 toast.info('Payment has already been canceled');
             } else {
@@ -100,7 +166,7 @@ const StripePaymentElement = () => {
         <>
             <section className='stripeSection' id='stripeSection'>
                 <div className='stripeContainer'>
-                    <p className='price'><span id="currency">USD</span> <span id="amount">99</span> </p>
+                    {/* <p className='price'><span id="currency">USD</span> <span id="amount">99</span> </p> */}
                     <form onSubmit={(e) => e.preventDefault()}>
                         <PaymentElement />
                         <button disabled={!stripe} onClick={(e) => { e.preventDefault(); handleCancel(e); }} className='btnLtePrimary mt-3'>Cancel</button>

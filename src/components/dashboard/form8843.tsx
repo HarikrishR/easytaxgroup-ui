@@ -204,10 +204,14 @@ const FormEEFT = () => {
             
             var paymentData = {
                 amount: amount,
+                userId: userData.userId,
             };
             const response = await axios.post(serviceUrl + "/createCheckoutSession", paymentData);
+            var res = response.data.data;
             dispatch(getClientSecretSettings({
-                clientSecret: response.data.client_secret,
+                clientSecret: res.clientSecret,
+                amount: res.amount,
+                currency: res.currency,
                 loading: false,
             }));
             dispatch(get_loader(false));
@@ -513,7 +517,7 @@ const FormEEFT = () => {
                                     {errorsQues.q4 && (<p className="formError">{errorsQues.q4}</p>)}
                                 </div>
                             </div>
-                            <button type="submit" className="btnPrimary float-end mt-2" onClick={handleQuesSubmit}>Start Form 8843</button>
+                            <button type="submit" className="btnPrimary float-end mt-2" onClick={handleQuesSubmit}>Submit</button>
                         </form>
                     </div>
                     :
@@ -556,8 +560,91 @@ const FormEEFT = () => {
                                         {errors.ssn && (<p className="formError">{errors.ssn}</p>)}
                                     </div>
                                 </div>
+                                
                                 <div className='subHead position-relative overflow-hidden mb-3'>
-                                    <h6 className='mb-0 pe-4'>Residential Address</h6>
+                                    <h6 className='mb-0 pe-4'>USA Address</h6>
+                                </div>
+                                <div className='row'>
+                                    <div className='col-sm-6 col-lg-4 mb-4'>
+                                        <label className='mb-2'>Street</label>
+                                        <input type="text" name="usaStreet" placeholder="Street" value={formData.usaStreet} onChange={handleChange} className='form-control' />
+                                        {errors.usaStreet && (<p className="formError">{errors.usaStreet}</p>)}
+                                    </div>
+                                    <div className='col-sm-6 col-lg-4 mb-4'>
+                                        <label className='mb-2'>City</label>
+                                        <input type="text" name="usaCity" placeholder="City" value={formData.usaCity} onChange={handleChange} className='form-control' />
+                                        {errors.usaCity && (<p className="formError">{errors.usaCity}</p>)}
+                                    </div>
+                                    <div className='col-sm-6 col-lg-4 mb-4'>
+                                        <label className='mb-2'>State</label>
+                                        <select
+                                            className="form-select"
+                                            name="usaState"
+                                            value={formData.usaState}
+                                            onChange={handleChange}
+                                        >
+                                            <option value="">Select State</option>
+                                            <option value="Alabama">Alabama</option>
+                                            <option value="Alaska">Alaska</option>
+                                            <option value="Arizona">Arizona</option>
+                                            <option value="Arkansas">Arkansas</option>
+                                            <option value="California">California</option>
+                                            <option value="Colorado">Colorado</option>
+                                            <option value="Connecticut">Connecticut</option>
+                                            <option value="Delaware">Delaware</option>
+                                            <option value="Florida">Florida</option>
+                                            <option value="Georgia">Georgia</option>
+                                            <option value="Hawaii">Hawaii</option>
+                                            <option value="Idaho">Idaho</option>
+                                            <option value="Illinois">Illinois</option>
+                                            <option value="Indiana">Indiana</option>
+                                            <option value="Iowa">Iowa</option>
+                                            <option value="Kansas">Kansas</option>
+                                            <option value="Kentucky">Kentucky</option>
+                                            <option value="Louisiana">Louisiana</option>
+                                            <option value="Maine">Maine</option>
+                                            <option value="Maryland">Maryland</option>
+                                            <option value="Massachusetts">Massachusetts</option>
+                                            <option value="Michigan">Michigan</option>
+                                            <option value="Minnesota">Minnesota</option>
+                                            <option value="Mississippi">Mississippi</option>
+                                            <option value="Missouri">Missouri</option>
+                                            <option value="Montana">Montana</option>
+                                            <option value="Nebraska">Nebraska</option>
+                                            <option value="Nevada">Nevada</option>
+                                            <option value="New Hampshire">New Hampshire</option>
+                                            <option value="New Jersey">New Jersey</option>
+                                            <option value="New Mexico">New Mexico</option>
+                                            <option value="New York">New York</option>
+                                            <option value="North Carolina">North Carolina</option>
+                                            <option value="North Dakota">North Dakota</option>
+                                            <option value="Ohio">Ohio</option>
+                                            <option value="Oklahoma">Oklahoma</option>
+                                            <option value="Oregon">Oregon</option>
+                                            <option value="Pennsylvania">Pennsylvania</option>
+                                            <option value="Rhode Island">Rhode Island</option>
+                                            <option value="South Carolina">South Carolina</option>
+                                            <option value="South Dakota">South Dakota</option>
+                                            <option value="Tennessee">Tennessee</option>
+                                            <option value="Texas">Texas</option>
+                                            <option value="Utah">Utah</option>
+                                            <option value="Vermont">Vermont</option>
+                                            <option value="Virginia">Virginia</option>
+                                            <option value="Washington">Washington</option>
+                                            <option value="West Virginia">West Virginia</option>
+                                            <option value="Wisconsin">Wisconsin</option>
+                                            <option value="Wyoming">Wyoming</option>
+                                        </select>
+                                        {errors.usaState && (<p className="formError">{errors.usaState}</p>)}
+                                    </div>
+                                    <div className='col-sm-6 col-lg-4 mb-4'>
+                                        <label className='mb-2'>Zipcode</label>
+                                        <input type="number" name="usaZipcode" placeholder="Zipcode" value={formData.usaZipcode} onChange={handleChange} className='form-control' />
+                                        {errors.usaZipcode && (<p className="formError">{errors.usaZipcode}</p>)}
+                                    </div>
+                                </div>
+                                <div className='subHead position-relative overflow-hidden mb-3'>
+                                    <h6 className='mb-0 pe-4'>Address in country of residence (Home country)</h6>
                                 </div>
                                 <div className='row'>
                                     <div className='col-sm-6 col-lg-4 mb-4'>
@@ -579,31 +666,6 @@ const FormEEFT = () => {
                                         <label className='mb-2'>Zipcode</label>
                                         <input type="number" name="zipcode" placeholder="Zipcode" value={formData.zipcode} onChange={handleChange} className='form-control' />
                                         {errors.zipcode && (<p className="formError">{errors.zipcode}</p>)}
-                                    </div>
-                                </div>
-                                <div className='subHead position-relative overflow-hidden mb-3'>
-                                    <h6 className='mb-0 pe-4'>USA Address</h6>
-                                </div>
-                                <div className='row'>
-                                    <div className='col-sm-6 col-lg-4 mb-4'>
-                                        <label className='mb-2'>Street</label>
-                                        <input type="text" name="usaStreet" placeholder="Street" value={formData.usaStreet} onChange={handleChange} className='form-control' />
-                                        {errors.usaStreet && (<p className="formError">{errors.usaStreet}</p>)}
-                                    </div>
-                                    <div className='col-sm-6 col-lg-4 mb-4'>
-                                        <label className='mb-2'>City</label>
-                                        <input type="text" name="usaCity" placeholder="City" value={formData.usaCity} onChange={handleChange} className='form-control' />
-                                        {errors.usaCity && (<p className="formError">{errors.usaCity}</p>)}
-                                    </div>
-                                    <div className='col-sm-6 col-lg-4 mb-4'>
-                                        <label className='mb-2'>State</label>
-                                        <input type="text" name="usaState" placeholder="State" value={formData.usaState} onChange={handleChange} className='form-control' />
-                                        {errors.usaState && (<p className="formError">{errors.usaState}</p>)}
-                                    </div>
-                                    <div className='col-sm-6 col-lg-4 mb-4'>
-                                        <label className='mb-2'>Zipcode</label>
-                                        <input type="number" name="usaZipcode" placeholder="Zipcode" value={formData.usaZipcode} onChange={handleChange} className='form-control' />
-                                        {errors.usaZipcode && (<p className="formError">{errors.usaZipcode}</p>)}
                                     </div>
                                 </div>
                             </>

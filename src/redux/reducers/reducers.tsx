@@ -5,7 +5,12 @@ const initialState = {
   signIn: false,
   userData: null,
   selectedForm: null,
-  clientSecretSettings: { clientSecret: "", loading: true },
+  clientSecretSettings: { 
+    clientSecret: "",
+    loading: true,
+    amount: 0,
+    currency: "",
+  },
   stripePromise: null,
   generatePDF: false,
   formData: {},
