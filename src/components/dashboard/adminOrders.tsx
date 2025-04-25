@@ -7,17 +7,14 @@ import { } from "../../redux/actions/action";
 import { useEffect, useState } from "react";
 import "./dashboard.css"
 
-const Orders = () => {
+const AdminOrders = () => {
     const [orderData, setOrderData] = useState<any>([]);
 
     const fetchOrders = async () => {
         try {
             const serviceUrl = import.meta.env.VITE_SERVICE_URL;
             // Fetch user data from the server
-            var orderData = {
-                userId: localStorage.getItem('authUser')
-            };
-            await axios.post(serviceUrl + '/fetchOrdersById', orderData)
+            await axios.get(serviceUrl + '/fetchOrders')
                 .then((response: { data: any; }) => {
                     var data = response.data.data;
                     setOrderData(data);
@@ -74,4 +71,4 @@ const Orders = () => {
     );
 };
 
-export default Orders;
+export default AdminOrders;

@@ -15,6 +15,7 @@ import './adminDashboard.css'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import { userData } from '../../redux/actions/action';
 import Orders from './orders';
+import AdminOrders from './adminOrders';
 
 const Dashboard = () => {
     const auth = useContext(AuthContext);
@@ -83,6 +84,16 @@ const Dashboard = () => {
                                         </Nav.Item>
                                         : ''
                                 }
+                                {
+                                    (localStorage.getItem('authRole') ? atob(localStorage.getItem('authRole')!) : '') === 'ADMIN' ?
+                                        <Nav.Item>
+                                            <Nav.Link eventKey="adminOrders">
+                                                <RiListUnordered className="me-2" />
+                                                Orders
+                                            </Nav.Link>
+                                        </Nav.Item>
+                                        : ''
+                                }
                             </Nav>
                             
                         </div>
@@ -111,6 +122,13 @@ const Dashboard = () => {
                                     (localStorage.getItem('authRole') ? atob(localStorage.getItem('authRole')!) : '') === 'CLIENT' ?
                                             <Tab.Pane eventKey="orders">
                                                 <Orders />
+                                            </Tab.Pane>
+                                        : ''
+                                }
+                                {
+                                    (localStorage.getItem('authRole') ? atob(localStorage.getItem('authRole')!) : '') === 'ADMIN' ?
+                                            <Tab.Pane eventKey="adminOrders">
+                                                <AdminOrders />
                                             </Tab.Pane>
                                         : ''
                                 }
