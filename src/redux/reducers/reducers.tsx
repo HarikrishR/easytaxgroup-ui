@@ -14,6 +14,8 @@ const initialState = {
   stripePromise: null,
   generatePDF: false,
   formData: {},
+  adminOrderFromData: {},
+  updateOrder: false,
 };
 
 const reducer = (state = initialState, action : any) => {
@@ -57,6 +59,16 @@ const reducer = (state = initialState, action : any) => {
       return {
         ...state,
         clientSecretSettings: action.payload,
+      };
+    case actionTypes.ADMIN_ORDER_FORM:
+      return {
+        ...state,
+        adminOrderFromData: action.payload,
+      };
+    case actionTypes.UPDATE_ORDER:
+      return {
+        ...state,
+        updateOrder: action.payload,
       };
     default:
       return state;

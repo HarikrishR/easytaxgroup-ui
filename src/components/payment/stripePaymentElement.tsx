@@ -9,6 +9,7 @@ import { getClientSecretSettings } from '../../redux/actions/action';
 
 const StripePaymentElement = () => {
     const userData = useSelector((state:any)=>state.userData)
+    const formData = useSelector((state:any)=>state.formData)
     const dispatch = useDispatch();
     const stripe = useStripe();
     const elements = useElements();
@@ -41,14 +42,14 @@ const StripePaymentElement = () => {
             const serviceUrl = import.meta.env.VITE_SERVICE_URL;
             var paymentData = {
                 paymentId: paymentDetails.id,
-                status: paymentDetails.status,
+                status: "Success",
                 userId: userData.userId,
             };
             const puRes = await axios.post(serviceUrl + "/updateTransaction", paymentData);
             console.log(puRes.data);
 
 
-            const formData = JSON.parse(localStorage.getItem('formData') || '{}');
+            // const formData = JSON.parse(localStorage.getItem('formData') || '{}');
             const submittedYears = Object.keys(formData)
                 .filter(key => key.startsWith('wantToFile') && formData[key] === 'yes')
                 .map(key => key.replace('wantToFile', ''));
@@ -62,9 +63,9 @@ const StripePaymentElement = () => {
                 userId: userData.userId,
                 form: '8843',
                 submittedYear: submittedYears,
+                noOfDaysUSA: formData.noOfDaysUSA,
             };
-            const coRes = await axios.post(serviceUrl + "/createOrder", orderData);
-            console.log(coRes.data);
+            await createOrder(orderData);
 
             // PDFGenerate();
             
@@ -93,6 +94,7 @@ const StripePaymentElement = () => {
     };
 
     const handleCancel = async (event: React.MouseEvent<HTMLButtonElement>) => {
+        console.log(formData);
         event.preventDefault();
 
         console.log('Payment cancelled');
@@ -129,7 +131,7 @@ const StripePaymentElement = () => {
             console.log(puRes.data);
 
 
-            const formData = JSON.parse(localStorage.getItem('formData') || '{}');
+            // const formData = JSON.parse(localStorage.getItem('formData') || '{}');
             const submittedYears = Object.keys(formData)
                 .filter(key => key.startsWith('wantToFile') && formData[key] === 'yes')
                 .map(key => key.replace('wantToFile', ''));
@@ -144,8 +146,7 @@ const StripePaymentElement = () => {
                 form: '8843',
                 submittedYear: submittedYears,
             };
-            const coRes = await axios.post(serviceUrl + "/createOrder", orderData);
-            console.log(coRes.data);
+            await createOrder(orderData);
 
             if (result.paymentIntent?.status === 'requires_payment_method') {
                 toast.info('Payment has already been canceled');
@@ -159,6 +160,17 @@ const StripePaymentElement = () => {
             toast.error('An error occurred while attempting to cancel the payment.');
         }
     };
+
+    const createOrder = async (data: any) => {
+        try {
+            const serviceUrl = import.meta.env.VITE_SERVICE_URL;
+            const coRes = await axios.post(serviceUrl + "/createOrder", data);
+            console.log(coRes.data);
+        }
+        catch (error) {
+            toast.error('An error occurred while attempting to update the order.');
+        }
+    }
 
     
 

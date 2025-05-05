@@ -1,14 +1,73 @@
 
 
 import axios from 'axios';
+import Modal from 'react-bootstrap/Modal';
 import { toast } from 'react-toastify';
 import { useSelector, useDispatch } from "react-redux";
-import { } from "../../redux/actions/action";
+import { BsDownload } from "react-icons/bs";
+import { CiEdit } from "react-icons/ci";
+import Table from 'react-bootstrap/Table';
+import { getAdminOrderFormData, getGeneratePDF, getUpdateOrder } from "../../redux/actions/action";
 import { useEffect, useState } from "react";
 import "./dashboard.css"
 
 const AdminOrders = () => {
     const [orderData, setOrderData] = useState<any>([]);
+    const [updateOrderId, setUpdateOrderId] = useState<any>(null);
+    const dispatch = useDispatch();
+
+    const [formData, setFormData] = useState({ status: '', transcationLink: '' });
+    const [errors, setErrors] = useState<{ status?: string; transcationLink?: string }>({});
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        const { id, value, name } = e.target;
+        setFormData((prev) => ({ ...prev, [id]: value }));
+
+        // Validate the input field
+        const newErrors = { ...errors };
+        if (!value) {
+            newErrors[name as keyof typeof newErrors] = `${name} is required`;
+        } else
+            delete newErrors[name as keyof typeof newErrors];
+
+        setErrors(newErrors);
+    };
+
+    const validate = () => {
+        const newErrors: { status?: string; transcationLink?: string } = {};
+        if (!formData.status) {
+            newErrors.status = 'Order Status is required';
+        }
+        if (!formData.transcationLink) {
+            newErrors.transcationLink = 'Transaction Link is required';
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (validate()) {
+            const serviceUrl = import.meta.env.VITE_SERVICE_URL;
+            var orderStatusData = {
+                trackingLink: formData.transcationLink,
+                status: formData.status,
+                id: updateOrderId,
+            }
+            await axios.post(serviceUrl + '/updateOrderStatus', orderStatusData)
+                .then((response: { data: any; }) => {
+                    fetchOrders();
+                    dispatch(getUpdateOrder(false));
+                    toast.success("Updated successful");
+                })
+                .catch((error: any) => {
+                    toast.error(error.response.data.message);
+                }); // Dispatch the action with form data
+        }
+    };
+
+    const updateOrder = useSelector((state: any) => state.updateOrder);
 
     const fetchOrders = async () => {
         try {
@@ -32,40 +91,138 @@ const AdminOrders = () => {
         fetchOrders();
     }, []);
 
+    const handleDownload = (data: any) => {
+        // Logic to download the form
+        console.log(data);
+        dispatch(getGeneratePDF(true))
+        dispatch(getAdminOrderFormData(data));
+    };
+
+    const openEditOrder = (data: any) => {
+        dispatch(getUpdateOrder(true));
+        setUpdateOrderId(data);
+    }
+
     return (
         <>
-            <section className="orders">
+            <section className="adminOrders">
                 <h2 className="mb-3">Orders</h2>
                 <div className="row">
-                    {
-                        orderData.length === 0 ?
-                            <div className="col-12">
-                                <p className="mb-0 text-center">No Orders Found!</p>
-                            </div> :
-                            orderData.map((data: any) => (
-                                <div className="col-sm-6 col-lg-4 align-self-center mb-4" key={data.orderId}>
-                                    <div className="card shadow">
-                                        <div className="card-body">
-                                            <h5 className="mb-3"># {data.orderId}</h5>
-                                            <p className="mb-1 sub"><span>Form :</span> {data.form}</p>
-                                            <p className="mb-1 sub"><span>Years : </span>{ 
+                    <Table striped bordered hover size='sm'>
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>User ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone Number</th>
+                                <th>Form</th>
+                                <th>Years</th>
+                                <th>Status</th>
+                                <th>Payment</th>
+                                <th>Download Form</th>
+                                <th>Created At</th>
+                                <th>Update Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                orderData.length === 0 ?
+                                    <tr>
+                                        <td colSpan={20} className="text-center">No Orders Found!</td>
+                                    </tr> : orderData.map((data: any) => (
+                                        <tr key={data.orderId}>
+                                            <td>{data.orderId}</td>
+                                            <td>{data.user.userId}</td>
+                                            <td>{data.user.firstName + " " + data.user.lastName}</td>
+                                            <td>{data.user.email}</td>
+                                            <td>{data.user.phoneNumber}</td>
+                                            <td>{data.form}</td>
+                                            <td>{
                                                 data.submittedYear.map((year: any, index: number) => (
                                                     <span key={year}>
                                                         {year}{index !== data.submittedYear.length - 1 ? ', ' : ''}
                                                     </span>
                                                 ))
-                                            }</p>
-                                            <p className="mb-3 sub"><span>Payment :</span> {data.paymentStatus}</p>
-                                            <div className="status">
-                                                <p className="mb-1">Status</p>
-                                                <p className="mb-0">{data.status}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))
-                    }
+                                            }</td>
+                                            <td className='upper-case'>{data.status}</td>
+                                            <td>{data.paymentStatus}</td>
+                                            <td className='text-center'>
+                                                {
+                                                    data.paymentStatus === "succeeded" ?
+                                                        <p className='mb-0 downloadForm' onClick={() => handleDownload(data)}><BsDownload /></p> :
+                                                        <></>
+                                                }
+                                            </td>
+                                            <td>
+                                                {
+                                                    new Date(data.createdAt).toLocaleString('en-GB', {
+                                                        day: '2-digit',
+                                                        month: '2-digit',
+                                                        year: 'numeric',
+                                                        hour: '2-digit',
+                                                        minute: '2-digit',
+                                                        hour12: true
+                                                    }).replace(',', '').replace(/\//g, '-')
+                                                }
+                                            </td>
+                                            <td className='upper-case text-center'>
+                                                {
+                                                    data.paymentStatus === "succeeded" ?
+                                                        <button className='btnPrimary px-1 py-0' onClick={() => openEditOrder(data.id)} ><CiEdit /></button> :
+                                                        <></>
+                                                }
+                                            </td>
+                                        </tr>
+                                    ))
+                            }
+                        </tbody>
+                    </Table>
+
                 </div>
+                <>
+                    <Modal className='pdfModal' show={updateOrder} onHide={() => dispatch(getUpdateOrder(false))}>
+                        <Modal.Body className='text-center p-4 orderStatusModal'>
+                            <h5 className='mb-3'>Update Status</h5>
+                            <form>
+                                <div className="mb-4">
+                                    <select
+                                        className="form-select"
+                                        id="status"
+                                        name="status"
+                                        value={formData.status}
+                                        onChange={handleChange}
+                                    >
+                                        <option value=''>Select Status</option>
+                                        <option value='Pending'>Pending</option>
+                                    </select>
+                                    {errors.status && (
+                                        <p className="formError">
+                                            {errors.status}
+                                        </p>
+                                    )}
+                                </div>
+                                <div className="mb-4">
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        id="transcationLink"
+                                        name="transcationLink"
+                                        placeholder="Transcation Link"
+                                        value={formData.transcationLink}
+                                        onChange={handleChange}
+                                    />
+                                    {errors.transcationLink && (
+                                        <p className="formError">
+                                            {errors.transcationLink}
+                                        </p>
+                                    )}
+                                </div>
+                                <button type="submit" className="btnPrimary w-100 mt-2" onClick={handleSubmit}>Update</button>
+                            </form>
+                        </Modal.Body>
+                    </Modal>
+                </>
             </section>
         </>
     );

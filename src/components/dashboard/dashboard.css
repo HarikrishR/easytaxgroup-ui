@@ -38,6 +38,7 @@
 
 .users .usersDetails table th {
     font-family: 'poppinsSemiBold';
+    text-align: center;
 }
 .users p {
     font-family: 'poppinsMedium';
@@ -86,4 +87,21 @@
     display: inline-block;
     padding: 2px 11px;
     font-size: .725rem;
+}
+
+.adminOrders h2 {
+    font-family: 'poppinsBold';
+}
+.adminOrders table th {
+    font-family: 'poppinsSemiBold';
+    text-align: center;
+}
+.adminOrders p {
+    font-family: 'poppinsMedium';
+}
+.adminOrders .downloadForm {
+    cursor: pointer;
+}
+.orderStatusModal h5 {
+    font-family: 'poppinsSemiBold';
 }

@@ -230,7 +230,8 @@ const FormEEFT = () => {
                 .filter(key => key.startsWith('days'))
                 .map(key => ({
                     year: key.replace('days', ''),
-                    days: formData[key]
+                    days: formData[key],
+                    submitting: formData[`wantToFile${key.replace('days', '')}`] === 'yes' ? true : false
                 }));
             await axios.post(serviceUrl + '/updateForm8843', formData)
                 .then(async (response: { data: any; }) => {
