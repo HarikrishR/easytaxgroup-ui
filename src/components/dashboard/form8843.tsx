@@ -200,7 +200,13 @@ const FormEEFT = () => {
             let amount = 0;
             const storedFormData = formData;
             const wantToFileKeys = Object.keys(storedFormData).filter(key => key.startsWith('wantToFile') && storedFormData[key] === 'yes');
-            if (wantToFileKeys.length > 0) amount = 50 + (wantToFileKeys.length - 1) * 10;
+            if (wantToFileKeys.length === 1) {
+                amount = 15;
+            } else if (wantToFileKeys.length === 2) {
+                amount = 15 + 10;
+            } else if (wantToFileKeys.length >= 3) {
+                amount = 15 + 10 + (wantToFileKeys.length - 2) * 5;
+            }
             
             var paymentData = {
                 amount: amount,
