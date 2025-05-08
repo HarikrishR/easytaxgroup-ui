@@ -2,7 +2,6 @@
 
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { useSelector, useDispatch } from "react-redux";
 import { } from "../../redux/actions/action";
 import { useEffect, useState } from "react";
 import "./dashboard.css"
@@ -60,9 +59,20 @@ const Orders = () => {
                                             }</p>
                                             <p className="mb-3 sub"><span>Payment :</span> {data.paymentStatus}</p>
                                             <div className="status">
-                                                <p className="mb-1">Status</p>
-                                                <p className="mb-0">{data.status}</p>
+                                                <p className="mb-1"><span className='statusHead'>Status : </span>
+                                                <span className={`mb-3 statusDes ${data.status === 'Cancelled' ? 'cancel' : ''}`}>
+                                                {data.status === 'Pending' ? 'Filed' : data.status === 'Cancelled' ? 'Cancelled' : ''}
+                                                </span>
+                                                </p>
+                                                
                                             </div>
+                                            {
+                                                data.status === 'Pending' ? 
+                                                <>
+                                                <p className='mb-1 sub'><span>Tracking Link :</span> <a href={data.trackingLink} target='_blank' className='text-decoration-none'>Click here</a></p>
+                                                
+                                                </> : ""
+                                            }
                                         </div>
                                     </div>
                                 </div>

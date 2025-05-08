@@ -16,8 +16,8 @@ const AdminOrders = () => {
     const [updateOrderId, setUpdateOrderId] = useState<any>(null);
     const dispatch = useDispatch();
 
-    const [formData, setFormData] = useState({ status: '', transcationLink: '' });
-    const [errors, setErrors] = useState<{ status?: string; transcationLink?: string }>({});
+    const [formData, setFormData] = useState({ status: '', trackingLink: '', trackingNumber: '' });
+    const [errors, setErrors] = useState<{ status?: string; trackingLink?: string; trackingNumber?: string }>({});
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { id, value, name } = e.target;
@@ -34,12 +34,15 @@ const AdminOrders = () => {
     };
 
     const validate = () => {
-        const newErrors: { status?: string; transcationLink?: string } = {};
+        const newErrors: { status?: string; trackingLink?: string; trackingNumber?: string } = {};
         if (!formData.status) {
             newErrors.status = 'Order Status is required';
         }
-        if (!formData.transcationLink) {
-            newErrors.transcationLink = 'Transaction Link is required';
+        if (!formData.trackingLink) {
+            newErrors.trackingLink = 'Tracking Link is required';
+        }
+        if (!formData.trackingNumber) {
+            newErrors.trackingNumber = 'Tracking Number is required';
         }
 
         setErrors(newErrors);
@@ -51,7 +54,8 @@ const AdminOrders = () => {
         if (validate()) {
             const serviceUrl = import.meta.env.VITE_SERVICE_URL;
             var orderStatusData = {
-                trackingLink: formData.transcationLink,
+                trackingLink: formData.trackingLink,
+                trackingNumber: formData.trackingNumber,
                 status: formData.status,
                 id: updateOrderId,
             }
@@ -118,11 +122,11 @@ const AdminOrders = () => {
                                 <th>Phone Number</th>
                                 <th>Form</th>
                                 <th>Years</th>
-                                <th>Status</th>
-                                <th>Payment</th>
                                 <th>Download Form</th>
                                 <th>Created At</th>
+                                <th>Payment</th>
                                 <th>Update Status</th>
+                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -145,8 +149,8 @@ const AdminOrders = () => {
                                                     </span>
                                                 ))
                                             }</td>
-                                            <td className='upper-case'>{data.status}</td>
-                                            <td>{data.paymentStatus}</td>
+                                           
+                                            
                                             <td className='text-center'>
                                                 {
                                                     data.paymentStatus === "succeeded" ?
@@ -166,12 +170,18 @@ const AdminOrders = () => {
                                                     }).replace(',', '').replace(/\//g, '-')
                                                 }
                                             </td>
+                                            <td>{data.paymentStatus}</td>
                                             <td className='upper-case text-center'>
                                                 {
                                                     data.paymentStatus === "succeeded" ?
                                                         <button className='btnPrimary px-1 py-0' onClick={() => openEditOrder(data.id)} ><CiEdit /></button> :
                                                         <></>
                                                 }
+                                            </td>
+                                            <td className='upper-case'>
+                                                <span className={`mb-3 statusDes ${data.status === 'Cancelled' ? 'cancel' : ''}`}>
+                                                    {data.status === 'Pending' ? 'Filed' : data.status === 'Cancelled' ? 'Cancelled' : ''}
+                                                </span>
                                             </td>
                                         </tr>
                                     ))
@@ -202,19 +212,35 @@ const AdminOrders = () => {
                                         </p>
                                     )}
                                 </div>
+                                <div className="mb-4 mt-2">
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        id="trackingNumber"
+                                        name="trackingNumber"
+                                        placeholder="Tracking Number"
+                                        value={formData.trackingNumber}
+                                        onChange={handleChange}
+                                    />
+                                    {errors.trackingNumber && (
+                                        <p className="formError">
+                                            {errors.trackingNumber}
+                                        </p>
+                                    )}
+                                </div>
                                 <div className="mb-4">
                                     <input
                                         type="text"
                                         className="form-control"
-                                        id="transcationLink"
-                                        name="transcationLink"
-                                        placeholder="Transcation Link"
-                                        value={formData.transcationLink}
+                                        id="trackingLink"
+                                        name="trackingLink"
+                                        placeholder="Tracking Link"
+                                        value={formData.trackingLink}
                                         onChange={handleChange}
                                     />
-                                    {errors.transcationLink && (
+                                    {errors.trackingLink && (
                                         <p className="formError">
-                                            {errors.transcationLink}
+                                            {errors.trackingLink}
                                         </p>
                                     )}
                                 </div>

@@ -86,8 +86,12 @@ const StripePaymentElement = () => {
 
             // // Log or store payment details
             // console.log('Payment Details:', { id, amount, currency, created, status, payment_method });
-
-            // toast.success('Payment successful!');
+            if (elements) {
+                elements.getElement(PaymentElement)?.destroy();
+                document.getElementById('stripeSection')!.style.display = 'none';
+                // document.querySelector('.stripeSection')?.remove();
+            }
+            toast.success('Payment successful!');
         } else {
             toast.info('Payment requires additional action or redirection.');
         }
