@@ -3,14 +3,14 @@ import React from 'react';
 import { useElements, useStripe , PaymentElement } from '@stripe/react-stripe-js';
 import { toast } from 'react-toastify';
 import './strip.css';
-import { useDispatch, useSelector } from 'react-redux';
-import PDFGenerate from '../pdfGeneration/pdfGenerate';
-import { getClientSecretSettings } from '../../redux/actions/action';
+import { useSelector } from 'react-redux';
+// import PDFGenerate from '../pdfGeneration/pdfGenerate';
+// import { getClientSecretSettings } from '../../redux/actions/action';
 
 const StripePaymentElement = () => {
     const userData = useSelector((state:any)=>state.userData)
     const formData = useSelector((state:any)=>state.formData)
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
     const stripe = useStripe();
     const elements = useElements();
     const clientSecretSettings = useSelector((state: any) => state.clientSecretSettings);

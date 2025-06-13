@@ -61,6 +61,7 @@ const AdminOrders = () => {
             }
             await axios.post(serviceUrl + '/updateOrderStatus', orderStatusData)
                 .then((response: { data: any; }) => {
+                    console.log(response);
                     fetchOrders();
                     dispatch(getUpdateOrder(false));
                     toast.success("Updated successful");
@@ -83,10 +84,12 @@ const AdminOrders = () => {
                     setOrderData(data);
                 })
                 .catch((error: any) => {
+                    console.error(error);
                     toast.error("Error fetching orders!");
                 });
 
         } catch (error) {
+            console.error(error);
             toast.error("Error fetching orders!");
         }
     };
@@ -120,6 +123,7 @@ const AdminOrders = () => {
                                 <th>Name</th>
                                 <th>Email</th>
                                 <th>Phone Number</th>
+                                <th>Address</th>
                                 <th>Form</th>
                                 <th>Years</th>
                                 <th>Download Form</th>
@@ -141,6 +145,7 @@ const AdminOrders = () => {
                                             <td>{data.user.firstName + " " + data.user.lastName}</td>
                                             <td>{data.user.email}</td>
                                             <td>{data.user.phoneNumber}</td>
+                                            <td>{data.user.usaStreet + ", " + data.user.usaCity + ", " + data.user.usaState + ", " + data.user.usaZipcode + "."}</td>
                                             <td>{data.form}</td>
                                             <td>{
                                                 data.submittedYear.map((year: any, index: number) => (

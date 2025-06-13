@@ -3,9 +3,9 @@ import { toast } from 'react-toastify';
 import { useEffect, useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import "./dashboard.css"
-import { get_loader, getClientSecretSettings, getFormData, getGeneratePDF, getStripePromise } from '../../redux/actions/action';
+import { get_loader, getClientSecretSettings, getFormData, getStripePromise } from '../../redux/actions/action';
 import { useDispatch, useSelector } from 'react-redux';
-import PDFGenerate from '../pdfGeneration/pdfGenerate';
+// import PDFGenerate from '../pdfGeneration/pdfGenerate';
 
 const sections = ["User Info", "General Information", "University Details", "Do You Want to File Form for the Following Years?"];
 
@@ -100,6 +100,7 @@ const FormEEFT = () => {
                     }
                 })
                 .catch((error: any) => {
+                    console.log(error);
                     toast.error("Error fetching form data!");
                 });
 
@@ -140,7 +141,7 @@ const FormEEFT = () => {
                     updatedFormData[wantToFileKey] = 'yes';
                 }
 
-                const startOfYear = new Date(year, 0, 1);
+                // const startOfYear = new Date(year, 0, 1);
                 const endOfYear = new Date(year, 11, 31);
                 if (Number(year) === Number(currentYear)) {
                     // const currentDate = new Date();

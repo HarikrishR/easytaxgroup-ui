@@ -45,7 +45,7 @@ const Orders = () => {
                                 <p className="mb-0 text-center">No Orders Found!</p>
                             </div> :
                             orderData.map((data: any) => (
-                                <div className="col-sm-6 col-lg-4 align-self-center mb-4" key={data.orderId}>
+                                <div className="col-sm-6 col-lg-4 mb-4" key={data.orderId}>
                                     <div className="card shadow">
                                         <div className="card-body">
                                             <h5 className="mb-3"># {data.orderId}</h5>
@@ -57,19 +57,19 @@ const Orders = () => {
                                                     </span>
                                                 ))
                                             }</p>
-                                            <p className="mb-3 sub"><span>Payment :</span> {data.paymentStatus}</p>
+                                            <p className="mb-2 sub"><span>Payment :</span> {data.paymentStatus}</p>
                                             <div className="status">
                                                 <p className="mb-1"><span className='statusHead'>Status : </span>
-                                                <span className={`mb-3 statusDes ${data.status === 'Cancelled' ? 'cancel' : ''}`}>
-                                                {data.status === 'Pending' ? 'Filed' : data.status === 'Cancelled' ? 'Cancelled' : ''}
-                                                </span>
+                                                    <span className={`mb-2 statusDes ${data.status === 'Cancelled' ? 'cancel' : ''}`}>
+                                                    {data.status === 'Pending' ? 'Filed' : data.status === 'Cancelled' ? 'Cancelled' : ''}
+                                                    </span>
                                                 </p>
-                                                
                                             </div>
                                             {
                                                 data.status === 'Pending' ? 
                                                 <>
                                                 <p className='mb-1 sub'><span>Tracking Link :</span> <a href={data.trackingLink} target='_blank' className='text-decoration-none'>Click here</a></p>
+                                                <p className='mb-1 sub'><span>Tracking Number :</span> {data.trackingNumber || "N/A"}</p>
                                                 
                                                 </> : ""
                                             }

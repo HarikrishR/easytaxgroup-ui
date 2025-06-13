@@ -1,7 +1,7 @@
 import Modal from 'react-bootstrap/Modal';
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from 'react-toastify';
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
 import { PDFDocument } from 'pdf-lib';
 import form8843_20 from './f8843_20.pdf';
 import form8843_21 from './f8843_21.pdf';
@@ -75,7 +75,7 @@ const PDFGenerate = () => {
                 const formPdfBytes = await fetch(formUrl).then(res => res.arrayBuffer());
                 const pdfDoc = await PDFDocument.load(formPdfBytes);
                 const form = pdfDoc.getForm();
-                const fields = form.getFields().map(f => f.getName()); // Extract field names
+                // const fields = form.getFields().map(f => f.getName()); // Extract field names
 
                 // Populate fields (Make sure field names match actual PDF form field names)
                 form.getTextField("topmostSubform[0].Page1[0].f1_4[0]").setText(formData.user.firstName);

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import "./dashboard.css"
 import { useDispatch, useSelector } from 'react-redux';
 import { userData } from '../../redux/actions/action';
