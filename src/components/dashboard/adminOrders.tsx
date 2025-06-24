@@ -184,8 +184,8 @@ const AdminOrders = () => {
                                                 }
                                             </td>
                                             <td className='upper-case'>
-                                                <span className={`mb-3 statusDes ${data.status === 'Cancelled' ? 'cancel' : ''}`}>
-                                                    {data.status === 'Pending' ? 'Filed' : data.status === 'Cancelled' ? 'Cancelled' : ''}
+                                                <span className={`statusDes ${data.status === 'Pending' ? '' : data.status === 'Cancelled' ? 'cancel' : data.status === 'Under Review' ? 'ur' : ''}`}>
+                                                    {data.status === 'Pending' ? 'Filed' : data.status === 'Cancelled' ? 'Cancelled' : data.status === 'Under Review' ? 'Under Review' : ''}
                                                 </span>
                                             </td>
                                         </tr>

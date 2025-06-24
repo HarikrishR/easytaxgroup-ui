@@ -67,31 +67,34 @@ const PDFGenerate = () => {
                     formUrl = form8843_22;
                 } else if (year === "2023") {
                     formUrl = form8843_23;
-                }
-                else if (year === "2024") {
+                } else if (year === "2024") {
                     formUrl = form8843_24;
                 }
 
                 const formPdfBytes = await fetch(formUrl).then(res => res.arrayBuffer());
                 const pdfDoc = await PDFDocument.load(formPdfBytes);
                 const form = pdfDoc.getForm();
+
                 // const fields = form.getFields().map(f => f.getName()); // Extract field names
 
                 // Populate fields (Make sure field names match actual PDF form field names)
                 form.getTextField("topmostSubform[0].Page1[0].f1_4[0]").setText(formData.user.firstName);
                 form.getTextField("topmostSubform[0].Page1[0].f1_5[0]").setText(formData.user.lastName);
                 form.getTextField("topmostSubform[0].Page1[0].f1_7[0]").setText(formData.user.street + "," + formData.user.city + "," + formData.user.state + "," + formData.user.zipcode);
-                form.getTextField("topmostSubform[0].Page1[0].f1_9[0]").setText(formData.visaType);
-                form.getTextField("topmostSubform[0].Page1[0].f1_11[0]").setText(formData.citizen);
-                form.getTextField("topmostSubform[0].Page1[0].f1_12[0]").setText(formData.citizen);
-                form.getTextField("topmostSubform[0].Page1[0].f1_13[0]").setText(formData.passportNumber);
+                form.getTextField("topmostSubform[0].Page1[0].f1_9[0]").setText(formData.form8843_datum.visaType);
+                form.getTextField("topmostSubform[0].Page1[0].f1_11[0]").setText(formData.form8843_datum.citizen);
+                form.getTextField("topmostSubform[0].Page1[0].f1_12[0]").setText(formData.form8843_datum.citizen);
+                form.getTextField("topmostSubform[0].Page1[0].f1_13[0]").setText(formData.form8843_datum.passportNumber);
                 form.getTextField("topmostSubform[0].Page1[0].f1_14[0]").setText(getNoOfDays(Number(year.slice(-2))));
                 form.getTextField("topmostSubform[0].Page1[0].f1_15[0]").setText(getNoOfDays(Number(year.slice(-2)) - 1));
                 form.getTextField("topmostSubform[0].Page1[0].f1_16[0]").setText(getNoOfDays(Number(year.slice(-2)) - 2));
                 form.getTextField("topmostSubform[0].Page1[0].f1_17[0]").setText(getNoOfDays(Number(year.slice(-2))));
-                form.getTextField("topmostSubform[0].Page1[0].f1_30[0]").setText(formData.form8843_datum.universityAdvisorName);
+                form.getTextField("topmostSubform[0].Page1[0].f1_30[0]").setText(formData.form8843_datum.universityName);
                 form.getTextField("topmostSubform[0].Page1[0].f1_31[0]").setText(formData.form8843_datum.universityStreet + "," + formData.form8843_datum.universityCity + "," + formData.form8843_datum.universityState + "," + formData.form8843_datum.universityZipcode);
                 form.getTextField("topmostSubform[0].Page1[0].f1_32[0]").setText(formData.form8843_datum.universityAdvisorNumber);
+                form.getTextField("topmostSubform[0].Page1[0].f1_33[0]").setText(formData.form8843_datum.universityAdvisorName);
+                form.getTextField("topmostSubform[0].Page1[0].f1_34[0]").setText(formData.form8843_datum.universityStreet + "," + formData.form8843_datum.universityCity + "," + formData.form8843_datum.universityState + "," + formData.form8843_datum.universityZipcode);
+                form.getTextField("topmostSubform[0].Page1[0].f1_35[0]").setText(formData.form8843_datum.universityAdvisorNumber);
                 form.getTextField("topmostSubform[0].Page1[0].f1_36[0]").setText(getVisaForYears(Number(year.slice(-2)) - 6));
                 form.getTextField("topmostSubform[0].Page1[0].f1_37[0]").setText(getVisaForYears(Number(year.slice(-2)) - 5));
                 form.getTextField("topmostSubform[0].Page1[0].f1_38[0]").setText(getVisaForYears(Number(year.slice(-2)) - 4));

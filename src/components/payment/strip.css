@@ -40,8 +40,12 @@
     color: #fff;
 }
 .stripeSection .price {
-    color: #fff;
+    color: #016fd0;
     font-family: 'poppinsBold';
+    font-size: 1.25rem;
+}
+.stripeSection .price #amount {
+    float: right;
 }
 
 @media (max-width: 768px) {

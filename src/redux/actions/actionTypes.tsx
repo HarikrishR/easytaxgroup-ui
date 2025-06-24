@@ -9,3 +9,4 @@ export const STRIPE_PROMISE = "STRIPE_PROMISE";
 export const FORM_DATA = "FORM_DATA";
 export const ADMIN_ORDER_FORM = "ADMIN_ORDER_FORM";
 export const UPDATE_ORDER = "UPDATE_ORDER";
+export const ORDER_DATA_BY_ID = "ORDER_DATA_BY_ID";

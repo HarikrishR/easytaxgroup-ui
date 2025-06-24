@@ -2,12 +2,14 @@
 
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { } from "../../redux/actions/action";
+import { getOrderDataById } from "../../redux/actions/action";
 import { useEffect, useState } from "react";
 import "./dashboard.css"
+import { useDispatch } from 'react-redux';
 
 const Orders = () => {
     const [orderData, setOrderData] = useState<any>([]);
+    const dispatch = useDispatch();
 
     const fetchOrders = async () => {
         try {
@@ -19,9 +21,11 @@ const Orders = () => {
             await axios.post(serviceUrl + '/fetchOrdersById', orderData)
                 .then((response: { data: any; }) => {
                     var data = response.data.data;
+                    dispatch(getOrderDataById(data));
                     setOrderData(data);
                 })
                 .catch((error: any) => {
+                    console.error("Error fetching orders:", error)
                     toast.error("Error fetching orders!");
                 });
 
@@ -60,8 +64,8 @@ const Orders = () => {
                                             <p className="mb-2 sub"><span>Payment :</span> {data.paymentStatus}</p>
                                             <div className="status">
                                                 <p className="mb-1"><span className='statusHead'>Status : </span>
-                                                    <span className={`mb-2 statusDes ${data.status === 'Cancelled' ? 'cancel' : ''}`}>
-                                                    {data.status === 'Pending' ? 'Filed' : data.status === 'Cancelled' ? 'Cancelled' : ''}
+                                                    <span className={`mb-2 statusDes ${data.status === 'Pending' ? 'filed' : data.status === 'Cancelled' ? 'cancel' : data.status === 'Under Review' ? 'ur' : ''}`}>
+                                                    {data.status === 'Pending' ? 'Filed' : data.status === 'Cancelled' ? 'Cancelled' : data.status === 'Under Review' ? 'Under Review' : ''}
                                                     </span>
                                                 </p>
                                             </div>

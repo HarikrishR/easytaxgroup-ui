@@ -16,6 +16,7 @@ const initialState = {
   formData: {},
   adminOrderFromData: {},
   updateOrder: false,
+  orderDataById: null,
 };
 
 const reducer = (state = initialState, action : any) => {
@@ -39,6 +40,11 @@ const reducer = (state = initialState, action : any) => {
       return {
         ...state,
         formData: action.payload,
+      };
+    case actionTypes.ORDER_DATA_BY_ID:
+      return {
+        ...state,
+        orderDataById: action.payload,
       };
     case actionTypes.SELECTED_FROM:
       return {

@@ -1,5 +1,5 @@
 
-import { ADMIN_ORDER_FORM, CLIENT_SECURITY_SETTINGS, FORM_DATA, GENERATE_PDF, GET_LOADER, SELECTED_FROM, SIGN_IN, SIGN_UP, STRIPE_PROMISE, USER_DATA, UPDATE_ORDER } from './actionTypes';
+import { ADMIN_ORDER_FORM, CLIENT_SECURITY_SETTINGS, FORM_DATA, GENERATE_PDF, GET_LOADER, SELECTED_FROM, SIGN_IN, SIGN_UP, STRIPE_PROMISE, USER_DATA, UPDATE_ORDER, ORDER_DATA_BY_ID } from './actionTypes';
 
 export const get_loader = (value: Object) => {
     return {
@@ -74,6 +74,13 @@ export const getAdminOrderFormData = (value: any) => {
 export const getUpdateOrder = (value: any) => {
     return {
         type: UPDATE_ORDER,
+        payload: value,
+    };
+};
+
+export const getOrderDataById = (value: any) => {
+    return {
+        type: ORDER_DATA_BY_ID,
         payload: value,
     };
 };

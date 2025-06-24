@@ -448,20 +448,27 @@ const FormEEFT = () => {
         return Object.keys(newErrors).length === 0;
     };
 
+    const orderData = useSelector((state: any) => state.orderDataById);
+
     return (
         <>
-            {
-                !allow
+                {
+                    orderData && orderData.some((order: any) => order.paymentStatus === "succeeded") ?
+                    <>
+                        <p>You Have already filed 8843 please visit orders page to see updates on your form.</p>
+                    </>
+                    :
+                    !allow
                     ?
                     <div className='form8843'>
                         <h4 className='mb-4'>Welcome to the Form 8843</h4>
                         <p className='form8843Des'>Before you start, please make sure you have the following documents ready:</p>
                         <form>
-                            <div className='row align-items-center'>
-                                <div className='col-sm-8 mb-2 mb-sm-3'>
-                                    <p>Can we create a billing tab within our website?</p>
+                            <div className='row'>
+                                <div className='col-sm-9 mb-2 mb-sm-3'>
+                                    <p>1. Were you in the U.S. for fewer than 5 calendar years as a student, or fewer than 2 years as a scholar/teacher, on your current visa? <br></br>And Were you present in the U.S. during the tax year under an F, J, M, or Q visa?</p>
                                 </div>
-                                <div className='col-6 col-sm-4 mb-4 mb-sm-3'>
+                                <div className='col-sm-3 mb-4 mb-sm-3'>
                                     <select
                                         className="form-select"
                                         id="q1"
@@ -474,10 +481,13 @@ const FormEEFT = () => {
                                     </select>
                                     {errorsQues.q1 && (<p className="formError">{errorsQues.q1}</p>)}
                                 </div>
-                                <div className='col-sm-8 mb-2 mb-sm-3'>
-                                    <p>Once I click on Bill, Can we send automatic Email to the Client? And with the option of followup emailing?</p>
+                            </div>
+                            <hr></hr>
+                            <div className='row'>
+                                <div className='col-sm-9 mb-2 mb-sm-3'>
+                                    <p>2. Do you understand that even if you had no U.S. income, you are still required to file Form 8843 to report your visa status and presence in the U.S.?</p>
                                 </div>
-                                <div className='col-6 col-sm-4 mb-4 mb-sm-3'>
+                                <div className='col-sm-3 mb-4 mb-sm-3'>
                                     <select
                                         className="form-select"
                                         id="q2"
@@ -491,11 +501,12 @@ const FormEEFT = () => {
                                     {errorsQues.q2 && (<p className="formError">{errorsQues.q2}</p>)}
                                 </div>
                             </div>
-                            <div className='row align-items-center'>
-                                <div className='col-sm-8 mb-2 mb-sm-3'>
-                                    <p>Automatic emails</p>
+                            <hr></hr>
+                            <div className='row'>
+                                <div className='col-sm-9 mb-2 mb-sm-3'>
+                                    <p>3. Do you understand that even if you had Income for any of the year, file 8843 along with your 1040NR.?</p>
                                 </div>
-                                <div className='col-6 col-sm-4 mb-4 mb-sm-3'>
+                                <div className='col-sm-3 mb-4 mb-sm-3'>
                                     <select
                                         className="form-select"
                                         id="q3"
@@ -508,10 +519,19 @@ const FormEEFT = () => {
                                     </select>
                                     {errorsQues.q3 && (<p className="formError">{errorsQues.q3}</p>)}
                                 </div>
-                                <div className='col-sm-8 mb-2 mb-sm-3'>
-                                    <p>Question 4?</p>
                                 </div>
-                                <div className='col-6 col-sm-4 mb-4 mb-sm-3'>
+                            <hr></hr>
+                            <div className='row'>
+                                <div className='col-sm-9 mb-2 mb-sm-3'>
+                                    <p>4. Do you understand and agree to the professional service fees, which are as follows?</p>
+                                    <ul className='qesList'>
+                                        <li>$15 for the first year of filing</li>
+                                        <li>$10 for the second year</li>
+                                        <li>$5 for each additional year beyond the second</li>
+                                        <li>These fees apply to the preparation and filing of Form 8843. </li>
+                                    </ul>
+                                </div>
+                                <div className='col-sm-3 mb-4 mb-sm-3'>
                                     <select
                                         className="form-select"
                                         id="q4"
@@ -871,7 +891,8 @@ const FormEEFT = () => {
                             <button className='btnPrimary' onClick={handleSubmit}>Submit</button>
                         )}
                     </div>
-            }
+                }
+                
         </>
 
     );

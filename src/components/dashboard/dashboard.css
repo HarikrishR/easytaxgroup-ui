@@ -72,6 +72,16 @@
 .form .form8843 .form8843Des {
     font-family: 'poppinsMedium';
 }
+.form .qesList{
+    padding-left: 2rem;
+}
+.form .qesList li{
+    list-style-type: disc;
+}
+.form hr{
+    margin-top: 0;
+    opacity: .125;
+}
 
 .orders h2,
 .orders .card h5,
@@ -94,8 +104,14 @@
     color: #fff;
 }
 
+.orders .card .status .statusDes.ur {
+    background: #ffb700;
+    color: #fff;
+}
+
 .adminOrders table {
     text-align: center;
+    vertical-align: middle;
 }
 .adminOrders h2 {
     font-family: 'poppinsBold';
@@ -120,8 +136,15 @@
     border-radius: 4px;
     padding: 2px 11px;
     font-size: .725rem;
+    display: inline-block;
 }
 .adminOrders .statusDes.cancel {
     background: #ff0000;
     color: #fff;
+}
+
+.adminOrders .statusDes.ur {
+    background: #ffb700;
+    color: #fff;
+    width: 105px;
 }

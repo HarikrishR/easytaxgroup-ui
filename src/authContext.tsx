@@ -33,7 +33,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     localStorage.removeItem('authUser'); // Clear user info
     localStorage.removeItem('authRole'); // Clear role info
     localStorage.removeItem('formData'); // Clear formData info
-    toast.success("Logged out successfully");
+
+    window.location.reload();
+    // toast.success("Logged out successfully");
   };
 
   useEffect(() => {

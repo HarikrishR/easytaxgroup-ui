@@ -182,9 +182,19 @@ const StripePaymentElement = () => {
         <>
             <section className='stripeSection' id='stripeSection'>
                 <div className='stripeContainer'>
-                    {/* <p className='price'><span id="currency">USD</span> <span id="amount">99</span> </p> */}
+                    <p className='price'><span id="currency">Total</span> <span id="amount">${(clientSecretSettings.amount / 100).toFixed(2)}</span> </p>
                     <form onSubmit={(e) => e.preventDefault()}>
-                        <PaymentElement />
+                        <PaymentElement
+                            options={{
+                                defaultValues: {
+                                    billingDetails: {
+                                        address: {
+                                            country: 'US', // Set default country to United States
+                                        },
+                                    },
+                                },
+                            }}
+                        />
                         <button disabled={!stripe} onClick={(e) => { e.preventDefault(); handleCancel(e); }} className='btnLtePrimary mt-3'>Cancel</button>
                         <button disabled={!stripe} onClick={(e) => { e.preventDefault(); handleSubmit(e); }} className='btnPrimary mt-3 float-end'>Submit</button>
                         {/* {errorMessage && <p className='paymentError'>{errorMessage}</p>} */}
