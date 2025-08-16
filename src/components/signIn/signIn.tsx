@@ -107,8 +107,10 @@ const SignIn = () => {
                                                 {errors.password}
                                             </p>
                                         )}
+                                        <p className='fgtPassword'><Link to="/fgtPwd" className='nav-link'>Forgot Password?</Link></p>
                                     </div>
-                                    <button type="submit" className="btnPrimary w-100 mt-2" onClick={handleSubmit}>Login</button>
+                                    
+                                    <button type="submit" className="btnPrimary w-100 mt-4" onClick={handleSubmit}>Login</button>
                                 </form>
                                 <div className="text-center mt-4">
                                     <p className='mb-0'>Don't have a account? <Link to='/signUp'>Sign Up</Link></p>

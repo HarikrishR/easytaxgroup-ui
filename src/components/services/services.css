@@ -1,0 +1,46 @@
+.service {
+    padding: 60px 0;
+}
+.service .nav-pills .nav-link {
+    text-align: left;
+    border: 1px solid #bcbcbc;
+    border-radius: 0;
+    width: 100%;
+    border-bottom: 0;
+    color: #000;
+    background: #ccdeb8;
+}
+.service .nav-pills .nav-link.active {
+    background-color: #10182C !important;
+    color: #fff !important;
+}
+.service .nav-pills .nav-link:last-child {
+    border-bottom: 1px solid #bcbcbc;
+}
+.service ul{
+    position: relative;
+    padding-left: 2rem;
+    margin-bottom: 1rem;
+}
+.service ul li span {
+    font-family: 'poppinsBold';
+}
+.service ul li {
+    position: relative;
+    margin-bottom: 20px;
+}
+.service ul li:last-child {
+    margin-bottom: 0px;
+}
+.service ul li::before {
+    position: absolute;
+    content: '';
+    background-image: url('../../assets/images/check.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 20px;
+    height: 20px;
+    left: -28px;
+    top: 5px;
+}

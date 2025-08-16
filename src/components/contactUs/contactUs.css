@@ -1,0 +1,16 @@
+.contactUs {
+    padding: 60px 0;
+}
+.getInTouch {
+    font-family: 'poppinsBold';
+    font-size: 2rem;
+}
+.contactInfo img {
+    width: 36px;
+    margin-right: 15px;
+}
+.contactInfo .title {
+    font-family: 'poppinsSemiBold';
+    font-size: 1.125rem;
+    margin-bottom: 0.5rem;
+}

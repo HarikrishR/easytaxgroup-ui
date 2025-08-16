@@ -66,8 +66,6 @@ const SignUp = () => {
             .then((response: { data: any; }) => {
                 navigate('/signIn');
                 toast.success(response.data.message);
-                
-                console.log('Form submitted successfully', response.data);
             })
             .catch((error: any) => {
                 toast.error(error.response.data.message);

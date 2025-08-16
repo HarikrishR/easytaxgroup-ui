@@ -1,0 +1,35 @@
+.aboutUs {
+    padding: 60px 0;
+}
+.aboutUs h2 {
+    font-family: 'poppinsBold';
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.aboutUs ul{
+    margin-left: 0;
+}
+.aboutUs li {
+    margin-bottom: 10px;
+}
+
+.offer {
+    padding: 60px 0;
+    background: #f8f9fa;
+}
+.offer h2 {
+    font-family: 'poppinsBold';
+    font-size: 2rem;
+}
+.offerBox {
+    border-radius: 5px;
+    border: 1px solid #e6e6e6;
+}
+.offerBox h3 {
+    font-family: 'poppinsBold';
+    font-size: 1.25rem;
+}
+.offerBox p {
+    margin-bottom: 0;
+}

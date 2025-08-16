@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import './footer.css'
 import logo from '../../assets/images/logo.png'
 
@@ -14,10 +15,10 @@ const Footer = () => {
                         <div className='col-md-3'>
                             <h3>Company</h3>
                             <ul>
-                                <li><a href='' title=''>Home</a></li>
-                                <li><a href='' title=''>About Us</a></li>
-                                <li><a href='' title=''>Services</a></li>
-                                <li><a href='' title=''>Contacts</a></li>
+                                <li><Link to="/" >Home</Link></li>
+                                <li><Link to="/aboutUs" >About Us</Link></li>
+                                <li><Link to="/services" >Services</Link></li>
+                                <li><Link to="/contactUs" >Contact Us</Link></li>
                             </ul>
                         </div>
                         <div className='col-md-3'>
