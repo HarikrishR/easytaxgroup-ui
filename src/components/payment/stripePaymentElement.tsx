@@ -36,8 +36,6 @@ const StripePaymentElement = () => {
             toast.error(result.error.message ?? 'An unknown error occurred.');
         } else if ('paymentIntent' in result && (result.paymentIntent as { status: string })?.status === 'succeeded') {
             const paymentDetails = result.paymentIntent;
-            console.log('Payment result:', result);
-            console.log('Payment Details:', paymentDetails);
 
             const serviceUrl = import.meta.env.VITE_SERVICE_URL;
             var paymentData = {
@@ -45,16 +43,13 @@ const StripePaymentElement = () => {
                 status: "Success",
                 userId: userData.userId,
             };
-            const puRes = await axios.post(serviceUrl + "/updateTransaction", paymentData);
-            console.log(puRes.data);
+            await axios.post(serviceUrl + "/updateTransaction", paymentData);
 
 
             // const formData = JSON.parse(localStorage.getItem('formData') || '{}');
             const submittedYears = Object.keys(formData)
                 .filter(key => key.startsWith('wantToFile') && formData[key] === 'yes')
                 .map(key => key.replace('wantToFile', ''));
-
-            console.log(submittedYears);
 
             var orderData = {
                 paymentId: paymentDetails.id,
@@ -81,11 +76,8 @@ const StripePaymentElement = () => {
             // // Decode payment_method if it's an object
             // const decodedPaymentMethod = typeof payment_method === 'object' ? JSON.stringify(payment_method) : payment_method;
 
-            // console.log('Formatted Date:', formattedDate);
-            // console.log('Decoded Payment Method:', decodedPaymentMethod);
 
             // // Log or store payment details
-            // console.log('Payment Details:', { id, amount, currency, created, status, payment_method });
             if (elements) {
                 elements.getElement(PaymentElement)?.destroy();
                 document.getElementById('stripeSection')!.style.display = 'none';
@@ -98,10 +90,8 @@ const StripePaymentElement = () => {
     };
 
     const handleCancel = async (event: React.MouseEvent<HTMLButtonElement>) => {
-        console.log(formData);
         event.preventDefault();
 
-        console.log('Payment cancelled');
 
         if (!stripe || !elements) {
             return;
@@ -109,8 +99,6 @@ const StripePaymentElement = () => {
 
         try {
             const result = await stripe.retrievePaymentIntent(clientSecretSettings.clientSecret);
-            console.log('Payment Intent:', result);
-
             
             // Optionally, you can reset the payment element or handle UI state
             // Reset the payment element
@@ -131,16 +119,12 @@ const StripePaymentElement = () => {
                 status: "Cancelled",
                 userId: userData.userId,
             };
-            const puRes = await axios.post(serviceUrl + "/updateTransaction", paymentData);
-            console.log(puRes.data);
-
+            await axios.post(serviceUrl + "/updateTransaction", paymentData);
 
             // const formData = JSON.parse(localStorage.getItem('formData') || '{}');
             const submittedYears = Object.keys(formData)
                 .filter(key => key.startsWith('wantToFile') && formData[key] === 'yes')
                 .map(key => key.replace('wantToFile', ''));
-
-            console.log(submittedYears);
 
             var orderData = {
                 paymentId: paymentDetails.id,
@@ -168,8 +152,7 @@ const StripePaymentElement = () => {
     const createOrder = async (data: any) => {
         try {
             const serviceUrl = import.meta.env.VITE_SERVICE_URL;
-            const coRes = await axios.post(serviceUrl + "/createOrder", data);
-            console.log(coRes.data);
+            await axios.post(serviceUrl + "/createOrder", data);
         }
         catch (error) {
             toast.error('An error occurred while attempting to update the order.');

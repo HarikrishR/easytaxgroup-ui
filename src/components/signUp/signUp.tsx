@@ -59,7 +59,6 @@ const SignUp = () => {
         e.preventDefault();
         if (validate()) {
             // Dispatch form values to action signIn
-            console.log("Form submitted successfully:", formData);
 
             const serviceUrl = import.meta.env.VITE_SERVICE_URL;
             await axios.post(serviceUrl + '/signup', formData)
@@ -69,7 +68,6 @@ const SignUp = () => {
             })
             .catch((error: any) => {
                 toast.error(error.response.data.message);
-                console.error('Error submitting form', error);
             });
              // Dispatch the action with form data
         }

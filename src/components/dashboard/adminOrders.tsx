@@ -60,8 +60,7 @@ const AdminOrders = () => {
                 id: updateOrderId,
             }
             await axios.post(serviceUrl + '/updateOrderStatus', orderStatusData)
-                .then((response: { data: any; }) => {
-                    console.log(response);
+                .then(() => {
                     fetchOrders();
                     dispatch(getUpdateOrder(false));
                     toast.success("Updated successful");
@@ -100,7 +99,6 @@ const AdminOrders = () => {
 
     const handleDownload = (data: any) => {
         // Logic to download the form
-        console.log(data);
         dispatch(getGeneratePDF(true))
         dispatch(getAdminOrderFormData(data));
     };

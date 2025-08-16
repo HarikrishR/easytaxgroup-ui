@@ -49,8 +49,7 @@ const FgtPwd = () => {
         if (validate()) {
             const serviceUrl = import.meta.env.VITE_SERVICE_URL;
             await axios.post(serviceUrl + '/forgotPassword', formData)
-                .then((response: { data: any; }) => {
-                    console.log(response);
+                .then(() => {
                     // var data = response.data.data;
                     toast.success("OTP sent to your email");
                     setShowEmail(false);
@@ -58,7 +57,6 @@ const FgtPwd = () => {
                     setShowChangePassword(false);
                 })
                 .catch((error: any) => {
-                    console.error("Error during forgot password:", error);
                     toast.error(error.response.data.message);
                 }); // Dispatch the action with form data
         }
@@ -168,7 +166,7 @@ const FgtPwd = () => {
                             <div className='col-md-6 offset-md-3 col-xl-4 offset-xl-4'>
                                 <div id='sign-in-button'></div>
                                 <div className="box p-4 shadow-lg">
-                                    <h2 className="text-center mb-4">Enter Email</h2>
+                                    <h2 className="text-center mb-4">Forgot Password</h2>
                                     <form>
                                         <div className="mb-4">
                                             <input

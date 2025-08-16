@@ -99,8 +99,7 @@ const FormEEFT = () => {
                         }))
                     }
                 })
-                .catch((error: any) => {
-                    console.log(error);
+                .catch(() => {
                     toast.error("Error fetching form data!");
                 });
 
@@ -241,16 +240,13 @@ const FormEEFT = () => {
                     submitting: formData[`wantToFile${key.replace('days', '')}`] === 'yes' ? true : false
                 }));
             await axios.post(serviceUrl + '/updateForm8843', formData)
-                .then(async (response: { data: any; }) => {
+                .then(async () => {
                     dispatch(getFormData(formData));
-                    // console.log('Stripe payment');
-                    console.log(response);
                     createPaymentIntent();
                     // dispatch(getGeneratePDF(true))
                 })
-                .catch((error: any) => {
+                .catch(() => {
                     dispatch(get_loader(false));
-                    console.log(error);
                     toast.error("Something went wrong!");
                 }); // Dispatch the action with form data
 

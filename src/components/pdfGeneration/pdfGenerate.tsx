@@ -27,7 +27,6 @@ const PDFGenerate = () => {
             return days;
         }
         else {
-            console.log("No data");
             return days;
         }
     }
@@ -43,7 +42,6 @@ const PDFGenerate = () => {
             return visaType;
         }
         else {
-            console.log("No data");
             return visaType;
         }
     }
@@ -53,11 +51,9 @@ const PDFGenerate = () => {
         try {
             // const formWithYear = Object.keys(formData)
             //     .filter(key => formData[key] === "yes" && key.includes("wantToFile"));
-            // console.log(formWithYear);
 
             formData.submittedYear.forEach(async (data: any) => {
                 const year = data; // Extract the year from the key
-                // console.log(formData);
                 var formUrl = '';
                 if (year === "2020") {
                     formUrl = form8843_20;
