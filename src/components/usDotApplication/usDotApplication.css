@@ -1,0 +1,26 @@
+.usDotApplicationContainer h3 {
+    font-family: 'poppinsBold';
+    font-size: 1.125rem;
+}
+
+.usDotApplicationContainer h6 {
+    font-family: 'poppinsBold';
+    font-size: .725rem;
+}
+
+.usDotApplicationContainer .box {
+    border-radius: 8px;
+}
+
+.usDotApplicationContainer .form-control,
+.usDotApplicationContainer .form-select {
+    border-left: 0;
+    border-top: 0;
+    border-right: 0;
+    border-radius: 0;
+    padding-left: 0;
+    font-size: .712rem;
+}
+.usDotApplicationContainer label {
+    font-size: .725rem;
+}
