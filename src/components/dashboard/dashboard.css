@@ -148,3 +148,18 @@
     color: #fff;
     width: 105px;
 }
+
+.usDotApp table {
+    text-align: center;
+    vertical-align: middle;
+}
+.usDotApp h2 {
+    font-family: 'poppinsBold';
+}
+.usDotApp table th {
+    font-family: 'poppinsSemiBold';
+    text-align: center;
+}
+.usDotApp p {
+    font-family: 'poppinsMedium';
+}

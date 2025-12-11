@@ -16,6 +16,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import { userData } from '../../redux/actions/action';
 import Orders from './orders';
 import AdminOrders from './adminOrders';
+import UsDotApp from './adminUsDotApp';
 
 const Dashboard = () => {
     const auth = useContext(AuthContext);
@@ -45,7 +46,7 @@ const Dashboard = () => {
 
             <Tab.Container defaultActiveKey="profile">
                 <div className="container-fluid">
-                    <div id="sidebarMenu" className="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse shadow-sm">
+                    <div id="sidebarMenu" className="col-md-4 col-lg-2 d-md-block bg-light sidebar collapse shadow-sm">
                         <div className="position-sticky p-4">
                             <Nav className="flex-column">
                                 <Nav.Item>
@@ -94,6 +95,16 @@ const Dashboard = () => {
                                         </Nav.Item>
                                         : ''
                                 }
+                                {
+                                    (localStorage.getItem('authRole') ? atob(localStorage.getItem('authRole')!) : '') === 'ADMIN' ?
+                                        <Nav.Item>
+                                            <Nav.Link eventKey="usDotApp">
+                                                <FaWpforms className="me-2" />
+                                                DOT Applications
+                                            </Nav.Link>
+                                        </Nav.Item>
+                                        : ''
+                                }
                             </Nav>
                             
                         </div>
@@ -102,7 +113,7 @@ const Dashboard = () => {
                         </div>
                     </div>
 
-                    <div className="col-md-9 ms-sm-auto col-lg-10">
+                    <div className="col-md-8 ms-sm-auto col-lg-10">
                         <div className="p-4 pb-5">
                             <Tab.Content>
                                 <Tab.Pane eventKey="profile">
@@ -129,6 +140,13 @@ const Dashboard = () => {
                                     (localStorage.getItem('authRole') ? atob(localStorage.getItem('authRole')!) : '') === 'ADMIN' ?
                                             <Tab.Pane eventKey="adminOrders">
                                                 <AdminOrders />
+                                            </Tab.Pane>
+                                        : ''
+                                }
+                                {
+                                    (localStorage.getItem('authRole') ? atob(localStorage.getItem('authRole')!) : '') === 'ADMIN' ?
+                                            <Tab.Pane eventKey="usDotApp">
+                                                <UsDotApp />
                                             </Tab.Pane>
                                         : ''
                                 }

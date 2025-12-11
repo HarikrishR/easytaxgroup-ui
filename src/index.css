@@ -108,3 +108,12 @@ li {
 .btnUnderline:hover::after {
   transform: scaleX(1);
 }
+
+/* Add this new CSS rule */
+.nowrap-table td {
+    white-space: nowrap;
+}
+
+.nowrap-table th {
+    white-space: nowrap;
+}

@@ -112,8 +112,8 @@ const AdminOrders = () => {
         <>
             <section className="adminOrders">
                 <h2 className="mb-3">Orders</h2>
-                <div className="row">
-                    <Table striped bordered hover size='sm'>
+                <div className="table-responsive">
+                    <Table striped bordered hover size='sm' className='nowrap-table'>
                         <thead>
                             <tr>
                                 <th>Order ID</th>

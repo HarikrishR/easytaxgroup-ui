@@ -39,8 +39,8 @@ const Users = () => {
                 {
                     !userData ? <p>Loading...</p> :
                         <>
-                            <div className="usersDetails">
-                                <Table striped bordered hover size='sm'>
+                            <div className="table-responsive usersDetails">
+                                <Table striped bordered hover size='sm' className='nowrap-table'>
                                     <thead>
                                         <tr>
                                             <th>User ID</th>

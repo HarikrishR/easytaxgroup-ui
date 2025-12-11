@@ -1,7 +1,11 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 import "./usDotApplication.css"
+
+// Import your auth context
+import { AuthContext } from '../../authContext';
 
 // Define the shape for form data
 interface FormData {
@@ -17,8 +21,7 @@ interface FormData {
     typeOfVehicle: string;
     ownershipOfVehicle: string;
     interstateIntrastate: string;
-    driversLicenseFileName?: string;
-    businessLicenseFileName?: string;
+    userId?: string;
 }
 
 // Define the shape for errors
@@ -28,6 +31,11 @@ type FormErrors = Partial<Record<keyof FormData, string>> & {
 };
 
 const UsDotApplication = () => {
+    const navigate = useNavigate();
+    const authContext = useContext(AuthContext);
+
+    // Extract user from auth context
+    const user = authContext?.user || null;
 
     const [formData, setFormData] = useState<FormData>({
         firstName: '',
@@ -42,8 +50,7 @@ const UsDotApplication = () => {
         typeOfVehicle: '',
         ownershipOfVehicle: '',
         interstateIntrastate: '',
-        driversLicenseFileName: '',
-        businessLicenseFileName: '',
+        userId: user || '',
     });
     const [errors, setErrors] = useState<FormErrors>({});
     const [files, setFiles] = useState<{ driversLicense: File | null, businessLicense: File | null }>({
@@ -54,6 +61,23 @@ const UsDotApplication = () => {
         driversLicense: '',
         businessLicense: '',
     });
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    // Update userId when user changes
+    useEffect(() => {
+        if (user) {
+            setFormData((prev) => ({ ...prev, userId: user }));
+        }
+    }, [user]);
+
+    // If not authenticated, don't render the form - no toast
+    if (!user) {
+        return (
+            <div className="py-3 usDotApplicationContainer">
+                <p className="text-danger">Please log in to access this form.</p>
+            </div>
+        );
+    }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { id, value } = e.target;
@@ -115,7 +139,6 @@ const UsDotApplication = () => {
 
         // Required text/select fields validation
         (['firstName', 'lastName', 'businessName', 'email', 'areaCode', 'phoneNumber', 'serviceOffered', 'numberOfVehicles', 'typeOfVehicle', 'ownershipOfVehicle', 'interstateIntrastate'] as Array<keyof FormData>).forEach(key => {
-            // Remove 'numberOfDrivers' from this array - it doesn't exist in formData
             if (!formData[key] || formData[key] === '') {
                 const displayKey = key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
                 newErrors[key] = `${displayKey} is required.`;
@@ -148,11 +171,12 @@ const UsDotApplication = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (validate()) {
+            setIsSubmitting(true);
             try {
                 const serviceUrl = import.meta.env.VITE_SERVICE_URL;
                 const formDataToSend = new FormData();
 
-                // Add form fields
+                // Add form fields including userId
                 Object.keys(formData).forEach(key => {
                     if (key === 'typeOfProperty') {
                         formDataToSend.append(key, JSON.stringify(formData[key as keyof typeof formData]));
@@ -176,6 +200,7 @@ const UsDotApplication = () => {
                 const response = await axios.post(serviceUrl + '/usdotapplication', formDataToSend);
 
                 toast.success('Application submitted successfully!');
+                
                 // Reset form
                 setFormData({
                     firstName: '',
@@ -190,13 +215,16 @@ const UsDotApplication = () => {
                     typeOfVehicle: '',
                     ownershipOfVehicle: '',
                     interstateIntrastate: '',
+                    userId: user || '',
                 });
                 setFiles({ driversLicense: null, businessLicense: null });
                 setFileNames({ driversLicense: '', businessLicense: '' });
                 setErrors({});
             } catch (error: any) {
                 toast.error(error.response?.data?.message || 'An error occurred');
-            } 
+            } finally {
+                setIsSubmitting(false);
+            }
         }
         else {
             toast.error('Please fix the errors in the form before submitting.');
@@ -219,11 +247,9 @@ const UsDotApplication = () => {
 
     return (
         <>
-
             <div className="py-3 usDotApplicationContainer">
                 <h3 className="mb-4">US DOT Application</h3>
                 <form className="row g-3">
-
                     {/* First Name */}
                     <div className="col-md-6 mb-2">
                         <input type="text" className="form-control" placeholder="First Name" id="firstName" value={formData.firstName}
@@ -267,6 +293,8 @@ const UsDotApplication = () => {
                             </p>
                         )}
                     </div>
+
+                    {/* Area Code and Phone Number */}
                     <div className="col-md-6 mb-2">
                         <div className="input-group">
                             <input
@@ -301,7 +329,7 @@ const UsDotApplication = () => {
                             <option>Select Services</option>
                             <option value="General Feright Truck">General Feright Truck</option>
                             <option value="Car Hauling">Car Hauling</option>
-                            <option value="Feright Forward">Feright Forward</option>
+                            <option value="Feight Forward">Feight Forward</option>
                             <option value="Intermodal Equipment Provider">Intermodal Equipment Provider</option>
                         </select>
                         {errors.serviceOffered && (
@@ -311,8 +339,8 @@ const UsDotApplication = () => {
 
                     {/* Type of Property Checkboxes */}
                     <div className="col-12 mb-2">
+                        <h6 className="mb-2">Type of Property</h6>
                         <div className="form-check">
-                            <h6 className="mb-2">Type of Property</h6>
                             <input
                                 className="form-check-input"
                                 type="checkbox"
@@ -414,9 +442,9 @@ const UsDotApplication = () => {
                     <div className="col-md-6 mb-2">
                         <select id="interstateIntrastate" className="form-select" value={formData.interstateIntrastate}
                             onChange={handleChange} required>
-                            <option>Intersate or Intrastate?</option>
+                            <option>Interstate or Intrastate?</option>
                             <option value="Interstate(1 state to another state)">Interstate(1 state to another state)</option>
-                            <option value="Intrastate (WIthin 1 state)">Intrastate (WIthin 1 state)</option>
+                            <option value="Intrastate (Within 1 state)">Intrastate (Within 1 state)</option>
                             <option value="Both">Both</option>
                         </select>
                         {errors.interstateIntrastate && (
@@ -482,8 +510,8 @@ const UsDotApplication = () => {
 
                     {/* Submit Button */}
                     <div className="col-md-6 mt-4">
-                        <button type="submit" className="btnPrimary w-100 mt-4" onClick={handleSubmit}>
-                            Submit
+                        <button type="submit" className="btnPrimary w-100 mt-4" onClick={handleSubmit} disabled={isSubmitting}>
+                            {isSubmitting ? 'Submitting...' : 'Submit'}
                         </button>
                     </div>
                 </form>
