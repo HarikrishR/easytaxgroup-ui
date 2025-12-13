@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import "./usDotApplication.css"
 
 // Import your auth context
@@ -31,7 +31,7 @@ type FormErrors = Partial<Record<keyof FormData, string>> & {
 };
 
 const UsDotApplication = () => {
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     const authContext = useContext(AuthContext);
 
     // Extract user from auth context
@@ -197,7 +197,7 @@ const UsDotApplication = () => {
                 formDataToSend.append('driversLicenseFileName', fileNames.driversLicense);
                 formDataToSend.append('businessLicenseFileName', fileNames.businessLicense);
 
-                const response = await axios.post(serviceUrl + '/usdotapplication', formDataToSend);
+                await axios.post(serviceUrl + '/usdotapplication', formDataToSend);
 
                 toast.success('Application submitted successfully!');
                 

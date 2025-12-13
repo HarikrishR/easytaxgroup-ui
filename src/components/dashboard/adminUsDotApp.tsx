@@ -3,6 +3,7 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import Table from 'react-bootstrap/Table';
+// import { BsDownload } from "react-icons/bs";
 import { useEffect, useState } from "react";
 import "./dashboard.css"
 
@@ -68,6 +69,44 @@ const UsDotApp = () => {
     const serviceUrl = import.meta.env.VITE_SERVICE_URL;
     const licenseBaseUrl = serviceUrl ? `${serviceUrl}/uploads/licenses/` : '/';
 
+    // const handleDownloadLicense = async (fileName: string) => {
+    //     if (!fileName) {
+    //         toast.error("File name is missing.");
+    //         return;
+    //     }
+
+    //     const fileUrl = `${licenseBaseUrl}${fileName}`;
+
+    //     try {
+    //         const response = await axios.get(fileUrl, {
+    //             responseType: 'blob', // IMPORTANT: Fetch the file data as a Binary Large Object (Blob)
+    //         });
+
+    //         // 1. Create a link element
+    //         const url = window.URL.createObjectURL(new Blob([response.data]));
+    //         const link = document.createElement('a');
+            
+    //         // 2. Set the link's attributes
+    //         link.href = url;
+    //         // Use the original filename for the download attribute
+    //         link.setAttribute('download', fileName); 
+            
+    //         // 3. Append the link to the body and trigger click
+    //         document.body.appendChild(link);
+    //         link.click();
+            
+    //         // 4. Clean up
+    //         document.body.removeChild(link);
+    //         window.URL.revokeObjectURL(url);
+            
+    //         toast.success(`Successfully downloaded ${fileName}`);
+
+    //     } catch (error) {
+    //         console.error("Download Error:", error);
+    //         toast.error("Failed to download license file.");
+    //     }
+    // };
+
     return (
         <>
             <section className="usDotApp">
@@ -117,26 +156,42 @@ const UsDotApp = () => {
                                             <td>{data.interstateIntrastate}</td>
                                             <td>
                                                 {data.driversLicenseFileName ? (
+                                                    <>
                                                     <a
                                                         href={`${licenseBaseUrl}${data.driversLicenseFileName}`}
+                                                        className='text-dark me-3'
                                                         target="_blank"
                                                         rel="noopener noreferrer"
                                                         style={{ textDecoration: 'underline' }}
                                                     >
-                                                        View License
+                                                        View
                                                     </a>
+                                                    {/* <BsDownload 
+                                                        onClick={() => handleDownloadLicense(data.driversLicenseFileName)}
+                                                        style={{ cursor: 'pointer' }}
+                                                        title="Download Driver's License"
+                                                    /> */}
+                                                    </>
                                                 ) : 'N/A'}
                                             </td>
                                             <td>
                                                 {data.businessLicenseFileName ? (
+                                                    <>
                                                     <a
                                                         href={`${licenseBaseUrl}${data.businessLicenseFileName}`}
+                                                        className='text-dark me-3'
                                                         target="_blank"
                                                         rel="noopener noreferrer"
                                                         style={{ textDecoration: 'underline' }}
                                                     >
-                                                        View License
+                                                        View
                                                     </a>
+                                                    {/* <BsDownload 
+                                                        onClick={() => handleDownloadLicense(data.businessLicenseFileName)}
+                                                        style={{ cursor: 'pointer' }}
+                                                        title="Download Business License"
+                                                    /> */}
+                                                    </>
                                                 ) : 'N/A'}
                                             </td>
                                             <td>{
