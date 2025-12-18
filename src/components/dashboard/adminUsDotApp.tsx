@@ -1,116 +1,166 @@
-
-
+// fileName: adminUsDotApp.tsx
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import Table from 'react-bootstrap/Table';
-// import { BsDownload } from "react-icons/bs";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
+import Pagination from 'react-bootstrap/Pagination'; // <-- ADD THIS IMPORT
+import Row from 'react-bootstrap/Row'; // <-- ADD THIS IMPORT
+import Col from 'react-bootstrap/Col'; // <-- ADD THIS IMPORT
+
 import "./dashboard.css"
 
 const UsDotApp = () => {
-    const [orderData, setOrderData] = useState<any>([]);
+    // NEW STATE FOR PAGINATION AND SEARCH
+    const [applications, setApplications] = useState<any[]>([]); // Rename from orderData for clarity
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [limit, setLimit] = useState(10); // Records per page
 
-    const fetchDotApplication = async () => {
+    const serviceUrl = import.meta.env.VITE_SERVICE_URL;
+    const licenseBaseUrl = serviceUrl ? `${serviceUrl}/uploads/licenses/` : '/';
+
+    // Use useCallback to memoize the function, preventing unnecessary re-creation
+    const fetchDotApplication = useCallback(async () => {
         try {
-            const serviceUrl = import.meta.env.VITE_SERVICE_URL;
-            // Fetch user data from the server
-            await axios.get(serviceUrl + '/fetchUsdotapplications')
-                .then((response: { data: any; }) => {
-                    var data = response.data.data;
-                    setOrderData(data);
-                })
-                .catch((error: any) => {
-                    console.error(error);
-                    toast.error("Error fetching Applications!");
-                });
+            // Build query parameters
+            const params = {
+                page: currentPage,
+                limit: limit,
+                search: searchQuery,
+            };
+            
+            // Fetch applications with query parameters
+            const response = await axios.get(serviceUrl + '/fetchUsdotapplications', { params });
+                
+            const { 
+            data = [], 
+            totalPages = 1
+        } = response.data?.data || {};
 
+            setApplications(data);
+            setTotalPages(totalPages);
+            
         } catch (error) {
-            console.error(error);
+            setApplications([]); 
+            setTotalPages(1);
             toast.error("Error fetching Applications!");
         }
-    };
+    }, [currentPage, limit, searchQuery, serviceUrl]); // Dependencies
 
     useEffect(() => {
+        // Fetch data whenever page, limit, or search query changes
         fetchDotApplication();
-    }, []);
+    }, [fetchDotApplication]);
+
+    // HANDLERS
+    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchQuery(event.target.value);
+        setCurrentPage(1); // Reset to page 1 on new search
+    };
+
+    const handlePageChange = (page: number) => {
+        if (page >= 1 && page <= totalPages) {
+            setCurrentPage(page);
+        }
+    };
+    
+    // Function to generate the Pagination controls
+    const renderPagination = () => {
+        let items = [];
+        let startPage = Math.max(1, currentPage - 2);
+        let endPage = Math.min(totalPages, currentPage + 2);
+
+        if (startPage > 1) {
+            items.push(<Pagination.First key="first" onClick={() => handlePageChange(1)} />);
+            items.push(<Pagination.Prev key="prev" onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />);
+            if (startPage > 2) items.push(<Pagination.Ellipsis key="start-ellipsis" />);
+        } else {
+            items.push(<Pagination.Prev key="prev" onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />);
+        }
+
+        for (let number = startPage; number <= endPage; number++) {
+            items.push(
+                <Pagination.Item 
+                    key={number} 
+                    active={number === currentPage} 
+                    onClick={() => handlePageChange(number)}
+                >
+                    {number}
+                </Pagination.Item>,
+            );
+        }
+
+        if (endPage < totalPages) {
+            if (endPage < totalPages - 1) items.push(<Pagination.Ellipsis key="end-ellipsis" />);
+            items.push(<Pagination.Next key="next" onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages} />);
+            items.push(<Pagination.Last key="last" onClick={() => handlePageChange(totalPages)} />);
+        } else {
+            items.push(<Pagination.Next key="next" onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages} />);
+        }
+
+        return <Pagination>{items}</Pagination>;
+    };
 
     // Function to safely parse the JSON string property and return a clean array of strings
     const parseTypeOfProperty = (rawData: any): string[] => {
         let propertyList: string[] = [];
 
         if (Array.isArray(rawData)) {
-            // Case 1: Data is already a parsed array (new data)
             propertyList = rawData.map(String);
         } else if (typeof rawData === 'string') {
             try {
-                // Case 2: Data is a string that needs parsing (old/double-stringified data)
                 let parsed = JSON.parse(rawData);
 
-                // If the result is a string, it means it was double-stringified (e.g., the payload you provided)
                 if (typeof parsed === 'string') {
-                    parsed = JSON.parse(parsed); // Parse it again
+                    parsed = JSON.parse(parsed);
                 }
 
-                // If the final parsed result is an array, map it
                 propertyList = Array.isArray(parsed) ? parsed.map(String) : [String(rawData)];
             } catch (e) {
-                // Case 3: Parsing fails, treat the whole original string as a single item
                 propertyList = [rawData];
             }
         } else {
-            // Fallback for null/undefined/other
             propertyList = [String(rawData || 'N/A')];
         }
 
-        // Final check to clean up remaining JSON string artifacts (quotes/brackets/backslashes)
         return propertyList.map(item => item.replace(/\"|\\|\[|\]/g, ''));
     };
 
-    const serviceUrl = import.meta.env.VITE_SERVICE_URL;
-    const licenseBaseUrl = serviceUrl ? `${serviceUrl}/uploads/licenses/` : '/';
-
-    // const handleDownloadLicense = async (fileName: string) => {
-    //     if (!fileName) {
-    //         toast.error("File name is missing.");
-    //         return;
-    //     }
-
-    //     const fileUrl = `${licenseBaseUrl}${fileName}`;
-
-    //     try {
-    //         const response = await axios.get(fileUrl, {
-    //             responseType: 'blob', // IMPORTANT: Fetch the file data as a Binary Large Object (Blob)
-    //         });
-
-    //         // 1. Create a link element
-    //         const url = window.URL.createObjectURL(new Blob([response.data]));
-    //         const link = document.createElement('a');
-            
-    //         // 2. Set the link's attributes
-    //         link.href = url;
-    //         // Use the original filename for the download attribute
-    //         link.setAttribute('download', fileName); 
-            
-    //         // 3. Append the link to the body and trigger click
-    //         document.body.appendChild(link);
-    //         link.click();
-            
-    //         // 4. Clean up
-    //         document.body.removeChild(link);
-    //         window.URL.revokeObjectURL(url);
-            
-    //         toast.success(`Successfully downloaded ${fileName}`);
-
-    //     } catch (error) {
-    //         console.error("Download Error:", error);
-    //         toast.error("Failed to download license file.");
-    //     }
-    // };
+    // Removed the unused handleDownloadLicense for brevity.
 
     return (
         <>
             <section className="usDotApp">
                 <h2 className="mb-3">Orders</h2>
+                
+                {/* SEARCH AND LIMIT CONTROLS */}
+                <Row className="mb-4 align-items-center">
+                    <Col xs={12} md={8} lg={4}>
+                        <input
+                            type="text"
+                            placeholder="Search by Name, Email, or Phone..."
+                            className='form-control'
+                            value={searchQuery}
+                            onChange={handleSearchChange}
+                        />
+                    </Col>
+                    <Col xs={12} md={4} lg={2} className="mt-2 mt-md-0 ms-auto">
+                        <select 
+                            value={limit} 
+                            className='form-select float-end'
+                            onChange={(e) => {
+                                setLimit(Number(e.target.value));
+                                setCurrentPage(1); // Reset to page 1 when limit changes
+                            }}
+                        >
+                            <option value={10}>Show 10</option>
+                            <option value={25}>Show 25</option>
+                            <option value={50}>Show 50</option>
+                        </select>
+                    </Col>
+                </Row>
+                
                 <div className="table-responsive">
                     <Table striped bordered hover size='sm' className='nowrap-table'>
                         <thead>
@@ -132,10 +182,10 @@ const UsDotApp = () => {
                         </thead>
                         <tbody>
                             {
-                                orderData.length === 0 ?
+                                applications.length === 0 ? // Check applications state
                                     <tr>
-                                        <td colSpan={20} className="text-center">No Applications Found!</td>
-                                    </tr> : orderData.map((data: any) => (
+                                        <td colSpan={13} className="text-center">No Applications Found!</td> {/* Corrected colspan */}
+                                    </tr> : applications.map((data: any) => (
                                         <tr key={data.userId}>
                                             <td>{data.userId}</td>
                                             <td>{data.firstName + " " + data.lastName}</td>
@@ -147,7 +197,6 @@ const UsDotApp = () => {
                                             <td>
                                                 <ul>
                                                     {parseTypeOfProperty(data.typeOfProperty).map((item: string, index: number) => (
-
                                                         <li key={index}>{item}</li>
                                                     ))}
                                                 </ul>
@@ -156,7 +205,6 @@ const UsDotApp = () => {
                                             <td>{data.interstateIntrastate}</td>
                                             <td>
                                                 {data.driversLicenseFileName ? (
-                                                    <>
                                                     <a
                                                         href={`${licenseBaseUrl}${data.driversLicenseFileName}`}
                                                         className='text-dark me-3'
@@ -166,17 +214,10 @@ const UsDotApp = () => {
                                                     >
                                                         View
                                                     </a>
-                                                    {/* <BsDownload 
-                                                        onClick={() => handleDownloadLicense(data.driversLicenseFileName)}
-                                                        style={{ cursor: 'pointer' }}
-                                                        title="Download Driver's License"
-                                                    /> */}
-                                                    </>
                                                 ) : 'N/A'}
                                             </td>
                                             <td>
                                                 {data.businessLicenseFileName ? (
-                                                    <>
                                                     <a
                                                         href={`${licenseBaseUrl}${data.businessLicenseFileName}`}
                                                         className='text-dark me-3'
@@ -186,12 +227,6 @@ const UsDotApp = () => {
                                                     >
                                                         View
                                                     </a>
-                                                    {/* <BsDownload 
-                                                        onClick={() => handleDownloadLicense(data.businessLicenseFileName)}
-                                                        style={{ cursor: 'pointer' }}
-                                                        title="Download Business License"
-                                                    /> */}
-                                                    </>
                                                 ) : 'N/A'}
                                             </td>
                                             <td>{
@@ -210,6 +245,13 @@ const UsDotApp = () => {
                         </tbody>
                     </Table>
                 </div>
+
+                {/* PAGINATION CONTROLS */}
+                {totalPages > 1 && (
+                    <div className="d-flex justify-content-center mt-3">
+                        {renderPagination()}
+                    </div>
+                )}
             </section>
         </>
     );
