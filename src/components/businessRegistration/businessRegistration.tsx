@@ -33,6 +33,8 @@ type FormErrors = Partial<Record<keyof FormData, string>> & {
 };
 
 const BusinessRegistration = () => {
+
+    const [showOtherInput, setShowOtherInput] = useState(false);
     // const navigate = useNavigate();
     // const authContext = useContext(AuthContext);
 
@@ -68,6 +70,23 @@ const BusinessRegistration = () => {
         secondaryDiversLicense: '',
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const handleBusinessTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const value = e.target.value;
+        if (value === 'Others') {
+            setShowOtherInput(true);
+            // Clear the value so the user is forced to type a custom type
+            setFormData((prev) => ({ ...prev, businessType: '' }));
+        } else {
+            setShowOtherInput(false);
+            setFormData((prev) => ({ ...prev, businessType: value }));
+            
+            // Clear errors if a valid option is picked
+            const newErrors = { ...errors };
+            delete newErrors.businessType;
+            setErrors(newErrors);
+        }
+    };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { id, value } = e.target;
@@ -128,7 +147,7 @@ const BusinessRegistration = () => {
         const newErrors: FormErrors = {};
 
         // Required text/select fields validation
-        (['businessName', 'businessType', 'businessAddressLineOne', 'businessAddressLineTwo', 'businessAddressCity', 'businessAddressState', 'businessAddressZip', 'firstName', 'lastName', 'email', 'areaCode', 'phoneNumber', 'SSN'] as Array<keyof FormData>).forEach(key => {
+        (['businessName', 'businessType', 'businessAddressLineOne', 'businessAddressLineTwo', 'businessAddressCity', 'businessAddressState', 'businessAddressZip', 'firstName', 'lastName', 'email', 'phoneNumber', 'SSN'] as Array<keyof FormData>).forEach(key => {
             if (!formData[key] || formData[key] === '') {
                 const displayKey = key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
                 newErrors[key] = `${displayKey} is required.`;
@@ -168,7 +187,7 @@ const BusinessRegistration = () => {
                 formDataToSend.append('primaryDiversLicenseFileName', fileNames.primaryDiversLicense);
                 formDataToSend.append('secondaryDiversLicenseFileName', fileNames.secondaryDiversLicense);
 
-                await axios.post(serviceUrl + '/usdotapplication', formDataToSend);
+                await axios.post(serviceUrl + '/businessRegistration', formDataToSend);
 
                 toast.success('Application submitted successfully!');
 
@@ -226,6 +245,43 @@ const BusinessRegistration = () => {
                                             </p>
                                         )}
                                     </div>
+
+                                    {/* Business Type Selection */}
+                                    <div className="col-md-6 mb-2">
+                                        <select 
+                                            className="form-select" 
+                                            id="businessTypeSelect" 
+                                            value={showOtherInput ? "Others" : formData.businessType}
+                                            onChange={handleBusinessTypeChange} 
+                                            required
+                                        >
+                                            <option value="">Select Business Type</option>
+                                            <option value="LLC">LLC</option>
+                                            <option value="Corporation">Corporation</option>
+                                            <option value="Others">Others</option>
+                                        </select>
+                                        {errors.businessType && !showOtherInput && (
+                                            <p className="formError">{errors.businessType}</p>
+                                        )}
+                                    </div>
+
+                                    {/* Conditional "Others" Text Input */}
+                                    {showOtherInput && (
+                                        <div className="col-md-6 mb-2">
+                                            <input 
+                                                type="text" 
+                                                className="form-control" 
+                                                placeholder="Please specify business type" 
+                                                id="businessType" 
+                                                value={formData.businessType}
+                                                onChange={handleChange} 
+                                                required 
+                                            />
+                                            {errors.businessType && (
+                                                <p className="formError">Specific business type is required</p>
+                                            )}
+                                        </div>
+                                    )}
 
                                     {/* Business Address Line One */}
                                     <div className="col-md-6 mb-2">
