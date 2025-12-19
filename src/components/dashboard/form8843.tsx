@@ -117,14 +117,15 @@ const FormEEFT = () => {
 
         if (name === "firstEntry") {
             const firstEntryDate = new Date(value);
+            // Normalize to start of day to avoid time-zone/millisecond shifts
+            firstEntryDate.setHours(0, 0, 0, 0); 
+            
             const currentYear = new Date().getFullYear();
             const updatedFormData = { ...formData, [name]: value };
 
-            // Remove all existing days records
+            // Clear old days
             Object.keys(updatedFormData).forEach((key) => {
-                if (key.startsWith('days')) {
-                    delete updatedFormData[key];
-                }
+                if (key.startsWith('days')) delete updatedFormData[key];
             });
 
             [2021, 2022, 2023, 2024].forEach((key) => {
@@ -132,29 +133,22 @@ const FormEEFT = () => {
                 updatedFormData[wantToFileKey] = 'notPresentInUSA';
             });
 
-            // Recalculate days for each year from firstEntry to currentYear
             for (let year = firstEntryDate.getFullYear(); year <= currentYear; year++) {
                 // Set default value for wantToFile
                 if ([2021, 2022, 2023, 2024].includes(year)) {
                     const wantToFileKey = `wantToFile${year}`;
                     updatedFormData[wantToFileKey] = 'yes';
                 }
+                const endOfYear = new Date(year, 11, 31, 23, 59, 59); // End of the specific year
 
-                // const startOfYear = new Date(year, 0, 1);
-                const endOfYear = new Date(year, 11, 31);
-                if (Number(year) === Number(currentYear)) {
-                    // const currentDate = new Date();
-                    // if (year !== firstEntryDate.getFullYear())
-                    //     updatedFormData[`days${year}`] = Math.ceil((currentDate.getTime() - startOfYear.getTime()) / (1000 * 60 * 60 * 24)) || 0;
-                    // else
-                    //     updatedFormData[`days${year}`] = Math.ceil((currentDate.getTime() - firstEntryDate.getTime()) / (1000 * 60 * 60 * 24)) || 0;
-                } else if (year === firstEntryDate.getFullYear()) {
-                    updatedFormData[`days${year}`] = Math.ceil((endOfYear.getTime() - firstEntryDate.getTime()) / (1000 * 60 * 60 * 24)) + 1;
-                } else {
-                    updatedFormData[`days${year}`] = 365;
+                if (year === firstEntryDate.getFullYear()) {
+                    // Difference in days: (End - Start) / ms_per_day, then add 1 to be inclusive
+                    const diff = Math.floor((endOfYear.getTime() - firstEntryDate.getTime()) / (1000 * 60 * 60 * 24)) + 1;
+                    updatedFormData[`days${year}`] = diff;
+                } else if (year < currentYear) {
+                    updatedFormData[`days${year}`] = (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0) ? 366 : 365;
                 }
             }
-
             setFormData(updatedFormData);
         } else {
             setFormData({
@@ -193,6 +187,7 @@ const FormEEFT = () => {
     async function createPaymentIntent () {
         try {
             dispatch(get_loader(true));
+            console.log("Creating payment intent...", import.meta.env.VITE_STRIPE_PUBLIC_KEY);
             const stripePromise = await loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
             dispatch(getStripePromise(stripePromise))
 
@@ -734,7 +729,7 @@ const FormEEFT = () => {
                                     </div>
                                     <div className='col-sm-6 col-lg-4 mb-4 position-relative'>
                                         <label className='mb-2'>Date of First Entry to USA</label>
-                                        <input type="date" name="firstEntry" value={formData.firstEntry} onChange={handleChange} className='form-control' max={new Date(new Date().getFullYear() - 1, 11, 31).toISOString().split('T')[0]} />
+                                        <input type="date" name="firstEntry" value={formData.firstEntry} onChange={handleChange} className='form-control' max={`${new Date().getFullYear() - 1}-12-31`} />
                                         {errors.firstEntry && (<p className="formError">{errors.firstEntry}</p>)}
                                     </div>
                                 </div>

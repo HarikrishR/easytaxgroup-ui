@@ -1,23 +1,23 @@
-.usDotApplicationContainer {
+.businessRegistrationContainer {
     padding: 60px 0;
 }
 
-.usDotApplicationContainer h2 {
+.businessRegistrationContainer h2 {
     font-family: 'poppinsBold';
     font-size: 1.5rem;
 }
 
-.usDotApplicationContainer h6 {
+.businessRegistrationContainer h6 {
     font-family: 'poppinsBold';
     font-size: .725rem;
 }
 
-.usDotApplicationContainer .box {
+.businessRegistrationContainer .box {
     border-radius: 20px;
 }
 
-.usDotApplicationContainer .form-control,
-.usDotApplicationContainer .form-select {
+.businessRegistrationContainer .form-control,
+.businessRegistrationContainer .form-select {
     border-left: 0;
     border-top: 0;
     border-right: 0;
@@ -25,6 +25,6 @@
     padding-left: 0;
     font-size: .712rem;
 }
-.usDotApplicationContainer label {
+.businessRegistrationContainer label {
     font-size: .725rem;
 }

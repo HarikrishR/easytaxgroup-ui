@@ -1,7 +1,7 @@
+import { Link } from "react-router-dom";
 import Footer from "../footer/footer";
 import Header from "../header/header";
 import Banner from "../banner/banner";
-import UsDotApplication from "../usDotApplication/usDotApplication";
 import "./services.css"
 
 const Services = () => {
@@ -65,7 +65,8 @@ const Services = () => {
                         <li><span>EIN (Employer Identification Number) Application:</span> Fast and accurate EIN registration with the IRS.</li>
                         <li><span>State-Level Registration & Licensing:</span> Registration with state departments for sales tax, employer tax, and local business licenses as needed.</li>
                       </ul>
-                      <p className="mb-0">Let us guide you through every step of launching your business.</p>
+                      <p className="mb-4">Let us guide you through every step of launching your business.</p>
+                      <Link to="/businessRegService" className='btnPrimary'>Apply Now</Link>
                     </div>
                     <div className="tab-pane fade" id="bookKeeping" role="tabpanel" aria-labelledby="bookKeeping-tab">
                       <p>Accurate bookkeeping is the foundation of any successful business. Our services include:</p>
@@ -88,8 +89,8 @@ const Services = () => {
                         <li><span>Hours of Service (HOS) Compliance:</span> Guidance on electronic logging devices (ELDs), log audits, and managing driver duty hours.</li>
                         <li><span>Audit Preparation:</span> Assistance in compiling and organizing required documents to prepare for FMCSA audits or roadside inspections.</li>
                       </ul>
-                      <p className="mb-0">We help keep your operations compliant, efficient, and audit-ready — so you can stay on the road without interruptions.</p>
-                      <UsDotApplication />
+                      <p className="mb-4">We help keep your operations compliant, efficient, and audit-ready — so you can stay on the road without interruptions.</p>
+                      <Link to="/fmcsacompliance" className='btnPrimary'>Apply Now</Link>
                     </div>
                     <div className="tab-pane fade" id="8843Filling" role="tabpanel" aria-labelledby="8843Filling-tab">
                       <p>If you're a non-resident alien in the U.S. on an F, J, M, or Q visa, you're required to file Form 8843 — even if you have no U.S. income. We help you:</p>

@@ -165,7 +165,6 @@ const UsDotApp = () => {
                     <Table striped bordered hover size='sm' className='nowrap-table'>
                         <thead>
                             <tr>
-                                <th>User ID</th>
                                 <th>Name</th>
                                 <th>Business Name</th>
                                 <th>Email</th>
@@ -186,8 +185,7 @@ const UsDotApp = () => {
                                     <tr>
                                         <td colSpan={13} className="text-center">No Applications Found!</td> {/* Corrected colspan */}
                                     </tr> : applications.map((data: any) => (
-                                        <tr key={data.userId}>
-                                            <td>{data.userId}</td>
+                                        <tr key={data.applicationId}>
                                             <td>{data.firstName + " " + data.lastName}</td>
                                             <td>{data.businessName}</td>
                                             <td>{data.email}</td>
@@ -207,7 +205,7 @@ const UsDotApp = () => {
                                                 {data.driversLicenseFileName ? (
                                                     <a
                                                         href={`${licenseBaseUrl}${data.driversLicenseFileName}`}
-                                                        className='text-dark me-3'
+                                                        className='text-dark'
                                                         target="_blank"
                                                         rel="noopener noreferrer"
                                                         style={{ textDecoration: 'underline' }}
@@ -220,7 +218,7 @@ const UsDotApp = () => {
                                                 {data.businessLicenseFileName ? (
                                                     <a
                                                         href={`${licenseBaseUrl}${data.businessLicenseFileName}`}
-                                                        className='text-dark me-3'
+                                                        className='text-dark'
                                                         target="_blank"
                                                         rel="noopener noreferrer"
                                                         style={{ textDecoration: 'underline' }}

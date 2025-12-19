@@ -1,13 +1,9 @@
-import { useState, useContext, useEffect } from 'react';
+import { useState } from 'react';
 import Header from '../header/header';
 import Footer from '../footer/footer';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-// import { useNavigate } from 'react-router-dom';
-import "./usDotApplication.css"
-
-// Import your auth context
-import { AuthContext } from '../../authContext';
+import "./businessRegistration.css"
 
 // Define the shape for form data
 interface FormData {
@@ -27,11 +23,11 @@ interface FormData {
 
 // Define the shape for errors
 type FormErrors = Partial<Record<keyof FormData, string>> & {
-    driversLicense?: string;
-    businessLicense?: string;
+    primaryDiversLicense?: string;
+    secondaryDiversLicense?: string;
 };
 
-const UsDotApplication = () => {
+const BusinessRegistration = () => {
     // const navigate = useNavigate();
     // const authContext = useContext(AuthContext);
 
@@ -53,13 +49,13 @@ const UsDotApplication = () => {
         interstateIntrastate: '',
     });
     const [errors, setErrors] = useState<FormErrors>({});
-    const [files, setFiles] = useState<{ driversLicense: File | null, businessLicense: File | null }>({
-        driversLicense: null,
-        businessLicense: null,
+    const [files, setFiles] = useState<{ primaryDiversLicense: File | null, secondaryDiversLicense: File | null }>({
+        primaryDiversLicense: null,
+        secondaryDiversLicense: null,
     });
-    const [fileNames, setFileNames] = useState<{ driversLicense: string, businessLicense: string }>({
-        driversLicense: '',
-        businessLicense: '',
+    const [fileNames, setFileNames] = useState<{ primaryDiversLicense: string, secondaryDiversLicense: string }>({
+        primaryDiversLicense: '',
+        secondaryDiversLicense: '',
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -101,7 +97,7 @@ const UsDotApplication = () => {
         return `${timestamp}_${randomString}.${fileExtension}`;
     };
 
-    const handleFileChange = (fileType: 'driversLicense' | 'businessLicense', file: File | null) => {
+    const handleFileChange = (fileType: 'primaryDiversLicense' | 'secondaryDiversLicense', file: File | null) => {
         if (file) {
             const uniqueName = generateUniqueFileName(file);
             setFiles((prev) => ({ ...prev, [fileType]: file }));
@@ -113,7 +109,7 @@ const UsDotApplication = () => {
         }
     };
 
-    const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>, fileType: 'driversLicense' | 'businessLicense') => {
+    const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>, fileType: 'primaryDiversLicense' | 'secondaryDiversLicense') => {
         const file = e.target.files?.[0];
         if (file) {
             handleFileChange(fileType, file);
@@ -125,7 +121,7 @@ const UsDotApplication = () => {
         e.stopPropagation();
     };
 
-    const handleDrop = (e: React.DragEvent, fileType: 'driversLicense' | 'businessLicense') => {
+    const handleDrop = (e: React.DragEvent, fileType: 'primaryDiversLicense' | 'secondaryDiversLicense') => {
         e.preventDefault();
         e.stopPropagation();
         const file = e.dataTransfer.files?.[0];
@@ -157,11 +153,11 @@ const UsDotApplication = () => {
         }
 
         // Validate files
-        if (!files.driversLicense) {
-            newErrors.driversLicense = 'Driver License is required.';
+        if (!files.primaryDiversLicense) {
+            newErrors.primaryDiversLicense = 'Primary Divers License is required.';
         }
-        // if (!files.businessLicense) {
-        //     newErrors.businessLicense = 'Business License is required.';
+        // if (!files.secondaryDiversLicense) {
+        //     newErrors.secondaryDiversLicense = 'Secondary Divers License is required.';
         // }
 
         setErrors(newErrors);
@@ -186,16 +182,16 @@ const UsDotApplication = () => {
                 });
 
                 // Add files with unique names
-                if (files.driversLicense) {
-                    formDataToSend.append('driversLicense', files.driversLicense, fileNames.driversLicense);
+                if (files.primaryDiversLicense) {
+                    formDataToSend.append('primaryDiversLicense', files.primaryDiversLicense, fileNames.primaryDiversLicense);
                 }
-                if (files.businessLicense) {
-                    formDataToSend.append('businessLicense', files.businessLicense, fileNames.businessLicense);
+                if (files.secondaryDiversLicense) {
+                    formDataToSend.append('secondaryDiversLicense', files.secondaryDiversLicense, fileNames.secondaryDiversLicense);
                 }
 
                 // Add file names to be stored in database
-                formDataToSend.append('driversLicenseFileName', fileNames.driversLicense);
-                formDataToSend.append('businessLicenseFileName', fileNames.businessLicense);
+                formDataToSend.append('primaryDiversLicenseFileName', fileNames.primaryDiversLicense);
+                formDataToSend.append('secondaryDiversLicenseFileName', fileNames.secondaryDiversLicense);
 
                 await axios.post(serviceUrl + '/usdotapplication', formDataToSend);
 
@@ -216,8 +212,8 @@ const UsDotApplication = () => {
                     ownershipOfVehicle: '',
                     interstateIntrastate: '',
                 });
-                setFiles({ driversLicense: null, businessLicense: null });
-                setFileNames({ driversLicense: '', businessLicense: '' });
+                setFiles({ primaryDiversLicense: null, secondaryDiversLicense: null });
+                setFileNames({ primaryDiversLicense: '', secondaryDiversLicense: '' });
                 setErrors({});
             } catch (error: any) {
                 toast.error(error.response?.data?.message || 'An error occurred');
@@ -244,12 +240,12 @@ const UsDotApplication = () => {
     return (
         <>
             <Header />
-            <section className="usDotApplicationContainer">
+            <section className="businessRegistrationContainer">
                 <div className='container'>
                     <div className='row'>
                         <div className='col-md-10 offset-md-1 col-xl-6 offset-xl-3'>
                             <div className="box p-4 shadow-lg">
-                                <h2 className="mb-4 text-center">US DOT Application</h2>
+                                <h2 className="mb-4 text-center">Business Registration</h2>
                                 <form className="row g-3">
                                     {/* First Name */}
                                     <div className="col-md-6 mb-2">
@@ -452,60 +448,61 @@ const UsDotApplication = () => {
                                             <p className="formError">{errors.interstateIntrastate}</p>
                                         )}
                                     </div>
-
+                                    <div className='col-12'><h6 className="mb-0">Driver's License</h6></div>
+                                    
                                     {/* Driver License File Upload */}
-                                    <div className="col-md-6 mt-4">
-                                        <h6 className="mb-2">Driver License</h6>
+                                    <div className="col-md-6">
+                                        <h6 className="mb-2">Primary Owner Driver's License</h6>
                                         <div
                                             className="border border-dashed p-5 text-center bg-light"
                                             onDragOver={handleDragOver}
-                                            onDrop={(e) => handleDrop(e, 'driversLicense')}
+                                            onDrop={(e) => handleDrop(e, 'primaryDiversLicense')}
                                             style={{ cursor: 'pointer' }}
                                         >
                                             <input
                                                 type="file"
                                                 className="form-control d-none"
-                                                id="driversLicenseInput"
-                                                onChange={(e) => handleFileInput(e, 'driversLicense')}
+                                                id="primaryDiversLicenseInput"
+                                                onChange={(e) => handleFileInput(e, 'primaryDiversLicense')}
                                             />
-                                            <label htmlFor="driversLicenseInput" style={{ cursor: 'pointer', marginBottom: 0 }}>
+                                            <label htmlFor="primaryDiversLicenseInput" style={{ cursor: 'pointer', marginBottom: 0 }}>
                                                 <p className="mb-1"><strong>Browse Files</strong></p>
                                                 <small className="text-muted">Drag and drop files here</small>
                                             </label>
-                                            {fileNames.driversLicense && (
-                                                <p className="mt-2 text-success"><small>✓ {files.driversLicense?.name}</small></p>
+                                            {fileNames.primaryDiversLicense && (
+                                                <p className="mt-2 text-success"><small>✓ {files.primaryDiversLicense?.name}</small></p>
                                             )}
                                         </div>
-                                        {errors.driversLicense && (
-                                            <p className="formError">{errors.driversLicense}</p>
+                                        {errors.primaryDiversLicense && (
+                                            <p className="formError">{errors.primaryDiversLicense}</p>
                                         )}
                                     </div>
 
                                     {/* Business License File Upload */}
-                                    <div className="col-md-6 mt-4">
-                                        <h6 className="mb-2">Business License</h6>
+                                    <div className="col-md-6">
+                                        <h6 className="mb-2">Secondary Owner Driver's License</h6>
                                         <div
                                             className="border border-dashed p-5 text-center bg-light"
                                             onDragOver={handleDragOver}
-                                            onDrop={(e) => handleDrop(e, 'businessLicense')}
+                                            onDrop={(e) => handleDrop(e, 'secondaryDiversLicense')}
                                             style={{ cursor: 'pointer' }}
                                         >
                                             <input
                                                 type="file"
                                                 className="form-control d-none"
-                                                id="businessLicenseInput"
-                                                onChange={(e) => handleFileInput(e, 'businessLicense')}
+                                                id="secondaryDiversLicenseInput"
+                                                onChange={(e) => handleFileInput(e, 'secondaryDiversLicense')}
                                             />
-                                            <label htmlFor="businessLicenseInput" style={{ cursor: 'pointer', marginBottom: 0 }}>
+                                            <label htmlFor="secondaryDiversLicenseInput" style={{ cursor: 'pointer', marginBottom: 0 }}>
                                                 <p className="mb-1"><strong>Browse Files</strong></p>
                                                 <small className="text-muted">Drag and drop files here</small>
                                             </label>
-                                            {fileNames.businessLicense && (
-                                                <p className="mt-2 text-success"><small>✓ {files.businessLicense?.name}</small></p>
+                                            {fileNames.secondaryDiversLicense && (
+                                                <p className="mt-2 text-success"><small>✓ {files.secondaryDiversLicense?.name}</small></p>
                                             )}
                                         </div>
-                                        {errors.businessLicense && (
-                                            <p className="formError">{errors.businessLicense}</p>
+                                        {errors.secondaryDiversLicense && (
+                                            <p className="formError">{errors.secondaryDiversLicense}</p>
                                         )}
                                     </div>
 
@@ -525,4 +522,4 @@ const UsDotApplication = () => {
         </>
     );
 };
-export default UsDotApplication;
+export default BusinessRegistration;
