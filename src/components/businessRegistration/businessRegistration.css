@@ -7,6 +7,11 @@
     font-size: 1.5rem;
 }
 
+.businessRegistrationContainer h5 {
+    font-family: 'poppinsBold';
+    font-size: .912rem;
+}
+
 .businessRegistrationContainer h6 {
     font-family: 'poppinsBold';
     font-size: .725rem;

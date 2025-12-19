@@ -214,7 +214,7 @@ const BusinessRegistration = () => {
                                 <h2 className="mb-4 text-center">Business Registration</h2>
                                 <form className="row g-3">
 
-                                    <div className='col-12'><h6 className="mb-0">Business Details</h6></div>
+                                    <div className='col-12'><h5 className="mb-0">Business Details</h5></div>
 
                                     {/* Business Name */}
                                     <div className="col-md-6 mb-2">
@@ -282,7 +282,7 @@ const BusinessRegistration = () => {
                                         )}
                                     </div>
 
-                                    <div className='col-12'><h6 className="mb-0">Primary Owner</h6></div>
+                                    <div className='col-12'><h5 className="mb-0">Primary Owner</h5></div>
                                     {/* First Name */}
                                     <div className="col-md-6 mb-2">
                                         <input type="text" className="form-control" placeholder="First Name" id="firstName" value={formData.firstName}
@@ -343,7 +343,7 @@ const BusinessRegistration = () => {
                                         )}
                                     </div>
 
-                                    <div className='col-12'><h6 className="mb-0">Secoundary Owner</h6></div>
+                                    <div className='col-12'><h5 className="mb-0">Secoundary Owner</h5></div>
                                     {/* First Name */}
                                     <div className="col-md-6 mb-2">
                                         <input type="text" className="form-control" placeholder="First Name" id="secoundaryFirstName" value={formData.secoundaryFirstName}
@@ -403,7 +403,7 @@ const BusinessRegistration = () => {
                                         )}
                                     </div>
 
-                                    <div className='col-12'><h6 className="mb-0">Driver's License</h6></div>
+                                    <div className='col-12'><h5 className="mb-0">Driver's License</h5></div>
                                     
                                     {/* Driver License File Upload */}
                                     <div className="col-md-6">
