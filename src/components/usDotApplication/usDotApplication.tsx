@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from 'react';
+import { useState } from 'react';
 import Header from '../header/header';
 import Footer from '../footer/footer';
 import axios from 'axios';
@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import "./usDotApplication.css"
 
 // Import your auth context
-import { AuthContext } from '../../authContext';
+// import { AuthContext } from '../../authContext';
 
 // Define the shape for form data
 interface FormData {
@@ -160,9 +160,6 @@ const UsDotApplication = () => {
         if (!files.driversLicense) {
             newErrors.driversLicense = 'Driver License is required.';
         }
-        // if (!files.businessLicense) {
-        //     newErrors.businessLicense = 'Business License is required.';
-        // }
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;

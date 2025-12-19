@@ -7,18 +7,23 @@ import "./businessRegistration.css"
 
 // Define the shape for form data
 interface FormData {
+    businessName: string;
+    businessType: string;
+    businessAddressLineOne: string;
+    businessAddressLineTwo: string;
+    businessAddressCity: string;
+    businessAddressState: string;
+    businessAddressZip: string;
     firstName: string;
     lastName: string;
-    businessName: string;
     email: string;
-    areaCode: string;
     phoneNumber: string;
-    serviceOffered: string;
-    typeOfProperty: string[];
-    numberOfVehicles: number | string;
-    typeOfVehicle: string;
-    ownershipOfVehicle: string;
-    interstateIntrastate: string;
+    SSN: string;
+    secoundaryFirstName: string;
+    secoundaryLastName: string;
+    secoundaryEmail: string;
+    secoundaryPhoneNumber: string;
+    secoundarySSN: string;
 }
 
 // Define the shape for errors
@@ -35,18 +40,23 @@ const BusinessRegistration = () => {
     // const user = authContext?.user || null;
 
     const [formData, setFormData] = useState<FormData>({
+        businessName: '',
+        businessType: '',
+        businessAddressLineOne: '',
+        businessAddressLineTwo: '',
+        businessAddressCity: '',
+        businessAddressState: '',
+        businessAddressZip: '',
         firstName: '',
         lastName: '',
-        businessName: '',
         email: '',
-        areaCode: '',
         phoneNumber: '',
-        serviceOffered: '',
-        typeOfProperty: [] as string[],
-        numberOfVehicles: '',
-        typeOfVehicle: '',
-        ownershipOfVehicle: '',
-        interstateIntrastate: '',
+        SSN: '',
+        secoundaryFirstName: '',
+        secoundaryLastName: '',
+        secoundaryEmail: '',
+        secoundaryPhoneNumber: '',
+        secoundarySSN: '',
     });
     const [errors, setErrors] = useState<FormErrors>({});
     const [files, setFiles] = useState<{ primaryDiversLicense: File | null, secondaryDiversLicense: File | null }>({
@@ -58,22 +68,6 @@ const BusinessRegistration = () => {
         secondaryDiversLicense: '',
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
-
-    // Update userId when user changes
-    // useEffect(() => {
-    //     if (user) {
-    //         setFormData((prev) => ({ ...prev, userId: user }));
-    //     }
-    // }, [user]);
-
-    // If not authenticated, don't render the form - no toast
-    // if (!user) {
-    //     return (
-    //         <div className="py-3 usDotApplicationContainer">
-    //             <p className="text-danger">Please log in to access this form.</p>
-    //         </div>
-    //     );
-    // }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { id, value } = e.target;
@@ -134,31 +128,16 @@ const BusinessRegistration = () => {
         const newErrors: FormErrors = {};
 
         // Required text/select fields validation
-        (['firstName', 'lastName', 'businessName', 'email', 'areaCode', 'phoneNumber', 'serviceOffered', 'numberOfVehicles', 'typeOfVehicle', 'ownershipOfVehicle', 'interstateIntrastate'] as Array<keyof FormData>).forEach(key => {
+        (['businessName', 'businessType', 'businessAddressLineOne', 'businessAddressLineTwo', 'businessAddressCity', 'businessAddressState', 'businessAddressZip', 'firstName', 'lastName', 'email', 'areaCode', 'phoneNumber', 'SSN'] as Array<keyof FormData>).forEach(key => {
             if (!formData[key] || formData[key] === '') {
                 const displayKey = key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
                 newErrors[key] = `${displayKey} is required.`;
             }
         });
 
-        // Check both areaCode and phoneNumber together
-        if (!formData.areaCode || !formData.phoneNumber) {
-            newErrors.areaCode = 'Area Code and Phone Number are required.';
-            newErrors.phoneNumber = 'Area Code and Phone Number are required.';
-        }
-
-        // Check if at least one type of property is selected
-        if (formData.typeOfProperty.length === 0) {
-            newErrors.typeOfProperty = 'Please select at least one type of property.';
-        }
-
-        // Validate files
         if (!files.primaryDiversLicense) {
             newErrors.primaryDiversLicense = 'Primary Divers License is required.';
         }
-        // if (!files.secondaryDiversLicense) {
-        //     newErrors.secondaryDiversLicense = 'Secondary Divers License is required.';
-        // }
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -174,11 +153,7 @@ const BusinessRegistration = () => {
 
                 // Add form fields including userId
                 Object.keys(formData).forEach(key => {
-                    if (key === 'typeOfProperty') {
-                        formDataToSend.append(key, JSON.stringify(formData[key as keyof typeof formData]));
-                    } else {
-                        formDataToSend.append(key, String(formData[key as keyof typeof formData]));
-                    }
+                    formDataToSend.append(key, String(formData[key as keyof typeof formData]));
                 });
 
                 // Add files with unique names
@@ -199,18 +174,23 @@ const BusinessRegistration = () => {
 
                 // Reset form
                 setFormData({
+                    businessName: '',
+                    businessType: '',
+                    businessAddressLineOne: '',
+                    businessAddressLineTwo: '',
+                    businessAddressCity: '',
+                    businessAddressState: '',
+                    businessAddressZip: '',
                     firstName: '',
                     lastName: '',
-                    businessName: '',
                     email: '',
-                    areaCode: '',
                     phoneNumber: '',
-                    serviceOffered: '',
-                    typeOfProperty: [],
-                    numberOfVehicles: '',
-                    typeOfVehicle: '',
-                    ownershipOfVehicle: '',
-                    interstateIntrastate: '',
+                    SSN: '',
+                    secoundaryFirstName: '',
+                    secoundaryLastName: '',
+                    secoundaryEmail: '',
+                    secoundaryPhoneNumber: '',
+                    secoundarySSN: '',
                 });
                 setFiles({ primaryDiversLicense: null, secondaryDiversLicense: null });
                 setFileNames({ primaryDiversLicense: '', secondaryDiversLicense: '' });
@@ -223,20 +203,6 @@ const BusinessRegistration = () => {
         }
     };
 
-    const handleCheckboxChange = (value: string) => {
-        setFormData((prev) => ({
-            ...prev,
-            typeOfProperty: prev.typeOfProperty.includes(value)
-                ? prev.typeOfProperty.filter((v) => v !== value)
-                : [...prev.typeOfProperty, value],
-        }));
-        setErrors((prev) => {
-            const newErrors = { ...prev };
-            delete newErrors.typeOfProperty;
-            return newErrors;
-        });
-    };
-
     return (
         <>
             <Header />
@@ -247,6 +213,76 @@ const BusinessRegistration = () => {
                             <div className="box p-4 shadow-lg">
                                 <h2 className="mb-4 text-center">Business Registration</h2>
                                 <form className="row g-3">
+
+                                    <div className='col-12'><h6 className="mb-0">Business Details</h6></div>
+
+                                    {/* Business Name */}
+                                    <div className="col-md-6 mb-2">
+                                        <input type="text" className="form-control" placeholder="Business Name" id="businessName" value={formData.businessName}
+                                            onChange={handleChange} required />
+                                        {errors.businessName && (
+                                            <p className="formError">
+                                                {errors.businessName}
+                                            </p>
+                                        )}
+                                    </div>
+
+                                    {/* Business Address Line One */}
+                                    <div className="col-md-6 mb-2">
+                                        <input type="text" className="form-control" placeholder="Address Line 1" id="businessAddressLineOne" value={formData.businessAddressLineOne}
+                                            onChange={handleChange} required />
+                                        {errors.businessAddressLineOne && (
+                                            <p className="formError">
+                                                {errors.businessAddressLineOne}
+                                            </p>
+                                        )}
+                                    </div>
+
+                                    {/* Business Address Line Two */}
+                                    <div className="col-md-6 mb-2">
+                                        <input type="text" className="form-control" placeholder="Address Line 2" id="businessAddressLineTwo" value={formData.businessAddressLineTwo}
+                                            onChange={handleChange} required />
+                                        {errors.businessAddressLineTwo && (
+                                            <p className="formError">
+                                                {errors.businessAddressLineTwo}
+                                            </p>
+                                        )}
+                                    </div>
+
+                                    {/* Business Address City */}
+                                    <div className="col-md-6 mb-2">
+                                        <input type="text" className="form-control" placeholder="City" id="businessAddressCity" value={formData.businessAddressCity}
+                                            onChange={handleChange} required />
+                                        {errors.businessAddressCity && (
+                                            <p className="formError">
+                                                {errors.businessAddressCity}
+                                            </p>
+                                        )}
+                                    </div>
+
+                                    {/* Business Address State */}
+                                    <div className="col-md-6 mb-2">
+                                        <input type="text" className="form-control" placeholder="State" id="businessAddressState" value={formData.businessAddressState}
+                                            onChange={handleChange} required />
+                                        {errors.businessAddressState && (
+                                            <p className="formError">
+                                                {errors.businessAddressState}
+                                            </p>
+                                        )}
+                                    </div>
+
+                                    {/* Business Address Zip */}
+                                    <div className="col-md-6 mb-2">
+                                        <input type="text" className="form-control" placeholder="Zipcode" id="businessAddressZip" value={formData.businessAddressZip}
+                                            onChange={handleChange} required />
+                                        {errors.businessAddressZip && (
+                                            <p className="formError">
+                                                {errors.businessAddressZip}
+                                            </p>
+                                        )}
+                                    </div>
+
+                                    <div className='col-12'><h6 className="mb-0">Primary Owner</h6></div>
                                     {/* First Name */}
                                     <div className="col-md-6 mb-2">
                                         <input type="text" className="form-control" placeholder="First Name" id="firstName" value={formData.firstName}
@@ -269,17 +305,6 @@ const BusinessRegistration = () => {
                                         )}
                                     </div>
 
-                                    {/* Business Name */}
-                                    <div className="col-md-6 mb-2">
-                                        <input type="text" className="form-control" placeholder="Business Name" id="businessName" value={formData.businessName}
-                                            onChange={handleChange} required />
-                                        {errors.businessName && (
-                                            <p className="formError">
-                                                {errors.businessName}
-                                            </p>
-                                        )}
-                                    </div>
-
                                     {/* Email */}
                                     <div className="col-md-6 mb-2">
                                         <input type="email" className="form-control" id="email" placeholder="Email" value={formData.email}
@@ -293,17 +318,6 @@ const BusinessRegistration = () => {
 
                                     {/* Area Code and Phone Number */}
                                     <div className="col-md-6 mb-2">
-                                        <div className="input-group">
-                                            <input
-                                                type="text"
-                                                className="form-control me-3"
-                                                id="areaCode"
-                                                placeholder="Area Code"
-                                                style={{ flex: '0 0 30%' }}
-                                                value={formData.areaCode}
-                                                onChange={handleChange}
-                                                required
-                                            />
                                             <input
                                                 type="tel"
                                                 className="form-control"
@@ -313,146 +327,87 @@ const BusinessRegistration = () => {
                                                 onChange={handleChange}
                                                 required
                                             />
-                                        </div>
-                                        {(errors.areaCode || errors.phoneNumber) && (
-                                            <p className="formError">Area Code and Phone Number are required</p>
+                                        {errors.phoneNumber && (
+                                            <p className="formError">{errors.phoneNumber}</p>
                                         )}
                                     </div>
 
-                                    {/* Service Offered */}
+                                    {/* Email */}
                                     <div className="col-md-6 mb-2">
-                                        <select id="serviceOffered" className="form-select" value={formData.serviceOffered}
-                                            onChange={handleChange} required>
-                                            <option>Select Services</option>
-                                            <option value="General Feright Truck">General Feright Truck</option>
-                                            <option value="Car Hauling">Car Hauling</option>
-                                            <option value="Feight Forward">Feight Forward</option>
-                                            <option value="Intermodal Equipment Provider">Intermodal Equipment Provider</option>
-                                        </select>
-                                        {errors.serviceOffered && (
-                                            <p className="formError">{errors.serviceOffered}</p>
+                                        <input type="string" className="form-control" id="SSN" placeholder="SSN" value={formData.SSN}
+                                            onChange={handleChange} required />
+                                        {errors.SSN && (
+                                            <p className="formError">
+                                                {errors.SSN}
+                                            </p>
                                         )}
                                     </div>
 
-                                    {/* Type of Property Checkboxes */}
-                                    <div className="col-12 mb-2">
-                                        <h6 className="mb-2">Type of Property</h6>
-                                        <div className="form-check">
+                                    <div className='col-12'><h6 className="mb-0">Secoundary Owner</h6></div>
+                                    {/* First Name */}
+                                    <div className="col-md-6 mb-2">
+                                        <input type="text" className="form-control" placeholder="First Name" id="secoundaryFirstName" value={formData.secoundaryFirstName}
+                                            onChange={handleChange} />
+                                        {errors.secoundaryFirstName && (
+                                            <p className="formError">
+                                                {errors.secoundaryFirstName}
+                                            </p>
+                                        )}
+                                    </div>
+
+                                    {/* Last Name */}
+                                    <div className="col-md-6 mb-2">
+                                        <input type="text" className="form-control" placeholder="Last Name" id="secoundaryLastName" value={formData.secoundaryLastName}
+                                            onChange={handleChange} />
+                                        {errors.secoundaryLastName && (
+                                            <p className="formError">
+                                                {errors.secoundaryLastName}
+                                            </p>
+                                        )}
+                                    </div>
+
+                                    {/* Email */}
+                                    <div className="col-md-6 mb-2">
+                                        <input type="email" className="form-control" id="secoundaryEmail" placeholder="Email" value={formData.secoundaryEmail}
+                                            onChange={handleChange} />
+                                        {errors.secoundaryEmail && (
+                                            <p className="formError">
+                                                {errors.secoundaryEmail}
+                                            </p>
+                                        )}
+                                    </div>
+
+                                    {/* Area Code and Phone Number */}
+                                    <div className="col-md-6 mb-2">
                                             <input
-                                                className="form-check-input"
-                                                type="checkbox"
-                                                id="hazardousMaterials"
-                                                checked={formData.typeOfProperty.includes("Hazardous Materials")}
-                                                onChange={() => handleCheckboxChange("Hazardous Materials")}
+                                                type="tel"
+                                                className="form-control"
+                                                id="secoundaryPhoneNumber"
+                                                placeholder="Phone Number"
+                                                value={formData.secoundaryPhoneNumber}
+                                                onChange={handleChange}
                                             />
-                                            <label className="form-check-label" htmlFor="hazardousMaterials">Hazardous Materials</label>
-                                        </div>
-                                        <div className="form-check">
-                                            <input
-                                                className="form-check-input"
-                                                type="checkbox"
-                                                id="householdGoods"
-                                                checked={formData.typeOfProperty.includes("Household Goods")}
-                                                onChange={() => handleCheckboxChange("Household Goods")}
-                                            />
-                                            <label className="form-check-label" htmlFor="householdGoods">Household Goods</label>
-                                        </div>
-                                        <div className="form-check">
-                                            <input
-                                                className="form-check-input"
-                                                type="checkbox"
-                                                id="exemptCommodities"
-                                                checked={formData.typeOfProperty.includes("Exempt Commodities")}
-                                                onChange={() => handleCheckboxChange("Exempt Commodities")}
-                                            />
-                                            <label className="form-check-label" htmlFor="exemptCommodities">Exempt Commodities</label>
-                                        </div>
-                                        <div className="form-check">
-                                            <input
-                                                className="form-check-input"
-                                                type="checkbox"
-                                                id="otherNonHazardous"
-                                                checked={formData.typeOfProperty.includes("Other Non-Hazardous Freight")}
-                                                onChange={() => handleCheckboxChange("Other Non-Hazardous Freight")}
-                                            />
-                                            <label className="form-check-label" htmlFor="otherNonHazardous">Other Non-Hazardous Freight</label>
-                                        </div>
-                                        {errors.typeOfProperty && (
-                                            <p className="formError">{errors.typeOfProperty}</p>
+                                        {errors.secoundaryPhoneNumber && (
+                                            <p className="formError">{errors.secoundaryPhoneNumber}</p>
                                         )}
                                     </div>
 
-                                    {/* Number of Vehicles */}
+                                    {/* SSN */}
                                     <div className="col-md-6 mb-2">
-                                        <input
-                                            type="number"
-                                            className="form-control"
-                                            id="numberOfVehicles"
-                                            placeholder="Number of Vehicles"
-                                            value={formData.numberOfVehicles}
-                                            onChange={handleChange}
-                                            required
-                                        />
-                                        {errors.numberOfVehicles && (
-                                            <p className="formError">{errors.numberOfVehicles}</p>
+                                        <input type="string" className="form-control" id="secoundarySSN" placeholder="SSN" value={formData.secoundarySSN}
+                                            onChange={handleChange}  />
+                                        {errors.secoundarySSN && (
+                                            <p className="formError">
+                                                {errors.secoundarySSN}
+                                            </p>
                                         )}
                                     </div>
 
-                                    {/* Type of Vehicle */}
-                                    <div className="col-md-6 mb-2">
-                                        <select
-                                            id="typeOfVehicle"
-                                            className="form-select"
-                                            value={formData.typeOfVehicle}
-                                            onChange={handleChange}
-                                            required
-                                        >
-                                            <option value="">Type of Vehicle</option>
-                                            <option value="Truck">Truck</option>
-                                            <option value="Trailer">Trailer</option>
-                                            <option value="Bus">Bus</option>
-                                        </select>
-                                        {errors.typeOfVehicle && (
-                                            <p className="formError">{errors.typeOfVehicle}</p>
-                                        )}
-                                    </div>
-
-                                    {/* Ownership of Vehicle */}
-                                    <div className="col-md-6 mb-2">
-                                        <select
-                                            id="ownershipOfVehicle"
-                                            className="form-select"
-                                            value={formData.ownershipOfVehicle}
-                                            onChange={handleChange}
-                                            required
-                                        >
-                                            <option value="">Ownership of Vehicle</option>
-                                            <option value="Owned">Owned</option>
-                                            <option value="Leased/Rental">Leased/Rental</option>
-                                        </select>
-                                        {errors.ownershipOfVehicle && (
-                                            <p className="formError">{errors.ownershipOfVehicle}</p>
-                                        )}
-                                    </div>
-
-                                    {/* Interstate/Intrastate */}
-                                    <div className="col-md-6 mb-2">
-                                        <select id="interstateIntrastate" className="form-select" value={formData.interstateIntrastate}
-                                            onChange={handleChange} required>
-                                            <option>Interstate or Intrastate?</option>
-                                            <option value="Interstate(1 state to another state)">Interstate(1 state to another state)</option>
-                                            <option value="Intrastate (Within 1 state)">Intrastate (Within 1 state)</option>
-                                            <option value="Both">Both</option>
-                                        </select>
-                                        {errors.interstateIntrastate && (
-                                            <p className="formError">{errors.interstateIntrastate}</p>
-                                        )}
-                                    </div>
                                     <div className='col-12'><h6 className="mb-0">Driver's License</h6></div>
                                     
                                     {/* Driver License File Upload */}
                                     <div className="col-md-6">
-                                        <h6 className="mb-2">Primary Owner Driver's License</h6>
+                                        <h6 className="mb-2">Primary Owner</h6>
                                         <div
                                             className="border border-dashed p-5 text-center bg-light"
                                             onDragOver={handleDragOver}
@@ -480,7 +435,7 @@ const BusinessRegistration = () => {
 
                                     {/* Business License File Upload */}
                                     <div className="col-md-6">
-                                        <h6 className="mb-2">Secondary Owner Driver's License</h6>
+                                        <h6 className="mb-2">Secondary Owner</h6>
                                         <div
                                             className="border border-dashed p-5 text-center bg-light"
                                             onDragOver={handleDragOver}
