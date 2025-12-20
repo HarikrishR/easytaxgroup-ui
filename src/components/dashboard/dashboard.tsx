@@ -17,6 +17,7 @@ import { userData } from '../../redux/actions/action';
 import Orders from './orders';
 import AdminOrders from './adminOrders';
 import UsDotApp from './adminUsDotApp';
+import BusinessRegApp from './adminBusinessRegApp';
 
 const Dashboard = () => {
     const auth = useContext(AuthContext);
@@ -31,7 +32,7 @@ const Dashboard = () => {
         <div className='dashboard'>
             <div className="navbar navbar-light sticky-top bg-light flex-md-nowrap shadow-sm py-2">
                 <div className="container-fluid">
-                    <a className="navbar-brand col-md-3 col-lg-2" href="#">
+                    <a className="navbar-brand col-md-3 col-lg-2" href="/">
                         <img src={logo} className='logo ps-4' />
                     </a>
                     <button className="navbar-toggler d-md-none collapsed me-4" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
@@ -46,7 +47,7 @@ const Dashboard = () => {
 
             <Tab.Container defaultActiveKey="profile">
                 <div className="container-fluid">
-                    <div id="sidebarMenu" className="col-md-4 col-lg-2 d-md-block bg-light sidebar collapse shadow-sm">
+                    <div id="sidebarMenu" className="col-md-5 col-lg-3 d-md-block bg-light sidebar collapse shadow-sm">
                         <div className="position-sticky p-4">
                             <Nav className="flex-column">
                                 <Nav.Item>
@@ -105,6 +106,16 @@ const Dashboard = () => {
                                         </Nav.Item>
                                         : ''
                                 }
+                                {
+                                    (localStorage.getItem('authRole') ? atob(localStorage.getItem('authRole')!) : '') === 'ADMIN' ?
+                                        <Nav.Item>
+                                            <Nav.Link eventKey="BusinessRegApp">
+                                                <FaWpforms className="me-2" />
+                                                Business Applications
+                                            </Nav.Link>
+                                        </Nav.Item>
+                                        : ''
+                                }
                             </Nav>
                             
                         </div>
@@ -113,7 +124,7 @@ const Dashboard = () => {
                         </div>
                     </div>
 
-                    <div className="col-md-8 ms-sm-auto col-lg-10">
+                    <div className="col-md-7 ms-sm-auto col-lg-9">
                         <div className="p-4 pb-5">
                             <Tab.Content>
                                 <Tab.Pane eventKey="profile">
@@ -147,6 +158,13 @@ const Dashboard = () => {
                                     (localStorage.getItem('authRole') ? atob(localStorage.getItem('authRole')!) : '') === 'ADMIN' ?
                                             <Tab.Pane eventKey="usDotApp">
                                                 <UsDotApp />
+                                            </Tab.Pane>
+                                        : ''
+                                }
+                                {
+                                    (localStorage.getItem('authRole') ? atob(localStorage.getItem('authRole')!) : '') === 'ADMIN' ?
+                                            <Tab.Pane eventKey="BusinessRegApp">
+                                                <BusinessRegApp />
                                             </Tab.Pane>
                                         : ''
                                 }

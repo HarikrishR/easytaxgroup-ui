@@ -2,6 +2,10 @@
     padding: 60px 0;
 }
 
+.usDotApplicationContainer .logo {
+    width: 40px;
+}
+
 .usDotApplicationContainer h2 {
     font-family: 'poppinsBold';
     font-size: 1.5rem;

@@ -2,6 +2,10 @@
     padding: 60px 0;
 }
 
+.businessRegistrationContainer .logo {
+    width: 40px;
+}
+
 .businessRegistrationContainer h2 {
     font-family: 'poppinsBold';
     font-size: 1.5rem;

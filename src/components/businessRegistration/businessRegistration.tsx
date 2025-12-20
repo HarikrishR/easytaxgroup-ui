@@ -1,9 +1,12 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import Header from '../header/header';
 import Footer from '../footer/footer';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { get_loader } from '../../redux/actions/action';
 import "./businessRegistration.css"
+import logo from '../../assets/titleLogo.png';
 
 // Define the shape for form data
 interface FormData {
@@ -18,7 +21,7 @@ interface FormData {
     lastName: string;
     email: string;
     phoneNumber: string;
-    SSN: string;
+    ssn: string;
     secoundaryFirstName: string;
     secoundaryLastName: string;
     secoundaryEmail: string;
@@ -35,6 +38,7 @@ type FormErrors = Partial<Record<keyof FormData, string>> & {
 const BusinessRegistration = () => {
 
     const [showOtherInput, setShowOtherInput] = useState(false);
+    const dispatch = useDispatch();
     // const navigate = useNavigate();
     // const authContext = useContext(AuthContext);
 
@@ -53,7 +57,7 @@ const BusinessRegistration = () => {
         lastName: '',
         email: '',
         phoneNumber: '',
-        SSN: '',
+        ssn: '',
         secoundaryFirstName: '',
         secoundaryLastName: '',
         secoundaryEmail: '',
@@ -147,12 +151,20 @@ const BusinessRegistration = () => {
         const newErrors: FormErrors = {};
 
         // Required text/select fields validation
-        (['businessName', 'businessType', 'businessAddressLineOne', 'businessAddressLineTwo', 'businessAddressCity', 'businessAddressState', 'businessAddressZip', 'firstName', 'lastName', 'email', 'phoneNumber', 'SSN'] as Array<keyof FormData>).forEach(key => {
+        (['businessName', 'businessType', 'businessAddressLineOne', 'businessAddressLineTwo', 'businessAddressCity', 'businessAddressState', 'businessAddressZip', 'firstName', 'lastName', 'email', 'phoneNumber', 'ssn'] as Array<keyof FormData>).forEach(key => {
             if (!formData[key] || formData[key] === '') {
                 const displayKey = key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
                 newErrors[key] = `${displayKey} is required.`;
             }
         });
+
+        if (!/\S+@\S+\.\S+/.test(formData.email)) {
+            newErrors.email = 'Email is invalid';
+        }
+
+        if (formData.secoundaryEmail && !/\S+@\S+\.\S+/.test(formData.secoundaryEmail)) {
+            newErrors.secoundaryEmail = 'Email is invalid';
+        }
 
         if (!files.primaryDiversLicense) {
             newErrors.primaryDiversLicense = 'Primary Divers License is required.';
@@ -166,6 +178,7 @@ const BusinessRegistration = () => {
         e.preventDefault();
         if (validate()) {
             setIsSubmitting(true);
+            dispatch(get_loader(true));
             try {
                 const serviceUrl = import.meta.env.VITE_SERVICE_URL;
                 const formDataToSend = new FormData();
@@ -204,7 +217,7 @@ const BusinessRegistration = () => {
                     lastName: '',
                     email: '',
                     phoneNumber: '',
-                    SSN: '',
+                    ssn: '',
                     secoundaryFirstName: '',
                     secoundaryLastName: '',
                     secoundaryEmail: '',
@@ -215,8 +228,10 @@ const BusinessRegistration = () => {
                 setFileNames({ primaryDiversLicense: '', secondaryDiversLicense: '' });
                 setErrors({});
             } catch (error: any) {
+                dispatch(get_loader(false));
                 toast.error(error.response?.data?.message || 'An error occurred');
             } finally {
+                dispatch(get_loader(false));
                 setIsSubmitting(false);
             }
         }
@@ -230,6 +245,9 @@ const BusinessRegistration = () => {
                     <div className='row'>
                         <div className='col-md-10 offset-md-1 col-xl-6 offset-xl-3'>
                             <div className="box p-4 shadow-lg">
+                                <div className="text-center mb-2">
+                                    <img src={logo} className='logo' />
+                                </div>
                                 <h2 className="mb-4 text-center">Business Registration</h2>
                                 <form className="row g-3">
 
@@ -390,11 +408,11 @@ const BusinessRegistration = () => {
 
                                     {/* Email */}
                                     <div className="col-md-6 mb-2">
-                                        <input type="string" className="form-control" id="SSN" placeholder="SSN" value={formData.SSN}
+                                        <input type="string" className="form-control" id="ssn" placeholder="Social Security Number (SSN)" value={formData.ssn}
                                             onChange={handleChange} required />
-                                        {errors.SSN && (
+                                        {errors.ssn && (
                                             <p className="formError">
-                                                {errors.SSN}
+                                                {errors.ssn}
                                             </p>
                                         )}
                                     </div>
@@ -518,7 +536,7 @@ const BusinessRegistration = () => {
                                     </div>
 
                                     {/* Submit Button */}
-                                    <div className="col-md-6 mt-4">
+                                    <div className="offset-md-6 col-md-6 mt-4">
                                         <button type="submit" className="btnPrimary w-100 mt-4" onClick={handleSubmit} disabled={isSubmitting}>
                                             {isSubmitting ? 'Submitting...' : 'Submit'}
                                         </button>

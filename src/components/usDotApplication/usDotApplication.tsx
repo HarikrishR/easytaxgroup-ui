@@ -1,9 +1,12 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import Header from '../header/header';
+import { get_loader } from '../../redux/actions/action';
 import Footer from '../footer/footer';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 // import { useNavigate } from 'react-router-dom';
+import logo from '../../assets/titleLogo.png';
 import "./usDotApplication.css"
 
 // Import your auth context
@@ -32,6 +35,8 @@ type FormErrors = Partial<Record<keyof FormData, string>> & {
 };
 
 const UsDotApplication = () => {
+
+    const dispatch = useDispatch();
     // const navigate = useNavigate();
     // const authContext = useContext(AuthContext);
 
@@ -145,6 +150,10 @@ const UsDotApplication = () => {
             }
         });
 
+        if (!/\S+@\S+\.\S+/.test(formData.email)) {
+            newErrors.email = 'Email is invalid';
+        }
+
         // Check both areaCode and phoneNumber together
         if (!formData.areaCode || !formData.phoneNumber) {
             newErrors.areaCode = 'Area Code and Phone Number are required.';
@@ -169,6 +178,7 @@ const UsDotApplication = () => {
         e.preventDefault();
         if (validate()) {
             setIsSubmitting(true);
+            dispatch(get_loader(true));
             try {
                 const serviceUrl = import.meta.env.VITE_SERVICE_URL;
                 const formDataToSend = new FormData();
@@ -217,8 +227,10 @@ const UsDotApplication = () => {
                 setFileNames({ driversLicense: '', businessLicense: '' });
                 setErrors({});
             } catch (error: any) {
+                dispatch(get_loader(false));
                 toast.error(error.response?.data?.message || 'An error occurred');
             } finally {
+                dispatch(get_loader(false));
                 setIsSubmitting(false);
             }
         }
@@ -246,6 +258,9 @@ const UsDotApplication = () => {
                     <div className='row'>
                         <div className='col-md-10 offset-md-1 col-xl-6 offset-xl-3'>
                             <div className="box p-4 shadow-lg">
+                                <div className="text-center mb-2">
+                                    <img src={logo} className='logo' />
+                                </div>
                                 <h2 className="mb-4 text-center">US DOT Application</h2>
                                 <form className="row g-3">
                                     {/* First Name */}
@@ -507,7 +522,7 @@ const UsDotApplication = () => {
                                     </div>
 
                                     {/* Submit Button */}
-                                    <div className="col-md-6 mt-4">
+                                    <div className="offset-md-6 col-md-6 mt-4">
                                         <button type="submit" className="btnPrimary w-100 mt-4" onClick={handleSubmit} disabled={isSubmitting}>
                                             {isSubmitting ? 'Submitting...' : 'Submit'}
                                         </button>

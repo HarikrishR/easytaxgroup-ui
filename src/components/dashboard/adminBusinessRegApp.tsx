@@ -1,4 +1,3 @@
-// fileName: adminUsDotApp.tsx
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import Table from 'react-bootstrap/Table';
@@ -9,7 +8,7 @@ import Col from 'react-bootstrap/Col'; // <-- ADD THIS IMPORT
 
 import "./dashboard.css"
 
-const UsDotApp = () => {
+const BusinessRegApp = () => {
     // NEW STATE FOR PAGINATION AND SEARCH
     const [applications, setApplications] = useState<any[]>([]); // Rename from orderData for clarity
     const [currentPage, setCurrentPage] = useState(1);
@@ -21,7 +20,7 @@ const UsDotApp = () => {
     const licenseBaseUrl = serviceUrl ? `${serviceUrl}/uploads/licenses/` : '/';
 
     // Use useCallback to memoize the function, preventing unnecessary re-creation
-    const fetchDotApplication = useCallback(async () => {
+    const fetchBusinessRegApplication = useCallback(async () => {
         try {
             // Build query parameters
             const params = {
@@ -31,7 +30,7 @@ const UsDotApp = () => {
             };
             
             // Fetch applications with query parameters
-            const response = await axios.get(serviceUrl + '/fetchUsdotapplications', { params });
+            const response = await axios.get(serviceUrl + '/fetchBusinessRegApplication', { params });
                 
             const { 
             data = [], 
@@ -50,8 +49,8 @@ const UsDotApp = () => {
 
     useEffect(() => {
         // Fetch data whenever page, limit, or search query changes
-        fetchDotApplication();
-    }, [fetchDotApplication]);
+        fetchBusinessRegApplication();
+    }, [fetchBusinessRegApplication]);
 
     // HANDLERS
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -102,37 +101,12 @@ const UsDotApp = () => {
         return <Pagination>{items}</Pagination>;
     };
 
-    // Function to safely parse the JSON string property and return a clean array of strings
-    const parseTypeOfProperty = (rawData: any): string[] => {
-        let propertyList: string[] = [];
-
-        if (Array.isArray(rawData)) {
-            propertyList = rawData.map(String);
-        } else if (typeof rawData === 'string') {
-            try {
-                let parsed = JSON.parse(rawData);
-
-                if (typeof parsed === 'string') {
-                    parsed = JSON.parse(parsed);
-                }
-
-                propertyList = Array.isArray(parsed) ? parsed.map(String) : [String(rawData)];
-            } catch (e) {
-                propertyList = [rawData];
-            }
-        } else {
-            propertyList = [String(rawData || 'N/A')];
-        }
-
-        return propertyList.map(item => item.replace(/\"|\\|\[|\]/g, ''));
-    };
-
     // Removed the unused handleDownloadLicense for brevity.
 
     return (
         <>
             <section className="usDotApp">
-                <h2 className="mb-3">US Dot Applications</h2>
+                <h2 className="mb-3">Business Registration Applications</h2>
                 
                 {/* SEARCH AND LIMIT CONTROLS */}
                 <Row className="mb-4 align-items-center">
@@ -165,17 +139,23 @@ const UsDotApp = () => {
                     <Table striped bordered hover size='sm' className='nowrap-table'>
                         <thead>
                             <tr>
-                                <th>Name</th>
                                 <th>Business Name</th>
+                                <th>Business Type</th>
+                                <th>Business Address Line 1</th>
+                                <th>Business Address Line 2</th>
+                                <th>Business City</th>
+                                <th>Business State</th>
+                                <th>Business Zipcode</th>
+                                <th>Name</th>
                                 <th>Email</th>
-                                <th>Area Code</th>
                                 <th>Phone Number</th>
-                                <th>Service Offered</th>
-                                <th>Type Of Property</th>
-                                <th>No Of Vehicle</th>
-                                <th>Interstate or Intrastate</th>
-                                <th>Driving License</th>
-                                <th>Business License</th>
+                                <th>SSN</th>
+                                <th>Secoundary Name</th>
+                                <th>Secoundary Email</th>
+                                <th>Secoundary Phone Number</th>
+                                <th>Secoundary SSN</th>
+                                <th>Primary Driving License</th>
+                                <th>Secoundary Business License</th>
                                 <th>Created At</th>
                             </tr>
                         </thead>
@@ -186,25 +166,25 @@ const UsDotApp = () => {
                                         <td colSpan={13} className="text-center">No Applications Found!</td> {/* Corrected colspan */}
                                     </tr> : applications.map((data: any) => (
                                         <tr key={data.applicationId}>
-                                            <td>{data.firstName + " " + data.lastName}</td>
                                             <td>{data.businessName}</td>
+                                            <td>{data.businessType}</td>
+                                            <td>{data.businessAddressLineOne}</td>
+                                            <td>{data.businessAddressLineTwo}</td>
+                                            <td>{data.businessAddressCity}</td>
+                                            <td>{data.businessAddressState}</td>
+                                            <td>{data.businessAddressZip}</td>
+                                            <td>{data.firstName + " " + data.lastName}</td>
                                             <td>{data.email}</td>
-                                            <td>{data.areaCode}</td>
                                             <td>{data.phoneNumber}</td>
-                                            <td>{data.serviceOffered}</td>
+                                            <td>{data.ssn}</td>
+                                            <td>{data.secoundaryFirstName + " " + data.secoundaryLastName}</td>
+                                            <td>{data.secoundaryEmail}</td>
+                                            <td>{data.secoundaryPhoneNumber}</td>
+                                            <td>{data.secoundarySSN}</td>
                                             <td>
-                                                <ul>
-                                                    {parseTypeOfProperty(data.typeOfProperty).map((item: string, index: number) => (
-                                                        <li key={index}>{item}</li>
-                                                    ))}
-                                                </ul>
-                                            </td>
-                                            <td>{data.numberOfVehicles}</td>
-                                            <td>{data.interstateIntrastate}</td>
-                                            <td>
-                                                {data.driversLicenseFileName ? (
+                                                {data.primaryDiversLicenseFileName ? (
                                                     <a
-                                                        href={`${licenseBaseUrl}${data.driversLicenseFileName}`}
+                                                        href={`${licenseBaseUrl}${data.primaryDiversLicenseFileName}`}
                                                         className='text-dark'
                                                         target="_blank"
                                                         rel="noopener noreferrer"
@@ -215,9 +195,9 @@ const UsDotApp = () => {
                                                 ) : 'N/A'}
                                             </td>
                                             <td>
-                                                {data.businessLicenseFileName ? (
+                                                {data.secondaryDiversLicenseFileName ? (
                                                     <a
-                                                        href={`${licenseBaseUrl}${data.businessLicenseFileName}`}
+                                                        href={`${licenseBaseUrl}${data.secondaryDiversLicenseFileName}`}
                                                         className='text-dark'
                                                         target="_blank"
                                                         rel="noopener noreferrer"
@@ -255,4 +235,4 @@ const UsDotApp = () => {
     );
 };
 
-export default UsDotApp;
+export default BusinessRegApp;
