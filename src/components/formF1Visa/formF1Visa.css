@@ -1,0 +1,42 @@
+.formF1Visa {
+    padding: 60px 0;
+}
+
+.formF1Visa .logo {
+    width: 40px;
+}
+
+.formF1Visa h2,
+.formF1Visa h5,
+.formF1Visa p.des {
+    font-family: 'poppinsBold';
+}
+
+.formF1Visa h2 {
+    font-size: 1.5rem;
+}
+
+.formF1Visa h5 {
+    font-size: .912rem;
+}
+
+.formF1Visa p.des {
+    color: #8dc63e;
+}
+
+.formF1Visa .box {
+    border-radius: 20px;
+}
+
+.formF1Visa .form-control,
+.formF1Visa .form-select {
+    border-left: 0;
+    border-top: 0;
+    border-right: 0;
+    border-radius: 0;
+    padding-left: 0;
+    font-size: .712rem;
+}
+.formF1Visa label {
+    font-size: .725rem;
+}

@@ -17,6 +17,7 @@ import { useSelector } from 'react-redux';
 import StripeCheckoutForm from './components/payment/stripElement.tsx';
 import UsDotApplication from './components/usDotApplication/usDotApplication.tsx';
 import BusinessRegistration from './components/businessRegistration/businessRegistration.tsx';
+import FormF1Visa from './components/formF1Visa/formF1Visa.tsx';
 
 const App = () => {
     const loader = useSelector((state: any) => state.loader);
@@ -34,6 +35,7 @@ const App = () => {
                 <Route path="/contactUs" element={<ContactUs />} />
                 <Route path="/fmcsacompliance" element={<UsDotApplication />} />
                 <Route path="/businessRegService" element={<BusinessRegistration />} />
+                <Route path="/formf1visa" element={<FormF1Visa />} />
                 <Route
                     path="/dashboard"
                     element={

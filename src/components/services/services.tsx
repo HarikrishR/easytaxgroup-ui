@@ -2,6 +2,13 @@ import { Link } from "react-router-dom";
 import Footer from "../footer/footer";
 import Header from "../header/header";
 import Banner from "../banner/banner";
+import { FaWpforms } from "react-icons/fa6";
+import { MdAppRegistration } from "react-icons/md";
+import { SlBookOpen } from "react-icons/sl";
+import { GrCompliance } from "react-icons/gr";
+import { GoCreditCard } from "react-icons/go";
+import { LiaSalesforce } from "react-icons/lia";
+import { AiOutlineFileDone } from "react-icons/ai";
 import "./services.css"
 
 const Services = () => {
@@ -15,14 +22,14 @@ const Services = () => {
             <div className="col-12">
               <div className="row">
                 <div className="col-sm-4 mb-4 mb-sm-0">
-                  <div className="nav align-items-start nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                    <button className="nav-link active" id="taxPrep-tab" data-bs-toggle="pill" data-bs-target="#taxPrep" type="button" role="tab" aria-controls="taxPrep" aria-selected="true">Tax Preparation & Filing</button>
-                    <button className="nav-link" id="salesTaxPrep-tab" data-bs-toggle="pill" data-bs-target="#salesTaxPrep" type="button" role="tab" aria-controls="salesTaxPrep" aria-selected="false">Sales Tax Registration & Filing</button>
-                    <button className="nav-link" id="payrollSetup-tab" data-bs-toggle="pill" data-bs-target="#payrollSetup" type="button" role="tab" aria-controls="payrollSetup" aria-selected="false">Payroll Setup & Compliance</button>
-                    <button className="nav-link" id="businessRegistration-tab" data-bs-toggle="pill" data-bs-target="#businessRegistration" type="button" role="tab" aria-controls="businessRegistration" aria-selected="false">Business Registration Services</button>
-                    <button className="nav-link" id="bookKeeping-tab" data-bs-toggle="pill" data-bs-target="#bookKeeping" type="button" role="tab" aria-controls="bookKeeping" aria-selected="false">Bookkeeping Services</button>
-                    <button className="nav-link" id="fmca-tab" data-bs-toggle="pill" data-bs-target="#fmca" type="button" role="tab" aria-controls="fmca" aria-selected="false">FMCSA Compliance</button>
-                    <button className="nav-link" id="8843Filling-tab" data-bs-toggle="pill" data-bs-target="#8843Filling" type="button" role="tab" aria-controls="8843Filling" aria-selected="false">Form 8843 Filing for Non-Residents</button>
+                  <div className="nav shadow align-items-start nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                    <button className="nav-link active" id="taxPrep-tab" data-bs-toggle="pill" data-bs-target="#taxPrep" type="button" role="tab" aria-controls="taxPrep" aria-selected="true"><AiOutlineFileDone /> Tax Preparation & Filing</button>
+                    <button className="nav-link" id="salesTaxPrep-tab" data-bs-toggle="pill" data-bs-target="#salesTaxPrep" type="button" role="tab" aria-controls="salesTaxPrep" aria-selected="false"><LiaSalesforce /> Sales Tax Registration & Filing</button>
+                    <button className="nav-link" id="payrollSetup-tab" data-bs-toggle="pill" data-bs-target="#payrollSetup" type="button" role="tab" aria-controls="payrollSetup" aria-selected="false"><GoCreditCard /> Payroll Setup & Compliance</button>
+                    <button className="nav-link" id="businessRegistration-tab" data-bs-toggle="pill" data-bs-target="#businessRegistration" type="button" role="tab" aria-controls="businessRegistration" aria-selected="false"><MdAppRegistration /> Business Registration Services</button>
+                    <button className="nav-link" id="bookKeeping-tab" data-bs-toggle="pill" data-bs-target="#bookKeeping" type="button" role="tab" aria-controls="bookKeeping" aria-selected="false"><SlBookOpen /> Bookkeeping Services</button>
+                    <button className="nav-link" id="fmca-tab" data-bs-toggle="pill" data-bs-target="#fmca" type="button" role="tab" aria-controls="fmca" aria-selected="false"><GrCompliance /> FMCSA Compliance</button>
+                    <button className="nav-link" id="8843Filling-tab" data-bs-toggle="pill" data-bs-target="#8843Filling" type="button" role="tab" aria-controls="8843Filling" aria-selected="false"><FaWpforms /> Form 8843 Filing for Non-Residents</button>
                   </div>
                 </div>
                 <div className="col-sm-8">
@@ -93,13 +100,115 @@ const Services = () => {
                       <Link target="_blank" to="/fmcsacompliance" className='btnPrimary'>Apply Now</Link>
                     </div>
                     <div className="tab-pane fade" id="8843Filling" role="tabpanel" aria-labelledby="8843Filling-tab">
-                      <p>If you're a non-resident alien in the U.S. on an F, J, M, or Q visa, you're required to file Form 8843 — even if you have no U.S. income. We help you:</p>
+                      <h3>Complete Tax Guide For Indian Students On F1 Visa.</h3>
+                      <p>Indian students studying in the United States are required to comply with U.S. tax laws every year, even if they did not earn any income. Many students unknowingly miss required filings, which can lead to penalties, IRS notices, or complications during future visa or Green Card processing.</p>
+                      <p>This guide explains who needs to file, what forms are required, important deadlines, and common mistakes to avoid.</p>
+                      <table className="table table-bordered my-4 text-center">
+                        <thead>
+                          <tr>
+                            <th></th>
+                            <th>F1</th>
+                            <th>F1 <br/>(On Campus PartTime| CPT | OPT)</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <th>Tax Form</th>
+                            <td>Form 8843</td>
+                            <td>1040 NR+Form 8843</td>
+                          </tr>
+                          <tr>
+                            <th>Due Date</th>
+                            <td>June 15th</td>
+                            <td>April 15th</td>
+                          </tr>
+                          <tr>
+                            <th>Tax Residential Status</th>
+                            <td>Non-Resident</td>
+                            <td>Non-Resident</td>
+                          </tr>
+                          <tr>
+                            <th>Filling Criteria</th>
+                            <td>Need to File Irrespective of the Income<br/>(Even with No Income)</td>
+                            <td>Need to File When You have Income.</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <h3>Mandatory Forms for Indian Students</h3>
+                      <h4>Form 8843 (Required for All Students)</h4>
+                      <p>Form 8843 must be filed by every F1 and J1 student, regardless of income.</p>
                       <ul>
-                        <li><span>Determine Filing Requirements:</span> Based on your visa type, number of days in the U.S., and income.</li>
-                        <li><span>Accurately Complete Form 8843:</span> Including details like school/employer information, duration of stay, and visa classification.</li>
-                        <li><span>Avoid IRS Issues:</span> Ensure you're in full compliance and avoid any future visa or tax problems.</li>
+                        <li>Confirms non-resident tax status</li>
+                        <li>Required even with zero income</li>
+                        <li>Failure to file may result in non-compliance records</li>
                       </ul>
-                      <p className="mb-0">This service is especially useful for international students, researchers, exchange visitors, and scholars.</p>
+                      <p>While many universities assist with Form 8843 filing, not all students receive this support.</p>
+                      <p>If your Form 8843 has not been filed, we will prepare and assist with filing it at no cost, except for mailing expenses.</p>
+                      <h4>Federal & State Tax Returns (If You Earned Income)1040NR+Form 8843</h4>
+                      <p>You must file a federal (and possibly state) tax return if you earned income such as:</p>
+                      <ul>
+                        <li>On-campus employment income (W-2)</li>
+                        <li>CPT or OPT salary</li>
+                        <li>Internship stipends</li>
+                        <li>Taxable scholarship or fellowship income</li>
+                        <li>Bank interest</li>
+                      </ul>
+                      <h4>Common Income Sources for Indian Students</h4>
+                      <p>Indian students commonly earn income through:</p>
+                      <ul>
+                        <li>On-campus jobs</li>
+                        <li>CPT internships</li>
+                        <li>OPT or STEM OPT employment</li>
+                        <li>Scholarships and fellowships</li>
+                        <li>U.S. bank interest</li>
+                      </ul>
+                      <p>Each income type has different tax treatment and must be reported correctly.</p>
+                      <h4>Resident vs Non-Resident Tax Status</h4>
+                      <p>Most Indian students are considered Non-Resident Aliens (NRA) for U.S. tax purposes during their first five calendar years in the U.S.</p>
+                      <p>As a Non-Resident Alien:</p>
+                      <ul>
+                        <li>You cannot claim the standard deduction</li>
+                        <li>You cannot file jointly</li>
+                        <li>Different tax rates and rules apply</li>
+                        <li>Special tax forms are required</li>
+                      </ul>
+                      <p>Filing under the wrong tax status is one of the most common and costly mistakes students make.</p>
+                      <h4>Important Tax Deadlines</h4>
+                      <ul>
+                        <li><span>April 15:</span> Federal and state tax returns (if income was earned)</li>
+                        <li><span>June 15:</span> Form 8843 only (if no income)</li>
+                      </ul>
+                      <p>Missing deadlines may result in penalties, interest, and future immigration complications.</p>
+                      <h4>Common Tax Filing Mistakes to Avoid</h4>
+                      <ul>
+                        <li>Not filing Form 8843</li>
+                        <li>Filing as a U.S. resident incorrectly</li>
+                        <li>Using tax software not designed for non-residents</li>
+                        <li>Missing state tax filings</li>
+                        <li>Ignoring IRS or state tax notices</li>
+                      </ul>
+                      <p>Even small mistakes can lead to financial penalties or compliance issues.</p>
+                      <h4>Why Professional Tax Help Matters</h4>
+                      <p>Tax filing for Indian students requires knowledge of:</p>
+                      <ul>
+                        <li>Visa-based tax rules</li>
+                        <li>Non-resident tax compliance</li>
+                        <li>India-U.S. tax treaty benefits</li>
+                        <li>Federal and state tax regulations</li>
+                      </ul>
+                      <p>Working with a professional ensures accuracy, compliance, and peace of mind.</p>
+                      <h4>Why Choose Us?</h4>
+                      <ul>
+                        <li>Team of CPA (USA) & Chartered Accountant (India)</li>
+                        <li>Over 10 years of experience in tax and accounting</li>
+                        <li>Specialized in Indian and international student tax filings</li>
+                        <li>Accurate, compliant, and transparent service</li>
+                        <li>Year-round support beyond tax season</li>
+                      </ul>
+                      <h4>Book a Free Consultation</h4>
+                      <p>If you are unsure about your filing requirements or need help with Form 8843, CPT, or OPT taxes, we are here to help.</p>
+                      <p><b>Schedule a free 15-minute consultation today and file with confidence.</b></p>
+                      <Link target="_blank" to="/formf1visa" className='btnPrimary'>Apply Now</Link>
                     </div>
                   </div>
                 </div>

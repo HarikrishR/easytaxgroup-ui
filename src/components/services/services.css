@@ -3,26 +3,46 @@
 }
 .service .nav-pills .nav-link {
     text-align: left;
-    border: 1px solid #bcbcbc;
+    /* border: 1px solid #bcbcbc; */
     border-radius: 0;
     width: 100%;
     border-bottom: 0;
-    color: #000;
-    background: #ccdeb8;
+    color: #fff;
+    transition: none;
+    /* background: #ccdeb8; */
+}
+.service .nav {
+    padding: 10px;
+    background: #153130;
+    border-radius: 6px;
+    color: #fff;
 }
 .service .nav-pills .nav-link.active {
-    background-color: #10182C !important;
-    color: #fff !important;
+    background-color: #fcfffc !important;
+    color: #8dc63e !important;
+    border-radius: 6px;
 }
-.service .nav-pills .nav-link:last-child {
+.service .nav-pills .nav-link svg {
+    font-size: 1.25rem;
+    margin-right: 10px;
+}
+/* .service .nav-pills .nav-link:last-child {
     border-bottom: 1px solid #bcbcbc;
-}
+} */
 .service ul{
     position: relative;
     padding-left: 2rem;
     margin-bottom: 1rem;
 }
-.service ul li span {
+.service h3 {
+    font-size: 1.25rem;
+}
+.service h4 {
+    color: #153130;
+}
+.service h3,
+.service ul li span,
+.service table th{
     font-family: 'poppinsBold';
 }
 .service ul li {

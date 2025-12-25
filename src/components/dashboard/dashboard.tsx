@@ -18,6 +18,7 @@ import Orders from './orders';
 import AdminOrders from './adminOrders';
 import UsDotApp from './adminUsDotApp';
 import BusinessRegApp from './adminBusinessRegApp';
+import FormF1RegApp from './adminFormF1RegApp';
 
 const Dashboard = () => {
     const auth = useContext(AuthContext);
@@ -116,6 +117,16 @@ const Dashboard = () => {
                                         </Nav.Item>
                                         : ''
                                 }
+                                {
+                                    (localStorage.getItem('authRole') ? atob(localStorage.getItem('authRole')!) : '') === 'ADMIN' ?
+                                        <Nav.Item>
+                                            <Nav.Link eventKey="FormF1RegApp">
+                                                <FaWpforms className="me-2" />
+                                                Form F1 Applications
+                                            </Nav.Link>
+                                        </Nav.Item>
+                                        : ''
+                                }
                             </Nav>
                             
                         </div>
@@ -165,6 +176,13 @@ const Dashboard = () => {
                                     (localStorage.getItem('authRole') ? atob(localStorage.getItem('authRole')!) : '') === 'ADMIN' ?
                                             <Tab.Pane eventKey="BusinessRegApp">
                                                 <BusinessRegApp />
+                                            </Tab.Pane>
+                                        : ''
+                                }
+                                {
+                                    (localStorage.getItem('authRole') ? atob(localStorage.getItem('authRole')!) : '') === 'ADMIN' ?
+                                            <Tab.Pane eventKey="FormF1RegApp">
+                                                <FormF1RegApp />
                                             </Tab.Pane>
                                         : ''
                                 }

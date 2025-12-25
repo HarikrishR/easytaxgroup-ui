@@ -1,3 +1,9 @@
+/* .homeNavbar {
+    position: absolute;
+    width: 100%;
+    z-index: 10;
+} */
+
 .nav-link {
     font-family: 'poppinsSemiBold' !important;
 }

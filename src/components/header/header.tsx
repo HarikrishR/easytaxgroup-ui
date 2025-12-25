@@ -19,7 +19,7 @@ const Header = () => {
     };
     return (
         <>
-            <Navbar expand="lg" className="bg-body-tertiary">
+            <Navbar expand="lg" className="bg-transparent shadow-sm">
                 <Container>
                     <Navbar.Brand href="/">
                         <img src={logo} className='logo' />
