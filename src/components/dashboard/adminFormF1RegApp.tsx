@@ -2,9 +2,9 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import Table from 'react-bootstrap/Table';
 import { useEffect, useState, useCallback } from "react";
-import Pagination from 'react-bootstrap/Pagination'; // <-- ADD THIS IMPORT
-import Row from 'react-bootstrap/Row'; // <-- ADD THIS IMPORT
-import Col from 'react-bootstrap/Col'; // <-- ADD THIS IMPORT
+import Pagination from 'react-bootstrap/Pagination'; 
+import Row from 'react-bootstrap/Row'; 
+import Col from 'react-bootstrap/Col'; 
 
 import "./dashboard.css"
 
@@ -14,10 +14,9 @@ const FormF1RegApp = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [searchQuery, setSearchQuery] = useState('');
-    const [limit, setLimit] = useState(10); // Records per page
+    const [limit, setLimit] = useState(10); // Records per pageß
 
     const serviceUrl = import.meta.env.VITE_SERVICE_URL;
-    const licenseBaseUrl = serviceUrl ? `${serviceUrl}/uploads/licenses/` : '/';
 
     // Use useCallback to memoize the function, preventing unnecessary re-creation
     const fetchFormF1RegApplication = useCallback(async () => {
@@ -55,7 +54,7 @@ const FormF1RegApp = () => {
     // HANDLERS
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(event.target.value);
-        setCurrentPage(1); // Reset to page 1 on new search
+        setCurrentPage(1); 
     };
 
     const handlePageChange = (page: number) => {
