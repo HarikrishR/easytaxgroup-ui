@@ -17,8 +17,20 @@
 }
 
 @font-face {
+  font-family: 'poppinsSemiBoldItalic';
+  src: url('../src/assets/fonts/Poppins/Poppins-SemiBoldItalic.ttf') format('truetype');
+  font-style: normal;
+}
+
+@font-face {
   font-family: 'poppinsBold';
   src: url('../src/assets/fonts/Poppins/Poppins-Bold.ttf') format('truetype');
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'poppinsBoldItalic';
+  src: url('../src/assets/fonts/Poppins/Poppins-BoldItalic.ttf') format('truetype');
   font-style: normal;
 }
 

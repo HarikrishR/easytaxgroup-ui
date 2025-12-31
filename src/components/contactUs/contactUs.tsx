@@ -10,7 +10,7 @@ const ContactUs = () => {
   return (
     <>
       <Header />
-      <Banner title="Contact" />
+      <Banner title="Contact" description="We don't just offer support, we offer peace of mind. Connect with our experts to simplify your regulatory journey and secure your financial legacy." />
       <section className="contactUs">
         <div className="container">
           <div className="row">

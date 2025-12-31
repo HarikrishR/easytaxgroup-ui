@@ -15,7 +15,7 @@ const Services = () => {
   return (
     <>
       <Header />
-      <Banner title="Services" />
+      <Banner title="Services" description="We don't just provide services, we provide a roadmap for growth. Explore our suite of financial and compliance solutions tailored for the modern entrepreneur." />
       <section className="service">
         <div className="container-lg">
           <div className="row justify-content-center">

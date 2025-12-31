@@ -3,11 +3,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { toast } from 'react-toastify';
 // import { useEffect, useState } from "react";
 import { PDFDocument } from 'pdf-lib';
-import form8843_20 from './f8843_20.pdf';
 import form8843_21 from './f8843_21.pdf';
 import form8843_22 from './f8843_22.pdf';
 import form8843_23 from './f8843_23.pdf';
 import form8843_24 from './f8843_24.pdf';
+import form8843_25 from './f8843_25.pdf';
 import { getGeneratePDF } from '../../redux/actions/action';
 import './pdfGenerate.css';
 
@@ -55,9 +55,7 @@ const PDFGenerate = () => {
             formData.submittedYear.forEach(async (data: any) => {
                 const year = data; // Extract the year from the key
                 var formUrl = '';
-                if (year === "2020") {
-                    formUrl = form8843_20;
-                } else if (year === "2021") {
+                if (year === "2021") {
                     formUrl = form8843_21;
                 } else if (year === "2022") {
                     formUrl = form8843_22;
@@ -65,6 +63,8 @@ const PDFGenerate = () => {
                     formUrl = form8843_23;
                 } else if (year === "2024") {
                     formUrl = form8843_24;
+                } else if (year === "2025") {
+                    formUrl = form8843_25;
                 }
 
                 const formPdfBytes = await fetch(formUrl).then(res => res.arrayBuffer());

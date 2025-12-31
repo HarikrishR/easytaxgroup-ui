@@ -34,8 +34,8 @@ const Users = () => {
     return (
         <>
             <section className="users">
-                {/* <h2 className="mb-3">Users</h2> */}
-                <p className="mb-4">Here you can view all users.</p>
+                <h2 className="mb-3">Users</h2>
+                {/* <p className="mb-4">Here you can view all users.</p> */}
                 {
                     !userData ? <p>Loading...</p> :
                         <>

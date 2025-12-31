@@ -2,18 +2,21 @@
     padding: 60px 0;
 }
 .service .nav-pills .nav-link {
+    transition: all 0.3s ease-in-out;
     text-align: left;
     /* border: 1px solid #bcbcbc; */
     border-radius: 0;
     width: 100%;
     border-bottom: 0;
     color: #fff;
-    transition: none;
     /* background: #ccdeb8; */
+}
+.service .tab-pane {
+    transition: all 0.2s ease-in-out;
 }
 .service .nav {
     padding: 10px;
-    background: #153130;
+    background: #222738;
     border-radius: 6px;
     color: #fff;
 }
@@ -47,7 +50,7 @@
 }
 .service ul li {
     position: relative;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 .service ul li:last-child {
     margin-bottom: 0px;
@@ -62,5 +65,5 @@
     width: 20px;
     height: 20px;
     left: -28px;
-    top: 5px;
+    top: 2px;
 }

@@ -19,10 +19,10 @@
     left: 0px;
     right: 0;
 }
-
-.profile h2 {
+.dashboard h2  {
     font-family: 'poppinsBold';
 }
+
 .profile .profile-content ul li {
     margin-bottom: 10px;
     list-style-type: none;
@@ -44,9 +44,6 @@
     font-family: 'poppinsMedium';
 }
 
-.form h2 {
-    font-family: 'poppinsBold';
-}
 .form h4 {
     font-family: 'poppinsSemiBold';
 }
@@ -83,7 +80,6 @@
     opacity: .125;
 }
 
-.orders h2,
 .orders .card h5,
 .orders .card .status p {
     font-family: 'poppinsBold';
@@ -113,9 +109,6 @@
     text-align: center;
     vertical-align: middle;
 }
-.adminOrders h2 {
-    font-family: 'poppinsBold';
-}
 .adminOrders table th {
     font-family: 'poppinsSemiBold';
     text-align: center;
@@ -128,6 +121,15 @@
 }
 .orderStatusModal h5 {
     font-family: 'poppinsSemiBold';
+}
+.orderStatusModal .form-control,
+.orderStatusModal .form-select {
+    border-left: 0;
+    border-top: 0;
+    border-right: 0;
+    border-radius: 0;
+    padding-left: 0;
+    font-size: .912rem;
 }
 
 .adminOrders .statusDes {
@@ -152,9 +154,6 @@
 .usDotApp table {
     text-align: center;
     vertical-align: middle;
-}
-.usDotApp h2 {
-    font-family: 'poppinsBold';
 }
 .usDotApp table th {
     font-family: 'poppinsSemiBold';

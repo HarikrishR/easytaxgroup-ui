@@ -18,10 +18,10 @@ const FormEEFT = () => {
         JSON.parse(localStorage.getItem("formData") || JSON.stringify({
             visaType: "F",
             citizen: "India",
-            wantToFile2021: "notPresentInUSA",
             wantToFile2022: "notPresentInUSA",
             wantToFile2023: "notPresentInUSA",
             wantToFile2024: "notPresentInUSA",
+            wantToFile2025: "notPresentInUSA",
         })) ||
         {}
     );
@@ -47,10 +47,10 @@ const FormEEFT = () => {
             universityCity?: string;
             universityState?: string;
             universityZipcode?: string;
-            wantToFile2021?: string;
             wantToFile2022?: string;
             wantToFile2023?: string;
             wantToFile2024?: string;
+            wantToFile2025?: string;
         }>({});
 
     useEffect(() => {
@@ -92,10 +92,10 @@ const FormEEFT = () => {
                         JSON.parse(localStorage.getItem("formData") || JSON.stringify({
                             visaType: "F",
                             citizen: "India",
-                            wantToFile2021: "notPresentInUSA",
                             wantToFile2022: "notPresentInUSA",
                             wantToFile2023: "notPresentInUSA",
-                            wantToFile2024: "notPresentInUSA"
+                            wantToFile2024: "notPresentInUSA",
+                            wantToFile2025: "notPresentInUSA",
                         }))
                     }
                 })
@@ -128,14 +128,14 @@ const FormEEFT = () => {
                 if (key.startsWith('days')) delete updatedFormData[key];
             });
 
-            [2021, 2022, 2023, 2024].forEach((key) => {
+            [2022, 2023, 2024, 2025].forEach((key) => {
                 const wantToFileKey = `wantToFile${key}`;
                 updatedFormData[wantToFileKey] = 'notPresentInUSA';
             });
 
             for (let year = firstEntryDate.getFullYear(); year <= currentYear; year++) {
                 // Set default value for wantToFile
-                if ([2021, 2022, 2023, 2024].includes(year)) {
+                if ([2022, 2023, 2024, 2025].includes(year)) {
                     const wantToFileKey = `wantToFile${year}`;
                     updatedFormData[wantToFileKey] = 'yes';
                 }
@@ -224,7 +224,7 @@ const FormEEFT = () => {
     }
 
     const handleSubmit = async () => {
-        if (validateWantToFile() && (formData.wantToFile2021 === 'yes' || formData.wantToFile2022 === 'yes' || formData.wantToFile2023 === 'yes' || formData.wantToFile2024 === 'yes')) {
+        if (validateWantToFile() && (formData.wantToFile2022 === 'yes' || formData.wantToFile2023 === 'yes' || formData.wantToFile2024 === 'yes' || formData.wantToFile2025 === 'yes')) {
             const serviceUrl = import.meta.env.VITE_SERVICE_URL;
             formData.userId = localStorage.getItem('authUser');
             formData.noOfDaysUSA = Object.keys(formData)
@@ -340,14 +340,11 @@ const FormEEFT = () => {
 
     const validateWantToFile = () => {
         const newErrors: {
-            wantToFile2021?: string;
             wantToFile2022?: string;
             wantToFile2023?: string;
             wantToFile2024?: string;
+            wantToFile2025?: string;
         } = {};
-        if (!formData.wantToFile2021) {
-            newErrors.wantToFile2021 = '2021 is required';
-        }
         if (!formData.wantToFile2022) {
             newErrors.wantToFile2022 = '2022 is required';
         }
@@ -356,6 +353,9 @@ const FormEEFT = () => {
         }
         if (!formData.wantToFile2024) {
             newErrors.wantToFile2024 = '2024 is required';
+        }
+        if (!formData.wantToFile2025) {
+            newErrors.wantToFile2025 = '2025 is required';
         }
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -805,22 +805,6 @@ const FormEEFT = () => {
                             <>
                                 <div className='row'>
                                     <div className='col-sm-6 col-md-4 col-lg-3 mb-4'>
-                                        <label className='mb-2'>2021</label>
-                                        <select
-                                            className="form-select"
-                                            id="wantToFile2021"
-                                            name="wantToFile2021"
-                                            value={formData.wantToFile2021}
-                                            onChange={handleChange}
-                                        >
-                                            <option value='yes'>Yes</option>
-                                            <option value='no'>No</option>
-                                            <option value='alreadyFiled'>Already Filed</option>
-                                            <option value='notPresentInUSA'>Not Present in USA</option>
-                                        </select>
-                                        {errors.wantToFile2021 && (<p className="formError">{errors.wantToFile2021}</p>)}
-                                    </div>
-                                    <div className='col-sm-6 col-md-4 col-lg-3 mb-4'>
                                         <label className='mb-2'>2022</label>
                                         <select
                                             className="form-select"
@@ -867,6 +851,22 @@ const FormEEFT = () => {
                                             <option value='notPresentInUSA'>Not Present in USA</option>
                                         </select>
                                         {errors.wantToFile2024 && (<p className="formError">{errors.wantToFile2024}</p>)}
+                                    </div>
+                                    <div className='col-sm-6 col-md-4 col-lg-3 mb-4'>
+                                        <label className='mb-2'>2025</label>
+                                        <select
+                                            className="form-select"
+                                            id="wantToFile2025"
+                                            name="wantToFile2025"
+                                            value={formData.wantToFile2025}
+                                            onChange={handleChange}
+                                        >
+                                            <option value='yes'>Yes</option>
+                                            <option value='no'>No</option>
+                                            <option value='alreadyFiled'>Already Filed</option>
+                                            <option value='notPresentInUSA'>Not Present in USA</option>
+                                        </select>
+                                        {errors.wantToFile2025 && (<p className="formError">{errors.wantToFile2025}</p>)}
                                     </div>
                                 </div>
                             </>

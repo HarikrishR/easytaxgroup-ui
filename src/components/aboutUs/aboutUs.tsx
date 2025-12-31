@@ -8,7 +8,7 @@ const AboutUs = () => {
   return (
     <>
       <Header />
-      <Banner title="About" />
+      <Banner title="About Us" description="We don't just file taxes, we architect financial security. Our modern approach to compliance ensures your business stays ahead in an evolving digital economy." />
       <section className="aboutUs">
         <div className="container">
           <div className="row justify-content-center align-items-center ">

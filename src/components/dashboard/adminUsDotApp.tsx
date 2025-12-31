@@ -127,6 +127,29 @@ const UsDotApp = () => {
         return propertyList.map(item => item.replace(/\"|\\|\[|\]/g, ''));
     };
 
+    const handleStatusChange = async (applicationId: string, newStatus: string) => {
+        try {
+            // 1. Make the API call to update status
+            // Note: Adjust the URL path based on your actual backend route
+            await axios.patch(`${serviceUrl}/updateUsDotAppStatus/${applicationId}`, {
+                status: newStatus
+            });
+    
+            // 2. Update local state so the UI reflects the change immediately
+            setApplications(prevApps => 
+                prevApps.map(app => 
+                    app.applicationId === applicationId ? { ...app, status: newStatus } : app
+                )
+            );
+    
+            toast.success(`Status updated to ${newStatus}`);
+            fetchDotApplication();
+        } catch (error) {
+            console.error("Error updating status:", error);
+            toast.error("Failed to update status. Please try again.");
+        }
+    };
+
     // Removed the unused handleDownloadLicense for brevity.
 
     return (
@@ -176,7 +199,9 @@ const UsDotApp = () => {
                                 <th>Interstate or Intrastate</th>
                                 <th>Driving License</th>
                                 <th>Business License</th>
+                                <th>Status</th>
                                 <th>Created At</th>
+                                <th>Updated At</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -227,8 +252,30 @@ const UsDotApp = () => {
                                                     </a>
                                                 ) : 'N/A'}
                                             </td>
+                                            <td>
+                                                <select 
+                                                    className="form-select width-select" id={data.applicationId} name='status'
+                                                    defaultValue={data.status?.trim().toLowerCase() || 'pending'}
+                                                    onChange={(e) => handleStatusChange(data.applicationId, e.target.value)}
+                                                >
+                                                    <option value="pending">Pending</option>
+                                                    <option value="working">Working</option>
+                                                    <option value="approved">Approved</option>
+                                                    <option value="rejected">Rejected</option>
+                                                </select>
+                                            </td>
                                             <td>{
                                                 new Date(data.createdAt).toLocaleString('en-GB', {
+                                                    day: '2-digit',
+                                                    month: '2-digit',
+                                                    year: 'numeric',
+                                                    hour: '2-digit',
+                                                    minute: '2-digit',
+                                                    hour12: true
+                                                }).replace(',', '').replace(/\//g, '-')
+                                            }</td>
+                                            <td>{
+                                                new Date(data.updatedAt).toLocaleString('en-GB', {
                                                     day: '2-digit',
                                                     month: '2-digit',
                                                     year: 'numeric',
