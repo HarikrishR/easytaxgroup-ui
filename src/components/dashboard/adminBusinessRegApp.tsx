@@ -67,17 +67,19 @@ const BusinessRegApp = () => {
     // Function to generate the Pagination controls
     const renderPagination = () => {
         let items = [];
+        
+        // Always show First and Previous buttons
+        items.push(
+            <Pagination.First key="first" onClick={() => handlePageChange(1)} disabled={currentPage === 1} />,
+            <Pagination.Prev key="prev" onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
+        );
+    
+        // Calculate range of page numbers to show
         let startPage = Math.max(1, currentPage - 2);
         let endPage = Math.min(totalPages, currentPage + 2);
-
-        if (startPage > 1) {
-            items.push(<Pagination.First key="first" onClick={() => handlePageChange(1)} />);
-            items.push(<Pagination.Prev key="prev" onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />);
-            if (startPage > 2) items.push(<Pagination.Ellipsis key="start-ellipsis" />);
-        } else {
-            items.push(<Pagination.Prev key="prev" onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />);
-        }
-
+    
+        if (startPage > 1) items.push(<Pagination.Ellipsis key="start-el" disabled />);
+    
         for (let number = startPage; number <= endPage; number++) {
             items.push(
                 <Pagination.Item 
@@ -86,18 +88,18 @@ const BusinessRegApp = () => {
                     onClick={() => handlePageChange(number)}
                 >
                     {number}
-                </Pagination.Item>,
+                </Pagination.Item>
             );
         }
-
-        if (endPage < totalPages) {
-            if (endPage < totalPages - 1) items.push(<Pagination.Ellipsis key="end-ellipsis" />);
-            items.push(<Pagination.Next key="next" onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages} />);
-            items.push(<Pagination.Last key="last" onClick={() => handlePageChange(totalPages)} />);
-        } else {
-            items.push(<Pagination.Next key="next" onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages} />);
-        }
-
+    
+        if (endPage < totalPages) items.push(<Pagination.Ellipsis key="end-el" disabled />);
+    
+        // Always show Next and Last buttons
+        items.push(
+            <Pagination.Next key="next" onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages} />,
+            <Pagination.Last key="last" onClick={() => handlePageChange(totalPages)} disabled={currentPage === totalPages} />
+        );
+    
         return <Pagination>{items}</Pagination>;
     };
 
