@@ -132,9 +132,7 @@ h4 {
   max-width: 24rem;
 }
 .cardtitle {
-  font-weight: bold;
-  --tw-text-opacity: 1;
-  color: rgba(31, 41, 55, var(--tw-text-opacity));
+  font-family: 'poppinsBold';
   text-align: center;
 }
 .cardimg {
@@ -149,6 +147,7 @@ h4 {
   --tw-text-opacity: 1;
   color: rgba(107, 114, 128, var(--tw-text-opacity));
   text-align: center;
+  margin-bottom: 0;
 }
 .slider {
   width: 100%;
@@ -165,7 +164,7 @@ h4 {
   position: relative;
   min-height: 375px;
   perspective: 500px;
-  margin-top: 5rem;
+  margin-top: 2rem;
   /* overflow: hidden; */
 }
 .testimonials .item {
@@ -178,7 +177,7 @@ h4 {
   position: absolute;
   box-sizing: border-box;
   background-color: #fff;
-  padding: 30px;
+  padding: 15px;
   width: 450px;
   text-align: center;
   transition: transform 0.4s;
@@ -192,9 +191,9 @@ h4 {
   border-radius: 50%;
   border: 13px solid #3b344d;
 }
-.testimonials .item p {
+/* .testimonials .item p {
   color: #ddd;
-}
+} */
 .testimonials .item h2 {
   font-size: 14px;
 }
@@ -217,7 +216,7 @@ h4 {
 /* First */
 #t-1:checked ~ .dots label[for="t-1"] {
   transform: scale(2);
-  background-color: #fff;
+  background-color: #8cc63f;
 }
 #t-1:checked ~ .dots label[for="t-2"] {
   transform: scale(1.5);
@@ -248,7 +247,7 @@ h4 {
 }
 #t-2:checked ~ .dots label[for="t-2"] {
   transform: scale(2);
-  background-color: #fff;
+  background-color: #8cc63f;
 }
 #t-2:checked ~ .dots label[for="t-3"] {
   transform: scale(1.5);
@@ -305,7 +304,7 @@ h4 {
 }
 #t-4:checked ~ .dots label[for="t-4"] {
   transform: scale(2);
-  background-color: #fff;
+  background-color: #8cc63f;
 }
 #t-4:checked ~ .dots label[for="t-5"] {
   transform: scale(1.5);
@@ -333,7 +332,7 @@ h4 {
 }
 #t-5:checked ~ .dots label[for="t-5"] {
   transform: scale(2);
-  background-color: #fff;
+  background-color: #8cc63f;
 }
 #t-5:checked ~ .testimonials label[for="t-1"] {
   transform: translateX(-1200px) translateZ(-360px) translateY(-60px);
@@ -352,4 +351,10 @@ h4 {
 }
 #t-5:checked ~ .testimonials label[for="t-5"] {
   z-index: 4;
+}
+
+.star {
+    color: #ffbc00;
+    font-size: 1rem;
+    margin-right: 2px;
 }

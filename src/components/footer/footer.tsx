@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import './footer.css'
-import logo from '../../assets/images/logo.png'
+import footerLogo from '../../assets/images/footerLogo.png'
 
 const Footer = () => {
     return (
@@ -9,7 +9,7 @@ const Footer = () => {
                 <div className='container'>
                     <div className='row'>
                         <div className='col-md-3'>
-                            <img src={logo} alt="logo" className='logo' />
+                            <img src={footerLogo} alt="logo" className='logo' />
                             <p className='mb-0'>At Easy Tax Group, we are dedicated to providing comprehensive compliance services that cover every aspect of your business needs.</p>
                         </div>
                         <div className='col-md-3'>

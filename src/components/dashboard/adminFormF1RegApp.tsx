@@ -107,7 +107,7 @@ const FormF1RegApp = () => {
     return (
         <>
             <section className="usDotApp">
-                <h2 className="mb-3">Form F1 Visa Applications</h2>
+                <h2 className="mb-3">Tax Filling Applications</h2>
                 
                 {/* SEARCH AND LIMIT CONTROLS */}
                 <Row className="mb-4 align-items-center">
@@ -147,6 +147,7 @@ const FormF1RegApp = () => {
                                 <th>State Of Reseidency</th>
                                 <th>Referal Name</th>
                                 <th>Referal Number</th>
+                                <th>Created At</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -161,8 +162,19 @@ const FormF1RegApp = () => {
                                             <td>{data.phoneNumber}</td>
                                             <td>{data.visaStatus}</td>
                                             <td>{data.stateOfResidency}</td>
-                                            <td>{data.referalName}</td>
-                                            <td>{data.referalPhoneNumber}</td>
+                                            <td>{data.referalName || 'N/A'}</td>
+                                            <td>{data.referalPhoneNumber || 'N/A'}</td>
+                                            <td>{
+                                                new Date(data.createdAt).toLocaleString('en-GB', {
+                                                    day: '2-digit',
+                                                    month: '2-digit',
+                                                    year: 'numeric',
+                                                    hour: '2-digit',
+                                                    minute: '2-digit',
+                                                    hour12: true
+                                                }).replace(',', '').replace(/\//g, '-')
+                                            }
+                                            </td>
                                         </tr>
                                     ))
                             }

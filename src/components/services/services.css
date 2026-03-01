@@ -1,6 +1,7 @@
 .service {
     padding: 60px 0;
 }
+
 .service .nav-pills .nav-link {
     transition: all 0.3s ease-in-out;
     text-align: left;
@@ -11,51 +12,62 @@
     color: #fff;
     /* background: #ccdeb8; */
 }
+
 .service .tab-pane {
     transition: all 0.2s ease-in-out;
 }
+
 .service .nav {
     padding: 10px;
     background: #222738;
     border-radius: 6px;
     color: #fff;
 }
+
 .service .nav-pills .nav-link.active {
     background-color: #fcfffc !important;
     color: #8dc63e !important;
     border-radius: 6px;
 }
+
 .service .nav-pills .nav-link svg {
     font-size: 1.25rem;
     margin-right: 10px;
 }
+
 /* .service .nav-pills .nav-link:last-child {
     border-bottom: 1px solid #bcbcbc;
 } */
-.service ul{
+.serviceContent ul {
     position: relative;
     padding-left: 2rem;
     margin-bottom: 1rem;
 }
-.service h3 {
+
+.serviceContent h3 {
     font-size: 1.25rem;
 }
-.service h4 {
+
+.serviceContent h4 {
     color: #153130;
 }
-.service h3,
-.service ul li span,
-.service table th{
+
+.serviceContent h3,
+.serviceContent ul li span,
+.serviceContent table th {
     font-family: 'poppinsBold';
 }
-.service ul li {
+
+.serviceContent ul li {
     position: relative;
     margin-bottom: 10px;
 }
-.service ul li:last-child {
+
+.serviceContent ul li:last-child {
     margin-bottom: 0px;
 }
-.service ul li::before {
+
+.serviceContent ul li::before {
     position: absolute;
     content: '';
     background-image: url('../../assets/images/check.png');
@@ -66,4 +78,128 @@
     height: 20px;
     left: -28px;
     top: 2px;
+}
+
+.serAbout {
+    padding: 60px 0;
+}
+
+.serAbout h2 {
+    font-family: 'poppinsBold';
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.serAbout p {
+    font-size: 1rem;
+    color: #818181;
+}
+
+.serAbout ul {
+    padding-left: 1rem;
+    margin: 0;
+}
+
+.serAbout li {
+    list-style: disc;
+}
+
+.serAbout li::marker {
+    color: #83bb42;
+    /* Change this to your desired color */
+}
+
+.serIntro {
+    padding: 0 0 60px;
+}
+.serIntro .head {
+    width: 100%;
+    background: #222738d6;
+}
+
+.serIntro .headtitle {
+    color: #fff;
+    background: #8dc63e;
+    font-size: 32px;
+    width: 50px;
+    height: 50px;
+    min-width: 50px;
+    min-height: 50px;
+    text-align: center;
+    margin-right: 15px;
+    z-index: 2;
+}
+
+.serIntro h3 {
+    font-family: 'poppinsBold';
+    font-size: 1.25rem;
+    color: #fff;
+}
+
+.serIntro p {
+    color: #fffc;
+    font-size: .825rem;
+    background: #222738d6;
+    height: 100%;
+    padding: 30px 20px 20px;
+}
+
+.serIntro img {
+    min-height: 250px;
+    max-height: 250px;
+}
+
+.serInfoBox {
+    position: relative;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.serInfoBox .serInfoImg {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.serInfoBox .overlay {
+    position: absolute;
+    bottom: 50px;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 0;
+    transition: .5s ease;
+}
+
+.serInfoBox:hover .overlay {
+    bottom: 0;
+    height: 100%;
+}
+
+.serInfoBox .text {
+    color: white;
+    font-size: 20px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.modal .modal-header {
+    padding: 8px 15px;
+}
+.modal .modal-content {
+    border-radius: 6px;
+}
+.modal .modal-icon {
+    font-size: 26px;
+}
+.modal .modal-title {
+    font-family: 'poppinsBold';
+}
+.modal .modal-body {
+    padding: 20px 20px 25px !important;
 }

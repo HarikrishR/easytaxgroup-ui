@@ -71,34 +71,61 @@ const PDFGenerate = () => {
                 const pdfDoc = await PDFDocument.load(formPdfBytes);
                 const form = pdfDoc.getForm();
 
-                // const fields = form.getFields().map(f => f.getName()); // Extract field names
+                const fields = form.getFields().map(f => f.getName()); // Extract field names
+                console.log(`Fields in the PDF for year ${year}:`, fields);
 
                 // Populate fields (Make sure field names match actual PDF form field names)
-                form.getTextField("topmostSubform[0].Page1[0].f1_4[0]").setText(formData.user.firstName);
-                form.getTextField("topmostSubform[0].Page1[0].f1_5[0]").setText(formData.user.lastName);
-                form.getTextField("topmostSubform[0].Page1[0].f1_7[0]").setText(formData.user.street + "," + formData.user.city + "," + formData.user.state + "," + formData.user.zipcode);
-                form.getTextField("topmostSubform[0].Page1[0].f1_9[0]").setText(formData.form8843_datum.visaType);
-                form.getTextField("topmostSubform[0].Page1[0].f1_11[0]").setText(formData.form8843_datum.citizen);
-                form.getTextField("topmostSubform[0].Page1[0].f1_12[0]").setText(formData.form8843_datum.citizen);
-                form.getTextField("topmostSubform[0].Page1[0].f1_13[0]").setText(formData.form8843_datum.passportNumber);
-                form.getTextField("topmostSubform[0].Page1[0].f1_14[0]").setText(getNoOfDays(Number(year.slice(-2))));
-                form.getTextField("topmostSubform[0].Page1[0].f1_15[0]").setText(getNoOfDays(Number(year.slice(-2)) - 1));
-                form.getTextField("topmostSubform[0].Page1[0].f1_16[0]").setText(getNoOfDays(Number(year.slice(-2)) - 2));
-                form.getTextField("topmostSubform[0].Page1[0].f1_17[0]").setText(getNoOfDays(Number(year.slice(-2))));
-                form.getTextField("topmostSubform[0].Page1[0].f1_30[0]").setText(formData.form8843_datum.universityName);
-                form.getTextField("topmostSubform[0].Page1[0].f1_31[0]").setText(formData.form8843_datum.universityStreet + "," + formData.form8843_datum.universityCity + "," + formData.form8843_datum.universityState + "," + formData.form8843_datum.universityZipcode);
-                form.getTextField("topmostSubform[0].Page1[0].f1_32[0]").setText(formData.form8843_datum.universityAdvisorNumber);
-                form.getTextField("topmostSubform[0].Page1[0].f1_33[0]").setText(formData.form8843_datum.universityAdvisorName);
-                form.getTextField("topmostSubform[0].Page1[0].f1_34[0]").setText(formData.form8843_datum.universityStreet + "," + formData.form8843_datum.universityCity + "," + formData.form8843_datum.universityState + "," + formData.form8843_datum.universityZipcode);
-                form.getTextField("topmostSubform[0].Page1[0].f1_35[0]").setText(formData.form8843_datum.universityAdvisorNumber);
-                form.getTextField("topmostSubform[0].Page1[0].f1_36[0]").setText(getVisaForYears(Number(year.slice(-2)) - 6));
-                form.getTextField("topmostSubform[0].Page1[0].f1_37[0]").setText(getVisaForYears(Number(year.slice(-2)) - 5));
-                form.getTextField("topmostSubform[0].Page1[0].f1_38[0]").setText(getVisaForYears(Number(year.slice(-2)) - 4));
-                form.getTextField("topmostSubform[0].Page1[0].f1_39[0]").setText(getVisaForYears(Number(year.slice(-2)) - 3));
-                form.getTextField("topmostSubform[0].Page1[0].f1_40[0]").setText(getVisaForYears(Number(year.slice(-2)) - 2));
-                form.getTextField("topmostSubform[0].Page1[0].f1_41[0]").setText(getVisaForYears(Number(year.slice(-2)) - 1));
-                form.getCheckBox("topmostSubform[0].Page1[0].c1_2[1]").check();
-                form.getCheckBox("topmostSubform[0].Page1[0].c1_3[1]").check();
+                if(year === "2025") {
+                    form.getTextField("topmostSubform[0].Page1[0].f1_04[0]").setText(formData.user.firstName);
+                    form.getTextField("topmostSubform[0].Page1[0].f1_05[0]").setText(formData.user.lastName);
+                    form.getTextField("topmostSubform[0].Page1[0].f1_07[0]").setText(formData.user.street + "," + formData.user.city + "," + formData.user.state + "," + formData.user.zipcode);
+                    form.getTextField("topmostSubform[0].Page1[0].f1_09[0]").setText(formData.form8843_datum.visaType);
+                    form.getTextField("topmostSubform[0].Page1[0].f1_11[0]").setText(formData.form8843_datum.citizen);
+                    form.getTextField("topmostSubform[0].Page1[0].f1_12[0]").setText(formData.form8843_datum.citizen);
+                    form.getTextField("topmostSubform[0].Page1[0].f1_13[0]").setText(formData.form8843_datum.passportNumber);
+                    form.getTextField("topmostSubform[0].Page1[0].f1_14[0]").setText(getNoOfDays(Number(year.slice(-2))));
+                    form.getTextField("topmostSubform[0].Page1[0].f1_15[0]").setText(getNoOfDays(Number(year.slice(-2)) - 1));
+                    form.getTextField("topmostSubform[0].Page1[0].f1_16[0]").setText(getNoOfDays(Number(year.slice(-2)) - 2));
+                    form.getTextField("topmostSubform[0].Page1[0].f1_17[0]").setText(getNoOfDays(Number(year.slice(-2))));
+                    form.getTextField("topmostSubform[0].Page1[0].f1_26[0]").setText(formData.form8843_datum.universityName + ", " + formData.form8843_datum.universityStreet + ", " + formData.form8843_datum.universityCity + "," + formData.form8843_datum.universityState + ", " + formData.form8843_datum.universityZipcode + ", " + formData.form8843_datum.universityAdvisorNumber);
+                    form.getTextField("topmostSubform[0].Page1[0].f1_27[0]").setText(formData.form8843_datum.universityAdvisorName + ", " + formData.form8843_datum.universityStreet + "," + formData.form8843_datum.universityCity + "," + formData.form8843_datum.universityState + "," + formData.form8843_datum.universityZipcode + ", " + formData.form8843_datum.universityAdvisorNumber);
+                    form.getTextField("topmostSubform[0].Page1[0].f1_28[0]").setText(getVisaForYears(Number(year.slice(-2)) - 6));
+                    form.getTextField("topmostSubform[0].Page1[0].f1_29[0]").setText(getVisaForYears(Number(year.slice(-2)) - 5));
+                    form.getTextField("topmostSubform[0].Page1[0].f1_30[0]").setText(getVisaForYears(Number(year.slice(-2)) - 4));
+                    form.getTextField("topmostSubform[0].Page1[0].f1_31[0]").setText(getVisaForYears(Number(year.slice(-2)) - 3));
+                    form.getTextField("topmostSubform[0].Page1[0].f1_32[0]").setText(getVisaForYears(Number(year.slice(-2)) - 2));
+                    form.getTextField("topmostSubform[0].Page1[0].f1_32[0]").setText(getVisaForYears(Number(year.slice(-2)) - 1));
+                    form.getCheckBox("topmostSubform[0].Page1[0].c1_2[1]").check();
+                    form.getCheckBox("topmostSubform[0].Page1[0].c1_3[1]").check();
+                }
+                else {
+                    form.getTextField("topmostSubform[0].Page1[0].f1_4[0]").setText(formData.user.firstName);
+                    form.getTextField("topmostSubform[0].Page1[0].f1_5[0]").setText(formData.user.lastName);
+                    form.getTextField("topmostSubform[0].Page1[0].f1_7[0]").setText(formData.user.street + "," + formData.user.city + "," + formData.user.state + "," + formData.user.zipcode);
+                    form.getTextField("topmostSubform[0].Page1[0].f1_9[0]").setText(formData.form8843_datum.visaType);
+                    form.getTextField("topmostSubform[0].Page1[0].f1_11[0]").setText(formData.form8843_datum.citizen);
+                    form.getTextField("topmostSubform[0].Page1[0].f1_12[0]").setText(formData.form8843_datum.citizen);
+                    form.getTextField("topmostSubform[0].Page1[0].f1_13[0]").setText(formData.form8843_datum.passportNumber);
+                    form.getTextField("topmostSubform[0].Page1[0].f1_14[0]").setText(getNoOfDays(Number(year.slice(-2))));
+                    form.getTextField("topmostSubform[0].Page1[0].f1_15[0]").setText(getNoOfDays(Number(year.slice(-2)) - 1));
+                    form.getTextField("topmostSubform[0].Page1[0].f1_16[0]").setText(getNoOfDays(Number(year.slice(-2)) - 2));
+                    form.getTextField("topmostSubform[0].Page1[0].f1_17[0]").setText(getNoOfDays(Number(year.slice(-2))));
+                    form.getTextField("topmostSubform[0].Page1[0].f1_30[0]").setText(formData.form8843_datum.universityName);
+                    form.getTextField("topmostSubform[0].Page1[0].f1_31[0]").setText(formData.form8843_datum.universityStreet + "," + formData.form8843_datum.universityCity + ", " + formData.form8843_datum.universityState + ", " + formData.form8843_datum.universityZipcode);
+                    form.getTextField("topmostSubform[0].Page1[0].f1_32[0]").setText(formData.form8843_datum.universityAdvisorNumber);
+                    form.getTextField("topmostSubform[0].Page1[0].f1_33[0]").setText(formData.form8843_datum.universityAdvisorName);
+                    form.getTextField("topmostSubform[0].Page1[0].f1_34[0]").setText(formData.form8843_datum.universityStreet + "," + formData.form8843_datum.universityCity + ", " + formData.form8843_datum.universityState + ", " + formData.form8843_datum.universityZipcode);
+                    form.getTextField("topmostSubform[0].Page1[0].f1_35[0]").setText(formData.form8843_datum.universityAdvisorNumber);
+                    form.getTextField("topmostSubform[0].Page1[0].f1_36[0]").setText(getVisaForYears(Number(year.slice(-2)) - 6));
+                    form.getTextField("topmostSubform[0].Page1[0].f1_37[0]").setText(getVisaForYears(Number(year.slice(-2)) - 5));
+                    form.getTextField("topmostSubform[0].Page1[0].f1_38[0]").setText(getVisaForYears(Number(year.slice(-2)) - 4));
+                    form.getTextField("topmostSubform[0].Page1[0].f1_39[0]").setText(getVisaForYears(Number(year.slice(-2)) - 3));
+                    form.getTextField("topmostSubform[0].Page1[0].f1_40[0]").setText(getVisaForYears(Number(year.slice(-2)) - 2));
+                    form.getTextField("topmostSubform[0].Page1[0].f1_41[0]").setText(getVisaForYears(Number(year.slice(-2)) - 1));
+                    form.getCheckBox("topmostSubform[0].Page1[0].c1_2[1]").check();
+                    form.getCheckBox("topmostSubform[0].Page1[0].c1_3[1]").check();
+                }
+                
 
                 //Save and prepare for download
                 const updatedPdfBytes = await pdfDoc.save();

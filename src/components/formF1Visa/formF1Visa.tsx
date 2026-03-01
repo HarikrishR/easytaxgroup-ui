@@ -21,7 +21,7 @@ interface FormData {
 }
 
 // Define the shape for errors
-type FormErrors = Partial<Record<keyof FormData, string>> ;
+type FormErrors = Partial<Record<keyof FormData, string>>;
 
 const FormF1Visa = () => {
 
@@ -65,7 +65,7 @@ const FormF1Visa = () => {
         const newErrors: FormErrors = {};
 
         // Required text/select fields validation
-        (['firstName', 'lastName', 'email', 'phoneNumber', 'visaStatus', 'stateOfResidency', 'referalName', 'referalPhoneNumber'] as Array<keyof FormData>).forEach(key => {
+        (['firstName', 'lastName', 'email', 'phoneNumber', 'visaStatus', 'stateOfResidency'] as Array<keyof FormData>).forEach(key => {
             if (!formData[key] || formData[key] === '') {
                 const displayKey = key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
                 newErrors[key] = `${displayKey} is required.`;
@@ -87,11 +87,12 @@ const FormF1Visa = () => {
             dispatch(get_loader(true));
             try {
                 const serviceUrl = import.meta.env.VITE_SERVICE_URL;
-
+    
+                // Submit form data to the backend
                 await axios.post(serviceUrl + '/formf1Registration', formData);
-
+    
                 toast.success('Application submitted successfully!');
-
+    
                 // Reset form
                 setFormData({
                     firstName: '',
@@ -125,7 +126,8 @@ const FormF1Visa = () => {
                                 <div className="text-center mb-2">
                                     <img src={logo} className='logo' />
                                 </div>
-                                <h2 className="mb-4 text-center">Form F1 Visa</h2>
+                                <h2 className="mb-4 text-center">Tax Filling Enrollment</h2>
+                                <p>You'll receive timely updates, helpful reminders, and expert advice to make your tax filing process smoother. <span className='boldText'>"This is a Real Tax Office Located in Edison, New Jersey. We don't spam call you for tax filling like any other Tax Filing Agencies."</span></p>
                                 <form className="row g-3">
                                     {/* First Name */}
                                     <div className="col-md-6 mb-2">
@@ -210,7 +212,7 @@ const FormF1Visa = () => {
 
                                     <div className='col-12'>
                                         <h5 className="mb-2">Referal Contact</h5>
-                                        <p className='mb-0 des'>Receive $10 for every successful referral. New referrals receive a $10 discount.</p>
+                                        <p className='mb-0 des'>Earn $10 for every referral—friends get $10 off.</p>
                                     </div>
 
                                     {/* Referal Name*/}

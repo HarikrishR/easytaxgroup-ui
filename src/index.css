@@ -40,6 +40,9 @@ body {
 }
 
 .logo {
+  width: 100px;
+}
+.dashboard .logo {
   width: 110px;
 }
 

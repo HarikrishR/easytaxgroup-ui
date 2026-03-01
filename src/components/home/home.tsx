@@ -1,13 +1,53 @@
 import { Link } from "react-router-dom";
+// import { useEffect, useState } from "react";
 import Footer from "../footer/footer";
 import Header from "../header/header";
 import arrow from '../../assets/images/arrows.png';
 import arrowDark from '../../assets/images/arrowsDark.png';
 import hmAbout from '../../assets/images/hmAbout.png';
 import whatwedo from '../../assets/images/whatwedo.jpg';
+import "react-google-reviews/dist/index.css";
 import "./home.css"
 
 const Home = () => {
+  // const [reviews, setReviews] = useState<google.maps.places.PlaceReview[]>([]);
+  // const [placeId, setPlaceId] = useState('ChIJc4O8g2W2w4kRpb2UpEq7d9o');
+
+  // useEffect(() => {
+  //   // 1. Load the Google Maps Script
+  //   const script = document.createElement('script');
+  //   script.src = `https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places`;
+  //   script.async = true;
+  //   document.head.appendChild(script);
+
+  //   script.onload = () => {
+  //     // 2. Initialize Places Service
+  //     const service = new window.google.maps.places.PlacesService(document.createElement('div'));
+      
+  //     service.getDetails({
+  //       placeId: placeId,
+  //       fields: ['reviews']
+  //     }, (place, status) => {
+  //       if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+  //         if (place && place.reviews) {
+  //           setReviews(place.reviews);
+  //         }
+  //       }
+  //     });
+  //   };
+  // }, [placeId]);
+
+  // Star Rating Component
+const StarRating = ({ rating = 5 }) => {
+  return (
+    <div className="star-rating mb-2">
+      {[...Array(5)].map((_, i) => (
+        <span key={i} className={i < rating ? 'star filled' : 'star'}>★</span>
+      ))}
+    </div>
+  );
+};
+
   return (
     <>
       <Header />
@@ -105,7 +145,7 @@ const Home = () => {
           <div className="row justify-content-center">
             <div className="col-md-12 text-center">
               <h2 className="mb-4">What our clients say</h2>
-              <p className="mb-5">We are proud to have received positive feedback from our clients, reflecting our commitment to excellence and client satisfaction.</p>
+              <p className="mb-2">We are proud to have received positive feedback from our clients, reflecting our commitment to excellence and client satisfaction.</p>
               <div className="slider">
                 <input type="radio" name="testimonial" id="t-1" />
                 <input type="radio" name="testimonial" id="t-2" />
@@ -115,56 +155,46 @@ const Home = () => {
                 <div className="testimonials mb-8">
                   <label className="item" htmlFor="t-1">
                     <div className="mycard">
-                      <p className="cardtitle">Práctica</p>
+                      <p className="cardtitle mb-1">Saba Phtskialadze</p>
+                      <StarRating rating={5} />
                       <div>
-                        <img src="https://i.pravatar.cc/200" alt="nivel5" className="cardimg" />
-                      </div>
-                      <div>
-                        <p className="carddescription">Poner en práctica los conocimientos adquiridos.</p>
+                        <p className="carddescription">I have been using the services of Easy Tax Group for my tax preparation and filing needs for several years now, and I am consistently impressed with their professionalism, expertise, and customer service.</p>
                       </div>
                     </div>
                   </label>
                   <label className="item" htmlFor="t-2">
                     <div className="mycard">
-                      <p className="cardtitle">Práctica</p>
+                      <p className="cardtitle mb-1">Milana Kastyrka</p>
+                      <StarRating rating={5} />
                       <div>
-                        <img src="https://i.pravatar.cc/200" alt="nivel5" className="cardimg" />
-                      </div>
-                      <div>
-                        <p className="carddescription">Poner en práctica los conocimientos adquiridos.</p>
+                        <p className="carddescription">Tatiana has been filling my taxes for 3 years now. They helped to file my personal and business taxes within due date, and I am very Happy with there services. Also, they are available to respond every time I need any suggestions. Would Highly recommend them.</p>
                       </div>
                     </div>
                   </label>
                   <label className="item" htmlFor="t-3">
                     <div className="mycard">
-                      <p className="cardtitle">Práctica</p>
+                      <p className="cardtitle mb-1">Elena Tarasova</p>
+                      <StarRating rating={5} />
                       <div>
-                        <img src="https://i.pravatar.cc/200" alt="nivel5" className="cardimg" />
-                      </div>
-                      <div>
-                        <p className="carddescription">Poner en práctica los conocimientos adquiridos.</p>
+                        <p className="carddescription">Actually, I have received state department notice from New York state and then approached Easy tax group through one of my friends. I spoke over the phone and was able to explain her my situation and she was very friendly and was able to waive the penalty amount and I have paid only the Interest amount. This helped me in a big way as the penalty amount itself was 1000$. Thank you so much for the help, Tatiana</p>
                       </div>
                     </div>
                   </label>
                   <label className="item" htmlFor="t-4">
                     <div className="mycard">
-                      <p className="cardtitle">Práctica</p>
+                      <p className="cardtitle mb-1">Deepak M</p>
+                      <StarRating rating={5} />
                       <div>
-                        <img src="https://i.pravatar.cc/200" alt="nivel5" className="cardimg" />
-                      </div>
-                      <div>
-                        <p className="carddescription">Poner en práctica los conocimientos adquiridos.</p>
+                        <p className="carddescription">I recently had my personal tax return prepared by Tatiana at Easy Tax Group, and she was fantastic in addressing all my questions. Her pricing was also very reasonable compared to the market. I would highly recommend her for tax services!</p>
                       </div>
                     </div>
                   </label>
                   <label className="item" htmlFor="t-5">
                     <div className="mycard">
-                      <p className="cardtitle">Práctica</p>
+                      <p className="cardtitle mb-1">Prasanth Reddy</p>
+                      <StarRating rating={5} />
                       <div>
-                        <img src="https://i.pravatar.cc/200" alt="nivel5" className="cardimg" />
-                      </div>
-                      <div>
-                        <p className="carddescription">Poner en práctica los conocimientos adquiridos.</p>
+                        <p className="carddescription">I appreciate how responsive they were—quick to return calls and emails, and always happy to explain things in a way I could understand. Their attention to detail gave me confidence that my return was handled accurately and efficiently.</p>
                       </div>
                     </div>
                   </label>

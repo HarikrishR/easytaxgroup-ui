@@ -19,7 +19,15 @@
 .formF1Visa h5 {
     font-size: .912rem;
 }
-
+.formF1Visa p {
+    font-family: 'poppinsMedium';
+    font-size: .812rem;
+    text-align: justify;
+}
+.formF1Visa .boldText {
+    font-family: 'poppinsBold';
+    color: #294822;
+}
 .formF1Visa p.des {
     color: #8dc63e;
 }

@@ -162,6 +162,8 @@
 .usDotApp p {
     font-family: 'poppinsMedium';
 }
+
+.adminOrders .form-control, .adminOrders .form-select,
 .usDotApp .form-control, .usDotApp .form-select {
     border-radius: 6px;
     font-size: .75rem;

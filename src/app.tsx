@@ -35,7 +35,7 @@ const App = () => {
                 <Route path="/contactUs" element={<ContactUs />} />
                 <Route path="/fmcsacompliance" element={<UsDotApplication />} />
                 <Route path="/businessRegService" element={<BusinessRegistration />} />
-                <Route path="/formf1visa" element={<FormF1Visa />} />
+                <Route path="/taxfilling" element={<FormF1Visa />} />
                 <Route
                     path="/dashboard"
                     element={

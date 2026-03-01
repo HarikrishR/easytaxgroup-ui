@@ -92,7 +92,7 @@ const Dashboard = () => {
                                         <Nav.Item>
                                             <Nav.Link eventKey="adminOrders">
                                                 <RiListUnordered className="me-2" />
-                                                Orders
+                                                Form 8843 Orders
                                             </Nav.Link>
                                         </Nav.Item>
                                         : ''
@@ -122,7 +122,7 @@ const Dashboard = () => {
                                         <Nav.Item>
                                             <Nav.Link eventKey="FormF1RegApp">
                                                 <FaWpforms className="me-2" />
-                                                Form F1 Applications
+                                                Tax Filing Enrollments
                                             </Nav.Link>
                                         </Nav.Item>
                                         : ''
