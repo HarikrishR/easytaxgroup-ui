@@ -6,7 +6,7 @@ import arrow from '../../assets/images/arrows.png';
 import arrowDark from '../../assets/images/arrowsDark.png';
 import hmAbout from '../../assets/images/hmAbout.png';
 import whatwedo from '../../assets/images/whatwedo.jpg';
-import "react-google-reviews/dist/index.css";
+// import "react-google-reviews/dist/index.css";
 import "./home.css"
 
 const Home = () => {
